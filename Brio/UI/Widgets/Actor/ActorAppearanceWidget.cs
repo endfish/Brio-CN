@@ -17,7 +17,7 @@ namespace Brio.UI.Widgets.Actor;
 
 public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widget<ActorAppearanceCapability>(capability)
 {
-    public override string HeaderName => Capability.Actor.IsProp ? "Change Prop" : "Appearance";
+    public override string HeaderName => Capability.Actor.IsProp ? Localize.Get("ui.actor.changeProp", "Change Prop") : Localize.Get("ui.actor.appearance", "Appearance");
 
     public override WidgetFlags Flags => Capability.Actor.IsProp ? WidgetFlags.DefaultOpen | WidgetFlags.DrawBody | WidgetFlags.DrawPopup | WidgetFlags.DrawQuickIcons
         : WidgetFlags.DefaultOpen | WidgetFlags.DrawBody | WidgetFlags.DrawQuickIcons | WidgetFlags.DrawPopup | WidgetFlags.HasAdvanced;
@@ -63,7 +63,7 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
         var currentAppearance = Capability.CurrentAppearance;
         var originalAppearance = Capability.OriginalAppearance;
 
-        if(ImBrio.FontIconButton("attachweapon", FontAwesomeIcon.Retweet, "Reload Prop"))
+        if(ImBrio.FontIconButton("attachweapon", FontAwesomeIcon.Retweet, Localize.Get("ui.actor.reloadProp", "Reload Prop")))
         {
             Capability.AttachWeapon();
             Capability.Actor.GetCapability<PosingCapability>().LoadResourcesPose("Data.BrioPropPose.pose");
@@ -85,7 +85,7 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
         bool didChange = false;
 
         bool equipChanged = !currentAppearance.Equipment.Equals(originalAppearance.Equipment) || !currentAppearance.Weapons.Equals(originalAppearance.Weapons) || !currentAppearance.Runtime.Equals(originalAppearance.Runtime);
-        if(ImBrio.FontIconButtonRight("reset_equipment", FontAwesomeIcon.Undo, 1, "Reset Equipment", equipChanged))
+        if(ImBrio.FontIconButtonRight("reset_equipment", FontAwesomeIcon.Undo, 1, Localize.Get("ui.actor.resetEquipment", "Reset Equipment"), equipChanged))
         {
             currentAppearance.Equipment = originalAppearance.Equipment;
             currentAppearance.Weapons = originalAppearance.Weapons;
@@ -175,7 +175,7 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
 
     private void DrawLoadAppearance()
     {
-        if(ImBrio.FontIconButton("load_npc", FontAwesomeIcon.PersonArrowDownToLine, "Load NPC Appearance"))
+        if(ImBrio.FontIconButton("load_npc", FontAwesomeIcon.PersonArrowDownToLine, Localize.Get("ui.actor.loadNpcAppearance", "Load NPC Appearance")))
         {
             AppearanceEditorCommon.ResetNPCSelector();
             ImGui.OpenPopup("widget_npc_selector");
@@ -183,12 +183,12 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("import_charafile", FontAwesomeIcon.FileDownload, "Import Character"))
+        if(ImBrio.FontIconButton("import_charafile", FontAwesomeIcon.FileDownload, Localize.Get("ui.actor.importCharacter", "Import Character")))
             FileUIHelpers.ShowImportCharacterModal(Capability, AppearanceImportOptions.All);
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("export_charafile", FontAwesomeIcon.Save, "Save Character File"))
+        if(ImBrio.FontIconButton("export_charafile", FontAwesomeIcon.Save, Localize.Get("ui.actor.saveCharacterFile", "Save Character File")))
             FileUIHelpers.ShowExportCharacterModal(Capability);
 
         ImGui.SameLine();
@@ -197,7 +197,7 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
         {
             using(ImRaii.Disabled(Capability.IsSelf || Capability.IsAnyMCDFLoading))
             {
-                if(ImBrio.FontIconButton("load_mcdf", FontAwesomeIcon.CloudDownloadAlt, "Load MCDF"))
+                if(ImBrio.FontIconButton("load_mcdf", FontAwesomeIcon.CloudDownloadAlt, Localize.Get("ui.actor.loadMcdf", "Load MCDF")))
                 {
                     FileUIHelpers.ShowImportMCDFModal(Capability);
                 }
@@ -210,7 +210,7 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
 
             using(ImRaii.Disabled(Capability.HasMCDF))
             {
-                if(ImBrio.FontIconButton("save_mcdf", FontAwesomeIcon.CloudUploadAlt, "Save MCDF"))
+                if(ImBrio.FontIconButton("save_mcdf", FontAwesomeIcon.CloudUploadAlt, Localize.Get("ui.actor.saveMcdf", "Save MCDF")))
                 {
                     FileUIHelpers.ShowExportMCDFModal(Capability);
                 }
@@ -220,12 +220,12 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
                 ImBrio.AttachToolTip("Can not save a MCDF of a Actor that has a MCDF loaded. Reset this Actor to save a MCDF.");
         }
 
-        if(ImBrio.FontIconButton("advanced_appearance", FontAwesomeIcon.UserEdit, "Advanced"))
+        if(ImBrio.FontIconButton("advanced_appearance", FontAwesomeIcon.UserEdit, Localize.Get("ui.common.advanced", "Advanced")))
             ToggleAdvancedWindow();
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("reset_appearance", FontAwesomeIcon.Undo, 1, "Reset", Capability.IsAppearanceOverridden))
+        if(ImBrio.FontIconButtonRight("reset_appearance", FontAwesomeIcon.Undo, 1, Localize.Get("ui.common.reset", "Reset"), Capability.IsAppearanceOverridden))
             _ = Capability.ResetAppearance();
 
         using(var popup = ImRaii.Popup("widget_npc_selector"))
@@ -240,14 +240,14 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
 
     public override void DrawPopup()
     {
-        var toggele = Capability.IsHidden ? "Show" : "Hide";
+        var toggele = Capability.IsHidden ? Localize.Get("ui.common.show", "Show") : Localize.Get("ui.common.hide", "Hide");
         if(ImGui.MenuItem($"{toggele} {Capability.Actor.FriendlyName}###Appearance_popup_toggle"))
             Capability.ToggleHide();
     }
 
     public override void DrawQuickIcons()
     {
-        if(ImBrio.FontIconButton("redrawwidget_redraw", FontAwesomeIcon.PaintBrush, "Redraw"))
+        if(ImBrio.FontIconButton("redrawwidget_redraw", FontAwesomeIcon.PaintBrush, Localize.Get("ui.common.redraw", "Redraw")))
         {
             _ = Capability.Redraw();
         }

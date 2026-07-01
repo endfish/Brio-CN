@@ -5,7 +5,7 @@ namespace Brio.Entities.Core;
 
 public class WorldEntity : Entity
 {
-    public override string FriendlyName => "World";
+    public override string FriendlyName => global::Brio.Resources.Localize.Get("ui.entities.world", "World");
     public override FontAwesomeIcon Icon => FontAwesomeIcon.Globe;
     public override bool IsAttached => true;
 

@@ -4,6 +4,7 @@ using Brio.Entities.Core;
 using Brio.Game.Core;
 using Brio.Game.GPose;
 using Brio.MCDF.Game.Services;
+using Brio.Resources;
 using Brio.Services;
 using Brio.UI.Controls.Core;
 using Brio.UI.Controls.Stateless;
@@ -102,7 +103,7 @@ public class MainWindow : Window, IDisposable
         if(_gPoseService.IsGPosing == false)
         {
             using(ImRaii.PushColor(ImGuiCol.Text, UIConstants.GizmoRed))
-                ImGui.Text("Open GPose to use Brio!");
+                ImGui.Text(Localize.Get("ui.main.gposeRequired", "Open GPose to use Brio!"));
         }
 
         var rootEntity = _entityManager.RootEntity;
@@ -137,7 +138,7 @@ public class MainWindow : Window, IDisposable
                 if(_entityManager.SelectedEntityIds.Count > 1)
                 {
                     using var color = ImRaii.PushColor(ImGuiCol.Text, ThemeManager.CurrentTheme.Accent.AccentColor);
-                    ImGui.Text($"{_entityManager.SelectedEntityIds.Count} selected");
+                    ImGui.Text(string.Format(Localize.Get("ui.main.selectedCount", "{0} selected"), _entityManager.SelectedEntityIds.Count));
                 }
             }
         }
@@ -198,11 +199,11 @@ public class MainWindow : Window, IDisposable
                 ImGui.SetCursorPos(startPos);
             }
 
-            if(ImBrio.Button("Project", FontAwesomeIcon.FolderOpen, new Vector2(line1Width, 0), centerTest: true))
+            if(ImBrio.Button(Localize.Get("ui.common.project", "Project"), FontAwesomeIcon.FolderOpen, new Vector2(line1Width, 0), centerTest: true))
                 ImGui.OpenPopup("DrawProjectPopup");
 
             ImGui.SameLine();
-            if(ImBrio.Button("Library", FontAwesomeIcon.Book, new Vector2(line1Width, 0), centerTest: true))
+            if(ImBrio.Button(Localize.Get("ui.common.library", "Library"), FontAwesomeIcon.Book, new Vector2(line1Width, 0), centerTest: true))
                 _libraryWindow.Toggle();
         }
 
@@ -211,14 +212,14 @@ public class MainWindow : Window, IDisposable
             _infoWindow.Toggle();
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Information & Changelog");
+            ImGui.SetTooltip(Localize.Get("ui.main.informationChangelog", "Information & Changelog"));
 
         ImGui.SameLine();
         if(ImBrio.FontIconButton(FontAwesomeIcon.Cog, new(buttonWidths, 0)))
             _settingsWindow.Toggle();
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Settings");
+            ImGui.SetTooltip(Localize.Get("ui.common.settings", "Settings"));
 
         //
 

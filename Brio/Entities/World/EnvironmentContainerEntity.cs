@@ -2,6 +2,7 @@
 using Brio.Entities.Core;
 using Brio.Game.GPose;
 using Brio.Game.World;
+using Brio.Resources;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Controls.Stateless;
 using Brio.UI.Theming;
@@ -18,7 +19,7 @@ public class EnvironmentContainerEntity(IServiceProvider provider) : Entity("env
     private readonly GPoseService _gPoseService = provider.GetRequiredService<GPoseService>();
     private readonly LightingService _lightingService = provider.GetRequiredService<LightingService>();
 
-    public override string FriendlyName => "Environment";
+    public override string FriendlyName => Localize.Get("ui.entities.environment", "Environment");
     public override FontAwesomeIcon Icon => FontAwesomeIcon.MountainSun;
 
     public override int ContextButtonCount => 1;
@@ -30,7 +31,7 @@ public class EnvironmentContainerEntity(IServiceProvider provider) : Entity("env
         {
             using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor))
             {
-                string toolTip = $"New Light";
+                string toolTip = Localize.Get("ui.environment.newLight", "New Light");
                 if(ImBrio.FontIconButtonRight($"###{Id}_light_contextButton", FontAwesomeIcon.Plus, 1f, toolTip, bordered: false))
                 {
                     ImGui.OpenPopup("DrawLightSpawnMenuPopup");

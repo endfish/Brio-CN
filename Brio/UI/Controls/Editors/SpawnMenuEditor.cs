@@ -32,22 +32,22 @@ public static class SpawnMenuEditor
             // Actor spawn
             if(actorSpawnService != null)
             {
-                ImGui.Text("Actors");
+                ImGui.Text(global::Brio.Resources.Localize.Get("ui.entities.actors", "Actors"));
                 ImGui.Separator();
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.User, "Spawn New Actor", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.User, global::Brio.Resources.Localize.Get("ui.actor.spawnNewActor", "Spawn New Actor"), buttonSize))
                 {
                     actorSpawnService.CreateCharacter(out _, SpawnFlags.Default, true);
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.PlusSquare, "Spawn with Companion Slot", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.PlusSquare, global::Brio.Resources.Localize.Get("ui.actor.spawnWithCompanionSlot", "Spawn with Companion Slot"), buttonSize))
                 {
                     actorSpawnService.CreateCharacter(out _, SpawnFlags.WithCompanionSlot, false);
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.Cubes, "Spawn Prop", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.Cubes, global::Brio.Resources.Localize.Get("ui.actor.spawnProp", "Spawn Prop"), buttonSize))
                 {
                     actorSpawnService.SpawnNewProp(out _);
                     ImGui.CloseCurrentPopup();
@@ -60,16 +60,16 @@ public static class SpawnMenuEditor
                 if(actorSpawnService != null)
                     ImGui.Spacing();
 
-                ImGui.Text("Cameras");
+                ImGui.Text(global::Brio.Resources.Localize.Get("ui.entities.cameras", "Cameras"));
                 ImGui.Separator();
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.Camera, "New Brio Camera", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.Camera, global::Brio.Resources.Localize.Get("ui.camera.newBrioCamera", "New Brio Camera"), buttonSize))
                 {
                     cameraManager.CreateCamera(CameraType.Game);
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.Video, "New Free-Cam", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.Video, global::Brio.Resources.Localize.Get("ui.camera.newFreeCam", "New Free-Cam"), buttonSize))
                 {
                     cameraManager.CreateCamera(CameraType.Free);
                     ImGui.CloseCurrentPopup();
@@ -82,22 +82,22 @@ public static class SpawnMenuEditor
                 if(actorSpawnService != null || cameraManager != null)
                     ImGui.Spacing();
 
-                ImGui.Text("Lights");
+                ImGui.Text(global::Brio.Resources.Localize.Get("ui.environment.lights", "Lights"));
                 ImGui.Separator();
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.Lightbulb, "Spawn Spot Light", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.Lightbulb, global::Brio.Resources.Localize.Get("ui.environment.spotLight", "Spawn Spot Light"), buttonSize))
                 {
                     lightingService.SpawnLight(LightType.SpotLight);
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.Circle, "Spawn Point Light", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.Circle, global::Brio.Resources.Localize.Get("ui.environment.pointLight", "Spawn Point Light"), buttonSize))
                 {
                     lightingService.SpawnLight(LightType.PointLight);
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.Square, "Spawn Flat Light", buttonSize))
+                if(ImBrio.DrawIconButton(FontAwesomeIcon.Square, global::Brio.Resources.Localize.Get("ui.environment.flatLight", "Spawn Flat Light"), buttonSize))
                 {
                     lightingService.SpawnLight(LightType.FlatLight);
                     ImGui.CloseCurrentPopup();

@@ -1,6 +1,7 @@
 ﻿using Brio.Capabilities.Actor;
 using Brio.Entities.Core;
 using Brio.Game.GPose;
+using Brio.Resources;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Controls.Stateless;
 using Brio.UI.Theming;
@@ -16,7 +17,7 @@ public class ActorContainerEntity(IServiceProvider provider) : Entity("actorCont
 {
     private readonly GPoseService _gPoseService = provider.GetRequiredService<GPoseService>();
 
-    public override string FriendlyName => "Actors";
+    public override string FriendlyName => Localize.Get("ui.entities.actors", "Actors");
     public override FontAwesomeIcon Icon => FontAwesomeIcon.Users;
 
     public override EntityFlags Flags => EntityFlags.HasContextButton;
@@ -37,7 +38,7 @@ public class ActorContainerEntity(IServiceProvider provider) : Entity("actorCont
         {
             using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor))
             {
-                string toolTip = $"New Actor";
+                string toolTip = Localize.Get("ui.actor.spawnNewActor", "New Actor");
                 if(ImBrio.FontIconButtonRight($"###{Id}_actors_contextButton", FontAwesomeIcon.Plus, 1f, toolTip, bordered: false))
                 {
                     ImGui.OpenPopup("ActorEditorDrawSpawnMenuPopup");

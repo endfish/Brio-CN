@@ -2,6 +2,7 @@
 using Brio.Config;
 using Brio.Entities;
 using Brio.Game.Posing;
+using Brio.Resources;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Widgets.Core;
 
@@ -9,7 +10,7 @@ namespace Brio.UI.Widgets.Actor;
 
 public class ActionTimelineWidget(ActionTimelineCapability capability, EntityManager entityManager, PhysicsService physicsService, ConfigurationService configService) : Widget<ActionTimelineCapability>(capability)
 {
-    public override string HeaderName => "Animation Control";
+    public override string HeaderName => Localize.Get("ui.actor.timeline", "Animation Control");
 
     public override WidgetFlags Flags => Capability.Actor.IsProp ? WidgetFlags.None : WidgetFlags.DrawBody | WidgetFlags.HasAdvanced;
 

@@ -12,7 +12,7 @@ namespace Brio.UI.Widgets.Actor;
 
 public class ActorContainerWidget(ActorContainerCapability capability) : Widget<ActorContainerCapability>(capability)
 {
-    public override string HeaderName => "Actors";
+    public override string HeaderName => global::Brio.Resources.Localize.Get("ui.entities.actors", "Actors");
     public override WidgetFlags Flags
     {
         get
@@ -34,56 +34,56 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
         {
             bool hasSelection = _selectedActor != null;
 
-            if(ImBrio.FontIconButton("containerwidget_spawnbasic", FontAwesomeIcon.Plus, "Spawn"))
+            if(ImBrio.FontIconButton("containerwidget_spawnbasic", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Get("ui.actor.spawn", "Spawn")))
             {
                 Capability.CreateCharacter(false, true, forceSpawnActorWithoutCompanion: true);
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("containerwidget_spawnattachments", FontAwesomeIcon.PlusSquare, "Spawn with Companion slot"))
+            if(ImBrio.FontIconButton("containerwidget_spawnattachments", FontAwesomeIcon.PlusSquare, global::Brio.Resources.Localize.Get("ui.actor.spawnWithCompanionSlot", "Spawn with Companion slot")))
             {
                 Capability.CreateCharacter(true, true);
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("lifetimewidget_spawn_prop", FontAwesomeIcon.Cubes, "Spawn Prop"))
+            if(ImBrio.FontIconButton("lifetimewidget_spawn_prop", FontAwesomeIcon.Cubes, global::Brio.Resources.Localize.Get("ui.actor.spawnProp", "Spawn Prop")))
             {
                 Capability.SpawnNewProp(true);
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("containerwidget_clone", FontAwesomeIcon.Clone, "Clone", hasSelection))
+            if(ImBrio.FontIconButton("containerwidget_clone", FontAwesomeIcon.Clone, global::Brio.Resources.Localize.Get("ui.common.clone", "Clone"), hasSelection))
             {
                 Capability.CloneActor(_selectedActor!, false);
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("containerwidget_destroy", FontAwesomeIcon.Trash, "Destroy", hasSelection))
+            if(ImBrio.FontIconButton("containerwidget_destroy", FontAwesomeIcon.Trash, global::Brio.Resources.Localize.Get("ui.common.destroy", "Destroy"), hasSelection))
             {
                 Capability.DestroyCharacter(_selectedActor!);
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("containerwidget_target", FontAwesomeIcon.Bullseye, "Target", hasSelection))
+            if(ImBrio.FontIconButton("containerwidget_target", FontAwesomeIcon.Bullseye, global::Brio.Resources.Localize.Get("ui.common.target", "Target"), hasSelection))
             {
                 Capability.Target(_selectedActor!);
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("containerwidget_selectinhierarchy", FontAwesomeIcon.FolderTree, "Select in Hierarchy", hasSelection))
+            if(ImBrio.FontIconButton("containerwidget_selectinhierarchy", FontAwesomeIcon.FolderTree, global::Brio.Resources.Localize.Get("ui.actor.selectInHierarchy", "Select in Hierarchy"), hasSelection))
             {
                 Capability.SelectInHierarchy(_selectedActor!);
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("containerwidget_destroyall", FontAwesomeIcon.Bomb, "Destroy All"))
+            if(ImBrio.FontIconButton("containerwidget_destroyall", FontAwesomeIcon.Bomb, global::Brio.Resources.Localize.Get("ui.common.destroyAll", "Destroy All")))
             {
                 Capability.DestroyAll();
             }
@@ -113,17 +113,17 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
 
     public override void DrawPopup()
     {
-        if(ImGui.BeginMenu("New...###containerwidgetpopup_new"))
+        if(ImGui.BeginMenu($"{global::Brio.Resources.Localize.Get("ui.common.new", "New...")}###containerwidgetpopup_new"))
         {
-            if(ImGui.MenuItem("Spawn###containerwidgetpopup_spawnbasic"))
+            if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.actor.spawn", "Spawn")}###containerwidgetpopup_spawnbasic"))
             {
                 Capability.CreateCharacter(false, true, forceSpawnActorWithoutCompanion: true);
             }
-            if(ImGui.MenuItem("Spawn with Companion###containerwidgetpopup_spawncompanion"))
+            if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.actor.spawnWithCompanion", "Spawn with Companion")}###containerwidgetpopup_spawncompanion"))
             {
                 Capability.CreateCharacter(true, true);
             }
-            if(ImGui.MenuItem("Spawn Prop###containerwidgetpopup_spawnprop"))
+            if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.actor.spawnProp", "Spawn Prop")}###containerwidgetpopup_spawnprop"))
             {
                 Capability.CreateProp(true);
             }
@@ -131,9 +131,9 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
             ImGui.EndMenu();
         }
 
-        if(ImGui.BeginMenu("Destroy All Actors###containerwidgetpopup_destroy"))
+        if(ImGui.BeginMenu($"{global::Brio.Resources.Localize.Get("ui.actor.destroyAllActors", "Destroy All Actors")}###containerwidgetpopup_destroy"))
         {
-            if(ImGui.MenuItem("Confirm Destruction##containerwidgetpopup_destroyall"))
+            if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.common.confirmDestruction", "Confirm Destruction")}##containerwidgetpopup_destroyall"))
             {
                 Capability.DestroyAll();
             }

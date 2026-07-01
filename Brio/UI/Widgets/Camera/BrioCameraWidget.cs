@@ -9,7 +9,7 @@ namespace Brio.UI.Widgets.Camera;
 
 public class BrioCameraWidget(BrioCameraCapability capability) : Widget<BrioCameraCapability>(capability)
 {
-    public override string HeaderName => "Camera Editor";
+    public override string HeaderName => global::Brio.Resources.Localize.Get("ui.camera.editor", "Camera Editor");
 
     public override WidgetFlags Flags => WidgetFlags.DrawBody | WidgetFlags.DefaultOpen | WidgetFlags.HasAdvanced;
 
@@ -21,11 +21,11 @@ public class BrioCameraWidget(BrioCameraCapability capability) : Widget<BrioCame
         }
         else if(Capability.CameraEntity.CameraType == CameraType.Cutscene)
         {
-            if(ImGui.Button("Open Camera Window"))
+            if(ImGui.Button(global::Brio.Resources.Localize.Get("ui.camera.openCameraWindow", "Open Camera Window")))
             {
                 Capability.ShowCameraWindow();
             }
-            ImBrio.TextCentered("Open the Camera Window to edit play a Cutscene ", ImGui.GetWindowContentRegionMax().X);
+            ImBrio.TextCentered(global::Brio.Resources.Localize.Get("ui.camera.openCameraWindowHint", "Open the Camera Window to edit play a Cutscene "), ImGui.GetWindowContentRegionMax().X);
 
         }
         else

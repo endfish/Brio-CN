@@ -2,6 +2,7 @@
 using Brio.Game.Actor;
 using Brio.Game.Camera;
 using Brio.Game.World;
+using Brio.Resources;
 using Brio.UI.Controls;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Controls.Stateless;
@@ -24,13 +25,13 @@ public class ActorLifetimeWidget : Widget<ActorLifetimeCapability>
         _lightingService = lightingService;
     }
 
-    public override string HeaderName => "Lifetime";
+    public override string HeaderName => Localize.Get("ui.widgets.lifetime", "Lifetime");
 
     public override WidgetFlags Flags => WidgetFlags.DrawPopup | WidgetFlags.DrawQuickIcons;
 
     public override void DrawQuickIcons()
     {
-        if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, "Spawn New"))
+        if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, Localize.Get("ui.actor.spawnNew", "Spawn New")))
         {
             ImGui.OpenPopup("UnifiedSpawnMenuPopup");
         }
@@ -38,42 +39,42 @@ public class ActorLifetimeWidget : Widget<ActorLifetimeCapability>
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_spawn_prop", FontAwesomeIcon.Cubes, "Spawn Prop"))
+        if(ImBrio.FontIconButton("lifetimewidget_spawn_prop", FontAwesomeIcon.Cubes, Localize.Get("ui.actor.spawnProp", "Spawn Prop")))
         {
             Capability.SpawnNewProp(false);
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_move_to_camera", FontAwesomeIcon.Thumbtack, "Move to Camera"))
+        if(ImBrio.FontIconButton("lifetimewidget_move_to_camera", FontAwesomeIcon.Thumbtack, Localize.Get("ui.actor.moveToCamera", "Move to Camera")))
         {
             Capability.MoveToCamera();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, "Clone", Capability.CanClone))
+        if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, Localize.Get("ui.common.clone", "Clone"), Capability.CanClone))
         {
             Capability.Clone(false);
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_target", FontAwesomeIcon.Bullseye, "Target"))
+        if(ImBrio.FontIconButton("lifetimewidget_target", FontAwesomeIcon.Bullseye, Localize.Get("ui.common.target", "Target")))
         {
             Capability.Target();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_destroy", FontAwesomeIcon.Trash, "Destroy", Capability.CanDestroy))
+        if(ImBrio.FontIconButton("lifetimewidget_destroy", FontAwesomeIcon.Trash, Localize.Get("ui.common.destroy", "Destroy"), Capability.CanDestroy))
         {
             Capability.Destroy();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, "Rename"))
+        if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, Localize.Get("ui.common.rename", "Rename")))
         {
             RenameActorModal.Open(Capability.Actor);
         }
@@ -81,14 +82,14 @@ public class ActorLifetimeWidget : Widget<ActorLifetimeCapability>
 
     public override void DrawPopup()
     {
-        if(ImGui.MenuItem("Move to Camera###actorlifetime_move_to_camera"))
+        if(ImGui.MenuItem($"{Localize.Get("ui.actor.moveToCamera", "Move to Camera")}###actorlifetime_move_to_camera"))
         {
             Capability.MoveToCamera();
         }
 
         if(Capability.CanClone)
         {
-            if(ImGui.MenuItem("Clone###actorlifetime_clone"))
+            if(ImGui.MenuItem($"{Localize.Get("ui.common.clone", "Clone")}###actorlifetime_clone"))
             {
                 Capability.Clone(true);
             }
@@ -96,9 +97,9 @@ public class ActorLifetimeWidget : Widget<ActorLifetimeCapability>
 
         if(Capability.CanDestroy)
         {
-            if(ImGui.BeginMenu("Destroy###actorlifetime_destroy"))
+            if(ImGui.BeginMenu($"{Localize.Get("ui.common.destroy", "Destroy")}###actorlifetime_destroy"))
             {
-                if(ImGui.MenuItem("Confirm Destruction###actorlifetime_destroy_confirm"))
+                if(ImGui.MenuItem($"{Localize.Get("ui.common.confirmDestruction", "Confirm Destruction")}###actorlifetime_destroy_confirm"))
                 {
                     Capability.Destroy();
                 }
@@ -107,14 +108,14 @@ public class ActorLifetimeWidget : Widget<ActorLifetimeCapability>
             }
         }
 
-        if(ImGui.MenuItem($"Rename {Capability.Actor.FriendlyName}###actorlifetime_rename"))
+        if(ImGui.MenuItem($"{Localize.Get("ui.common.rename", "Rename")} {Capability.Actor.FriendlyName}###actorlifetime_rename"))
         {
             ImGui.CloseCurrentPopup();
 
             RenameActorModal.Open(Capability.Actor);
         }
 
-        if(ImGui.MenuItem("Target###actorlifetime_target"))
+        if(ImGui.MenuItem($"{Localize.Get("ui.common.target", "Target")}###actorlifetime_target"))
         {
             Capability.Target();
         }

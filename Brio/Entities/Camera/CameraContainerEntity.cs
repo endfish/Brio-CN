@@ -2,6 +2,7 @@
 using Brio.Entities.Core;
 using Brio.Game.Camera;
 using Brio.Game.Input;
+using Brio.Resources;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Controls.Stateless;
 using Brio.UI.Theming;
@@ -18,7 +19,7 @@ public class CameraContainerEntity(IServiceProvider provider) : Entity("cameras"
     private readonly VirtualCameraManager _virtualCameraManager = provider.GetRequiredService<VirtualCameraManager>();
     private readonly GameInputService _gameInputService = provider.GetRequiredService<GameInputService>();
 
-    public override string FriendlyName => "Cameras";
+    public override string FriendlyName => Localize.Get("ui.entities.cameras", "Cameras");
 
     public override FontAwesomeIcon Icon => FontAwesomeIcon.Camera;
 
@@ -31,7 +32,7 @@ public class CameraContainerEntity(IServiceProvider provider) : Entity("cameras"
         using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor))
         {
             var lockIcon = IsLocked ? FontAwesomeIcon.Lock : FontAwesomeIcon.Unlock;
-            var lockToolTip = IsLocked ? "Unlock Cameras" : "Lock Cameras";
+            var lockToolTip = IsLocked ? Localize.Get("ui.camera.unlockCameras", "Unlock Cameras") : Localize.Get("ui.camera.lockCameras", "Lock Cameras");
             if(ImBrio.FontIconButtonRight($"###{Id}_cameras_lock", lockIcon, 2f, lockToolTip, bordered: false))
             {
                 IsLocked = !IsLocked;
@@ -39,7 +40,7 @@ public class CameraContainerEntity(IServiceProvider provider) : Entity("cameras"
 
             ImGui.SameLine();
 
-            string toolTip = $"New Camera";
+            string toolTip = Localize.Get("ui.camera.newCamera", "New Camera");
             if(ImBrio.FontIconButtonRight($"###{Id}_cameras_contextButton", FontAwesomeIcon.Plus, 1f, toolTip, bordered: false))
             {
                 ImGui.OpenPopup("DrawSpawnMenuPopup");

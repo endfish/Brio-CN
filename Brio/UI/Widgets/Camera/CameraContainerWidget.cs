@@ -13,7 +13,7 @@ namespace Brio.UI.Widgets.Camera;
 
 public class CameraContainerWidget(CameraContainerCapability capability) : Widget<CameraContainerCapability>(capability)
 {
-    public override string HeaderName => "Cameras";
+    public override string HeaderName => global::Brio.Resources.Localize.Get("ui.entities.cameras", "Cameras");
 
     public override WidgetFlags Flags => WidgetFlags.DefaultOpen | WidgetFlags.DrawBody | WidgetFlags.DrawPopup | WidgetFlags.DrawQuickIcons;
 
@@ -25,7 +25,7 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
         {
             bool hasSelection = _selectedEntity != null;
 
-            if(ImBrio.FontIconButton("CameraContainerWidget_New_Camera", FontAwesomeIcon.Plus, "New Camera"))
+            if(ImBrio.FontIconButton("CameraContainerWidget_New_Camera", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Get("ui.camera.newCamera", "New Camera")))
             {
                 ImGui.OpenPopup("DrawSpawnMenuPopup");
             }
@@ -37,7 +37,7 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
             {
                 using(ImRaii.Disabled(_selectedEntity?.VirtualCamera.CameraID == null))
                 {
-                    if(ImBrio.FontIconButton("CameraLifetime_clone", FontAwesomeIcon.Clone, "Clone Camera"))
+                    if(ImBrio.FontIconButton("CameraLifetime_clone", FontAwesomeIcon.Clone, global::Brio.Resources.Localize.Get("ui.camera.cloneCamera", "Clone Camera")))
                     {
                         Capability.VirtualCameraManager.CloneCamera(_selectedEntity!.VirtualCamera.CameraID);
                     }
@@ -47,7 +47,7 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
 
                 using(ImRaii.Disabled(_selectedEntity?.VirtualCamera.CameraID == 0))
                 {
-                    if(ImBrio.FontIconButton("CameraLifetime_destroy", FontAwesomeIcon.Trash, "Destroy Camera"))
+                    if(ImBrio.FontIconButton("CameraLifetime_destroy", FontAwesomeIcon.Trash, global::Brio.Resources.Localize.Get("ui.camera.destroyCamera", "Destroy Camera")))
                     {
                         Capability.VirtualCameraManager.DestroyCamera(_selectedEntity!.VirtualCamera.CameraID);
                     }
@@ -55,14 +55,14 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
 
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButton("CameraLifetime_target", FontAwesomeIcon.LocationCrosshairs, "Target Camera"))
+                if(ImBrio.FontIconButton("CameraLifetime_target", FontAwesomeIcon.LocationCrosshairs, global::Brio.Resources.Localize.Get("ui.camera.targetCamera", "Target Camera")))
                 {
                     Capability.VirtualCameraManager.SelectCamera(_selectedEntity!.VirtualCamera);
                 }
 
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButton("containerwidget_selectinhierarchy", FontAwesomeIcon.FolderTree, "Select in Hierarchy", hasSelection))
+                if(ImBrio.FontIconButton("containerwidget_selectinhierarchy", FontAwesomeIcon.FolderTree, global::Brio.Resources.Localize.Get("ui.actor.selectInHierarchy", "Select in Hierarchy"), hasSelection))
                 {
                     Capability.VirtualCameraManager.SelectInHierarchy(_selectedEntity!);
                 }
@@ -72,7 +72,7 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
             {
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButton("containerwidget_destroyall", FontAwesomeIcon.Bomb, "Destroy All"))
+                if(ImBrio.FontIconButton("containerwidget_destroyall", FontAwesomeIcon.Bomb, global::Brio.Resources.Localize.Get("ui.common.destroyAll", "Destroy All")))
                 {
                     Capability.VirtualCameraManager.DestroyAll();
                 }
@@ -84,18 +84,18 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
     {
         using(ImRaii.Disabled(Capability.IsAllowed == false))
         {
-            if(ImGui.MenuItem("Open Camera Editor###containerwidgetpopup_OpenAdvance"))
+            if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.camera.openCameraEditor", "Open Camera Editor")}###containerwidgetpopup_OpenAdvance"))
             {
                 Capability.OpenCameraWindow();
             }
 
-            if(ImGui.BeginMenu("New...###containerwidgetpopup_new"))
+            if(ImGui.BeginMenu($"{global::Brio.Resources.Localize.Get("ui.common.new", "New...")}###containerwidgetpopup_new"))
             {
-                if(ImGui.MenuItem("New Camera###containerwidgetpopup_newcamera"))
+                if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.camera.newCamera", "New Camera")}###containerwidgetpopup_newcamera"))
                 {
                     Capability.VirtualCameraManager.CreateCamera(CameraType.Game);
                 }
-                if(ImGui.MenuItem("New Free-Cam###containerwidgetpopup_newfreecamera"))
+                if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.camera.newFreeCam", "New Free-Cam")}###containerwidgetpopup_newfreecamera"))
                 {
                     Capability.VirtualCameraManager.CreateCamera(CameraType.Free);
                 }
@@ -103,9 +103,9 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
                 ImGui.EndMenu();
             }
 
-            if(ImGui.BeginMenu("Destroy All Cameras###containerwidgetpopup_destroyall"))
+            if(ImGui.BeginMenu($"{global::Brio.Resources.Localize.Get("ui.camera.destroyAllCameras", "Destroy All Cameras")}###containerwidgetpopup_destroyall"))
             {
-                if(ImGui.MenuItem("Confirm Destruction###containerwidgetpopup_destroyall_confirm"))
+                if(ImGui.MenuItem($"{global::Brio.Resources.Localize.Get("ui.common.confirmDestruction", "Confirm Destruction")}###containerwidgetpopup_destroyall_confirm"))
                 {
                     Capability.VirtualCameraManager.DestroyAll();
                 }
