@@ -41,7 +41,7 @@ public class WeatherSelector(string id) : Selector<WeatherUnion>(id)
 
     protected override void DrawOptions()
     {
-        if(ImGui.Checkbox("Show Invalid Weathers", ref _showInvalidWeathers))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show Invalid Weathers"), ref _showInvalidWeathers))
             UpdateList();
     }
 

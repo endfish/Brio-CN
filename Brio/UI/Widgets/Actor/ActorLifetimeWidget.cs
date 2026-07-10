@@ -14,28 +14,28 @@ public class ActorLifetimeWidget(ActorLifetimeCapability capability) : Widget<Ac
 
     public override void DrawQuickIcons()
     {
-        if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, "Clone", Capability.CanClone))
+        if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, global::Brio.Resources.Localize.Text("Clone"), Capability.CanClone))
         {
             Capability.Clone(false);
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_target", FontAwesomeIcon.Bullseye, "Target"))
+        if(ImBrio.FontIconButton("lifetimewidget_target", FontAwesomeIcon.Bullseye, global::Brio.Resources.Localize.Text("Target")))
         {
             Capability.Target();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.HoldButton("lifetimewidget_destroy", "", FontAwesomeIcon.Trash, 1f, new(40, 0), centerTest: true, tooltip: "[HOLD TO DESTROY]", onlyIcon: true))
+        if(ImBrio.HoldButton("lifetimewidget_destroy", global::Brio.Resources.Localize.Text(""), FontAwesomeIcon.Trash, 1f, new(40, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("[HOLD TO DESTROY]"), onlyIcon: true))
         {
             Capability.Destroy();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, "Rename"))
+        if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, global::Brio.Resources.Localize.Text("Rename")))
         {
             ModalManager.Instance.OpenRenameModal(Capability.Actor);
         }
@@ -52,18 +52,18 @@ public class ActorLifetimeWidget(ActorLifetimeCapability capability) : Widget<Ac
 
         if(Capability.CanClone)
         {
-            if(ImGui.MenuItem("Clone###actorlifetime_clone"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Clone###actorlifetime_clone")))
             {
                 Capability.Clone(true);
             }
         }
 
-        if(ImGui.MenuItem("Move to Camera###actorlifetime_move_to_camera"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Move to Camera###actorlifetime_move_to_camera")))
         {
             Capability.MoveToCamera();
         }
 
-        if(ImGui.MenuItem("Target###actorlifetime_target"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Target###actorlifetime_target")))
         {
             Capability.Target();
         }
@@ -81,7 +81,7 @@ public class ActorLifetimeWidget(ActorLifetimeCapability capability) : Widget<Ac
 
             if(ImGui.BeginMenu("Destroy###actorlifetime_destroy"))
             {
-                if(ImGui.MenuItem("Confirm Destruction###actorlifetime_destroy_confirm"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###actorlifetime_destroy_confirm")))
                 {
                     Capability.Destroy();
                 }

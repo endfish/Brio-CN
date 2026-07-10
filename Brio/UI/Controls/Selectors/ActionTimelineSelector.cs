@@ -118,7 +118,7 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
     {
         if(_isPinned)
         {
-            ImGui.TextDisabled("(Selector is pinned as separate window)");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("(Selector is pinned as separate window)"));
             return;
         }
 
@@ -283,7 +283,7 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
         if(_showBlendable)
         {
-            if(ImGui.Checkbox("Show Non-Blend Animations", ref _showNonBlendInBlendMode))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show Non-Blend Animations"), ref _showNonBlendInBlendMode))
                 UpdateList();
 
             ImBrio.VerticalPadding(2);
@@ -291,12 +291,13 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
         if(!_showBlendable)
         {
-            ImGui.Text("Draws Weapon");
+            ImGui.Text(global::Brio.Resources.Localize.Text("Draws Weapon"));
             ImBrio.VerticalPadding(1);
 
             int drawsWeaponSelection = !_filterByDrawsWeapon ? 0 : (_drawsWeaponValue ? 2 : 1);
 
-            if(ImBrio.ButtonSelectorStrip("draws_weapon_filter", Vector2.Zero, ref drawsWeaponSelection, ["All", "Sheathed", "Drawn"]))
+            if(ImBrio.ButtonSelectorStrip("draws_weapon_filter", Vector2.Zero, ref drawsWeaponSelection,
+                [global::Brio.Resources.Localize.Text("All"), global::Brio.Resources.Localize.Text("Sheathed"), global::Brio.Resources.Localize.Text("Drawn")]))
             {
                 switch(drawsWeaponSelection)
                 {
@@ -320,12 +321,13 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
             ImBrio.VerticalPadding(4);
         }
 
-        ImGui.Text("Emote Category");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Emote Category"));
         ImBrio.VerticalPadding(1);
 
         int emoteCategorySelection = _emoteCategoryValue;
 
-        if(ImBrio.ButtonSelectorStrip("emote_category_filter", Vector2.Zero, ref emoteCategorySelection, ["All", "General", "Special", "Expression"]))
+        if(ImBrio.ButtonSelectorStrip("emote_category_filter", Vector2.Zero, ref emoteCategorySelection,
+            [global::Brio.Resources.Localize.Text("All"), global::Brio.Resources.Localize.Text("General"), global::Brio.Resources.Localize.Text("Special"), global::Brio.Resources.Localize.Text("Expression")]))
         {
             _emoteCategoryValue = emoteCategorySelection;
             _filterByEmoteCategory = _emoteCategoryValue != 0;

@@ -100,14 +100,14 @@ public class MetadataModal : Modal
             ImGui.TableSetupColumn("##label", ImGuiTableColumnFlags.WidthFixed, labelColumnWidth);
             ImGui.TableSetupColumn("##input", ImGuiTableColumnFlags.WidthStretch);
 
-            Row("Author:", () => ImGui.InputText("###export_pose_author", ref _author, 100));
-            Row("Version:", () => ImGui.InputText("###export_pose_version", ref _version, 32));
+            Row("Author:", () => ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_author"), ref _author, 100));
+            Row("Version:", () => ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_version"), ref _version, 32));
             Row("Tags:", () =>
             {
-                ImGui.InputText("###export_pose_tags", ref _tags, 250);
-                ImBrio.AttachToolTip("Comma separated list of tags");
+                ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_tags"), ref _tags, 250);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Comma separated list of tags"));
             });
-            Row("Description:", () => ImGui.InputTextMultiline("###xport_pose_description", ref _description, 1024, new Vector2(-1, 5 * ImGui.GetTextLineHeight())));
+            Row("Description:", () => ImGui.InputTextMultiline(global::Brio.Resources.Localize.Text("###xport_pose_description"), ref _description, 1024, new Vector2(-1, 5 * ImGui.GetTextLineHeight())));
 
             static void Row(string label, Action input)
             {
@@ -121,7 +121,7 @@ public class MetadataModal : Modal
             }
         }
 
-        ImBrio.SeparatorText("Preview Image");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Preview Image"));
 
         if(ImGui.Button(_previewImage == null ? "Add##export_pose_preview" : "Replace##export_pose_preview"))
         {
@@ -146,7 +146,7 @@ public class MetadataModal : Modal
         if(_previewImage != null)
         {
             ImGui.SameLine();
-            if(ImGui.Button("Remove##export_pose_remove_preview"))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Remove##export_pose_remove_preview")))
             {
                 _previewImage?.Dispose();
                 _previewImage = null;
@@ -179,16 +179,16 @@ public class MetadataModal : Modal
 
         if(editing)
         {
-            if(ImGui.Button("Save", new(buttonW, 0)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Save"), new(buttonW, 0)))
             {
                 _fileEntry!.SaveMetadata(_author, _version, _description, _tags, _base64Image);
                 Close();
             }
-            ImBrio.AttachToolTip("Save the metadata to the file");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Save the metadata to the file"));
         }
         else
         {
-            if(ImGui.Button("Export", new(buttonW, 0)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Export"), new(buttonW, 0)))
             {
                 if(_capability is not null)
                 {
@@ -221,12 +221,12 @@ public class MetadataModal : Modal
 
                 Close();
             }
-            ImBrio.AttachToolTip("Export the current pose to a file with the specified metadata");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Export the current pose to a file with the specified metadata"));
         }
 
         ImGui.SameLine();
 
-        if(ImGui.Button("Cancel", new(buttonW, 0)))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Cancel"), new(buttonW, 0)))
             Close();
     }
 }

@@ -106,7 +106,7 @@ public class ReferenceImageService(EntityManager entityManager)
             }
             else
             {
-                ImGui.TextDisabled("Image loading...");
+                ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Image loading..."));
             }
         }
 
@@ -151,7 +151,7 @@ public class ReferenceImageService(EntityManager entityManager)
         float opacityPercent = entity.Opacity * 100f;
         if(ImGui.SliderFloat($"###opacity_{entity.Id}", ref opacityPercent, 10f, 100f, "%.0f%%"))
             entity.Opacity = opacityPercent / 100f;
-        ImBrio.AttachToolTip("Opacity");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Opacity"));
 
         ImGui.SameLine();
 
@@ -159,7 +159,7 @@ public class ReferenceImageService(EntityManager entityManager)
         float zoom = entity.Zoom;
         if(ImGui.SliderFloat($"###zoom_{entity.Id}", ref zoom, 0.1f, 3.0f, "%.1fx"))
             entity.Zoom = zoom;
-        ImBrio.AttachToolTip("Zoom (Scroll Wheel)");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Zoom (Scroll Wheel)"));
 
         ImGui.SameLine();
 
@@ -167,7 +167,7 @@ public class ReferenceImageService(EntityManager entityManager)
         float rotationDegrees = entity.Rotation * (180f / MathF.PI);
         if(ImGui.SliderFloat($"###rotation_{entity.Id}", ref rotationDegrees, 0f, 360f, "%.0f°"))
             entity.Rotation = rotationDegrees * (MathF.PI / 180f);
-        ImBrio.AttachToolTip("Rotation");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rotation"));
 
         ImGui.SameLine();
 

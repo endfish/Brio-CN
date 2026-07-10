@@ -13,28 +13,28 @@ public class LightLifetimeWidget(LightLifetimeCapability lightLifetimeCapability
 
     public override void DrawQuickIcons()
     {
-        if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, "Clone Light", Capability.CanClone))
+        if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, global::Brio.Resources.Localize.Text("Clone Light"), Capability.CanClone))
         {
             Capability.Clone();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("lifetimewidget_move_to_camera", FontAwesomeIcon.CaretSquareDown, "Move to Camera"))
+        if(ImBrio.FontIconButton("lifetimewidget_move_to_camera", FontAwesomeIcon.CaretSquareDown, global::Brio.Resources.Localize.Text("Move to Camera")))
         {
             Capability.MoveToCamera();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.HoldButton("lifetimewidget_destroy", "", FontAwesomeIcon.Trash, 1f, new(40, 0), centerTest: true, tooltip: "[HOLD TO DESTROY]", onlyIcon: true))
+        if(ImBrio.HoldButton("lifetimewidget_destroy", global::Brio.Resources.Localize.Text(""), FontAwesomeIcon.Trash, 1f, new(40, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("[HOLD TO DESTROY]"), onlyIcon: true))
         {
             Capability.Destroy();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, "Rename Light"))
+        if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, global::Brio.Resources.Localize.Text("Rename Light")))
         {
             ModalManager.Instance.OpenRenameModal(Capability.Entity);
         }
@@ -51,13 +51,13 @@ public class LightLifetimeWidget(LightLifetimeCapability lightLifetimeCapability
 
         if(Capability.CanClone)
         {
-            if(ImGui.MenuItem("Clone###lightlifetime_clone"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Clone###lightlifetime_clone")))
             {
                 Capability.Clone();
             }
         }
 
-        if(ImGui.MenuItem("Move to Camera###lightlifetime_move_to_camera"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Move to Camera###lightlifetime_move_to_camera")))
         {
             Capability.MoveToCamera();
         }
@@ -68,7 +68,7 @@ public class LightLifetimeWidget(LightLifetimeCapability lightLifetimeCapability
             Capability.GameLight.ToggleLight();
         }
 
-        if(ImGui.MenuItem("Open Light Window###lightlifetime_lightwindow"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Open Light Window###lightlifetime_lightwindow")))
         {
             Capability.OpenLightWindow();
         }
@@ -79,7 +79,7 @@ public class LightLifetimeWidget(LightLifetimeCapability lightLifetimeCapability
 
             if(ImGui.BeginMenu("Destroy###lightlifetime_destroy"))
             {
-                if(ImGui.MenuItem("Confirm Destruction###lightlifetime_destroy_confirm"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###lightlifetime_destroy_confirm")))
                 {
                     Capability.Destroy();
                 }

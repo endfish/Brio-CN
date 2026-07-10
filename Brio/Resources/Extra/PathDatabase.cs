@@ -316,8 +316,14 @@ public sealed partial class PathIndex
 
         var fileName = Path.GetFileNameWithoutExtension(path);
         var assetType = GetAssetType(fileName);
+        var localizedAssetType = global::Brio.Resources.Localize.Text(assetType);
 
-        return new GamePathInfo(path, $"{assetType} [{fileName}]", expansion, subtype, assetType);
+        return new GamePathInfo(
+            path,
+            $"{localizedAssetType} [{fileName}]",
+            global::Brio.Resources.Localize.Text(expansion),
+            global::Brio.Resources.Localize.Text(subtype),
+            localizedAssetType);
     }
 
     private static string GetAssetType(string fileName)

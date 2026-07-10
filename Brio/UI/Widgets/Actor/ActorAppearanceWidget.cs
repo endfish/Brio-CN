@@ -49,7 +49,7 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
 
     private void DrawLoadAppearance()
     {
-        if(ImBrio.FontIconButton("load_npc", FontAwesomeIcon.PersonArrowDownToLine, "Load NPC Appearance"))
+        if(ImBrio.FontIconButton("load_npc", FontAwesomeIcon.PersonArrowDownToLine, global::Brio.Resources.Localize.Text("Load NPC Appearance")))
         {
             AppearanceEditorCommon.ResetNPCSelector();
             ImGui.OpenPopup("widget_npc_selector");
@@ -57,12 +57,12 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("import_charafile", FontAwesomeIcon.FileDownload, "Import Character"))
+        if(ImBrio.FontIconButton("import_charafile", FontAwesomeIcon.FileDownload, global::Brio.Resources.Localize.Text("Import Character")))
             FileUIHelpers.ShowImportCharacterModal(Capability, AppearanceImportOptions.All);
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("export_charafile", FontAwesomeIcon.Save, "Save Character File"))
+        if(ImBrio.FontIconButton("export_charafile", FontAwesomeIcon.Save, global::Brio.Resources.Localize.Text("Save Character File")))
             FileUIHelpers.ShowExportCharacterModal(Capability);
 
         ImBrio.VerticalSeparator(24, 1);
@@ -71,36 +71,36 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
         {
             using(ImRaii.Disabled(Capability.IsSelf || Capability.IsAnyMCDFLoading))
             {
-                if(ImBrio.FontIconButton("load_mcdf", FontAwesomeIcon.CloudDownloadAlt, "Load MCDF"))
+                if(ImBrio.FontIconButton("load_mcdf", FontAwesomeIcon.CloudDownloadAlt, global::Brio.Resources.Localize.Text("Load MCDF")))
                 {
                     FileUIHelpers.ShowImportMCDFModal(Capability);
                 }
                 ImGui.SameLine();
             }
             if(Capability.IsSelf)
-                ImBrio.AttachToolTip("Can not load a MCDF on your Player Character. Spawn an Actor to load a MCDF.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Can not load a MCDF on your Player Character. Spawn an Actor to load a MCDF."));
             if(Capability.IsAnyMCDFLoading)
-                ImBrio.AttachToolTip("Another MCDF is loading, Please wait for it to finish.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Another MCDF is loading, Please wait for it to finish."));
 
             using(ImRaii.Disabled(Capability.HasMCDF))
             {
-                if(ImBrio.FontIconButton("save_mcdf", FontAwesomeIcon.CloudUploadAlt, "Save MCDF"))
+                if(ImBrio.FontIconButton("save_mcdf", FontAwesomeIcon.CloudUploadAlt, global::Brio.Resources.Localize.Text("Save MCDF")))
                 {
                     FileUIHelpers.ShowExportMCDFModal(Capability);
                 }
             }
             if(Capability.HasMCDF)
-                ImBrio.AttachToolTip("Can not save a MCDF of a Actor that has a MCDF loaded. Reset this Actor to save a MCDF.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Can not save a MCDF of a Actor that has a MCDF loaded. Reset this Actor to save a MCDF."));
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("advanced_appearance", FontAwesomeIcon.UserEdit, "Advanced"))
+        if(ImBrio.FontIconButton("advanced_appearance", FontAwesomeIcon.UserEdit, global::Brio.Resources.Localize.Text("Advanced")))
             ToggleAdvancedWindow();
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("reset_appearance", FontAwesomeIcon.Undo, 1, "Reset", Capability.IsAppearanceOverridden))
+        if(ImBrio.FontIconButtonRight("reset_appearance", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset"), Capability.IsAppearanceOverridden))
             _ = Capability.ResetAppearance();
 
         using(var popup = ImRaii.Popup("widget_npc_selector"))
@@ -115,7 +115,7 @@ public class ActorAppearanceWidget(ActorAppearanceCapability capability) : Widge
 
     public override void DrawQuickIcons()
     {
-        if(ImBrio.FontIconButton("redrawwidget_redraw", FontAwesomeIcon.PaintBrush, "Redraw"))
+        if(ImBrio.FontIconButton("redrawwidget_redraw", FontAwesomeIcon.PaintBrush, global::Brio.Resources.Localize.Text("Redraw")))
         {
             _ = Capability.Redraw();
         }

@@ -96,14 +96,15 @@ public class SettingsWindow : Window
             {
                 DrawLibrarySection();
 
-                if(ImBrio.Button("Close", FontAwesomeIcon.Times, new Vector2(100, 0)))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("Close"), FontAwesomeIcon.Times, new Vector2(100, 0)))
                 {
                     IsOpen = false;
                 }
             }
             else
             {
-                ImBrio.ButtonSelectorStrip("settings_filters_selector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected, ["General", "Posing", "Library", "Auto-Save", "Input", "Advanced"]);
+                ImBrio.ButtonSelectorStrip("settings_filters_selector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected,
+                    [Localize.Text("General"), Localize.Text("Posing"), Localize.Text("Library"), Localize.Text("Auto-Save"), Localize.Text("Input"), Localize.Text("Advanced")]);
 
                 using(var child = ImRaii.Child("###settingsPane"))
                 {
@@ -138,18 +139,18 @@ public class SettingsWindow : Window
 
     private void DrawGeneralTab()
     {
-        ImBrio.SeparatorText("Options");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Options"));
 
         DrawGeneralSettings();
 
-        ImBrio.SeparatorText("IPC");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("IPC"));
 
         DrawBrioIPC();
         DrawThirdPartyIPC();
 
-        ImBrio.SeparatorText("Other");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Other"));
 
-        if(ImGui.CollapsingHeader("Library", ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Library"), ImGuiTreeNodeFlags.DefaultOpen))
         {
             bool useLibraryWhenImporting = _configurationService.Configuration.UseLibraryWhenImporting;
             const string label1 = "Use the Library when importing a file";
@@ -179,7 +180,7 @@ public class SettingsWindow : Window
             }
         }
 
-        if(ImGui.CollapsingHeader("Transform Slider Speed"))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Transform Slider Speed")))
         {
             DrawOffsetSection();
         }
@@ -209,21 +210,21 @@ public class SettingsWindow : Window
     private void DrawHideSettings()
     {
         bool showInGPose = _configurationService.Configuration.Interface.ShowInGPose;
-        if(ImGui.Checkbox("Show in GPose", ref showInGPose))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show in GPose"), ref showInGPose))
         {
             _configurationService.Configuration.Interface.ShowInGPose = showInGPose;
             _configurationService.ApplyChange();
         }
 
         bool showInCutscene = _configurationService.Configuration.Interface.ShowInCutscene;
-        if(ImGui.Checkbox("Show in Cutscenes", ref showInCutscene))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show in Cutscenes"), ref showInCutscene))
         {
             _configurationService.Configuration.Interface.ShowInCutscene = showInCutscene;
             _configurationService.ApplyChange();
         }
 
         bool showWhenUIHidden = _configurationService.Configuration.Interface.ShowWhenUIHidden;
-        if(ImGui.Checkbox("Show when UI Hidden", ref showWhenUIHidden))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show when UI Hidden"), ref showWhenUIHidden))
         {
             _configurationService.Configuration.Interface.ShowWhenUIHidden = showWhenUIHidden;
             _configurationService.ApplyChange();
@@ -233,20 +234,20 @@ public class SettingsWindow : Window
     private void DrawGeneralSettings()
     {
         bool censorActorNames = _configurationService.Configuration.Interface.CensorActorNames;
-        if(ImGui.Checkbox("Censor Actor Names Across Brio", ref censorActorNames))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Censor Actor Names Across Brio"), ref censorActorNames))
         {
             _configurationService.Configuration.Interface.CensorActorNames = censorActorNames;
             _configurationService.ApplyChange();
         }
 
         bool hideNames = _configurationService.Configuration.Posing.HideNameOnGPoseSettingsWindow;
-        if(ImGui.Checkbox("Hide Name in 'Group Pose Settings' Window", ref hideNames))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Hide Name in 'Group Pose Settings' Window"), ref hideNames))
         {
             _configurationService.Configuration.Posing.HideNameOnGPoseSettingsWindow = hideNames;
             _configurationService.ApplyChange();
         }
 
-        ImBrio.SeparatorText("Brio's Theme");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Brio's Theme"));
 
         var currentThemeName = _configurationService.Configuration.Appearance.Theme;
         const string themeLabel = "Theme";
@@ -277,7 +278,7 @@ public class SettingsWindow : Window
         //}
 
         bool blur = _configurationService.Configuration.Appearance.EnableBlur;
-        if(ImGui.Checkbox("Enable Background Blur", ref blur))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Background Blur"), ref blur))
         {
             _configurationService.Configuration.Appearance.EnableBlur = blur;
             _configurationService.ApplyChange();
@@ -287,14 +288,14 @@ public class SettingsWindow : Window
 
     private void DrawSceneTab()
     {
-        ImBrio.SeparatorText("Options");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Options"));
 
         DrawAutoSaveSettings();
     }
 
     private void DrawThirdPartyIPC()
     {
-        if(ImGui.CollapsingHeader("Third-Party IPC"))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Third-Party IPC")))
         {
             var penumbraStatus = _penumbraService.CheckStatus();
             var penumbraUnavailable = penumbraStatus is IPCStatus.None or IPCStatus.NotInstalled or IPCStatus.VersionMismatch or IPCStatus.Error;
@@ -302,13 +303,13 @@ public class SettingsWindow : Window
             if(penumbraUnavailable)
             {
                 using(ImRaii.PushColor(ImGuiCol.Text, UIConstants.GizmoRed))
-                    ImGui.Text("Please Install Penumbra");
+                    ImGui.Text(global::Brio.Resources.Localize.Text("Please Install Penumbra"));
             }
 
             using(ImRaii.Disabled(penumbraUnavailable))
             {
                 bool enablePenumbra = _configurationService.Configuration.IPC.AllowPenumbraIntegration;
-                if(ImGui.Checkbox("Allow Penumbra Integration", ref enablePenumbra))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Allow Penumbra Integration"), ref enablePenumbra))
                 {
                     _configurationService.Configuration.IPC.AllowPenumbraIntegration = enablePenumbra;
                     _configurationService.ApplyChange();
@@ -317,14 +318,14 @@ public class SettingsWindow : Window
 
                 ImGui.Text($"Penumbra Status: {penumbraStatus}");
                 ImGui.SameLine();
-                if(ImBrio.FontIconButton("refresh_penumbra", FontAwesomeIcon.Sync, "Refresh Penumbra Status"))
+                if(ImBrio.FontIconButton("refresh_penumbra", FontAwesomeIcon.Sync, global::Brio.Resources.Localize.Text("Refresh Penumbra Status")))
                 {
                     _penumbraService.CheckStatus(true);
                 }
             }
 
             bool enableGlamourer = _configurationService.Configuration.IPC.AllowGlamourerIntegration;
-            if(ImGui.Checkbox("Allow Glamourer Integration", ref enableGlamourer))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Allow Glamourer Integration"), ref enableGlamourer))
             {
                 _configurationService.Configuration.IPC.AllowGlamourerIntegration = enableGlamourer;
                 _configurationService.ApplyChange();
@@ -336,14 +337,14 @@ public class SettingsWindow : Window
             {
                 ImGui.Text($"Glamourer Status: {glamourerStatus}");
                 ImGui.SameLine();
-                if(ImBrio.FontIconButton("refresh_glamourer", FontAwesomeIcon.Sync, "Refresh Glamourer Status"))
+                if(ImBrio.FontIconButton("refresh_glamourer", FontAwesomeIcon.Sync, global::Brio.Resources.Localize.Text("Refresh Glamourer Status")))
                 {
                     _glamourerService.CheckStatus(true);
                 }
             }
 
             bool enableCustomizePlus = _configurationService.Configuration.IPC.AllowCustomizePlusIntegration;
-            if(ImGui.Checkbox("Allow Customize+ Integration", ref enableCustomizePlus))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Allow Customize+ Integration"), ref enableCustomizePlus))
             {
                 _configurationService.Configuration.IPC.AllowCustomizePlusIntegration = enableCustomizePlus;
                 _configurationService.ApplyChange();
@@ -355,7 +356,7 @@ public class SettingsWindow : Window
             {
                 ImGui.Text($"Customize+ Status: {customizePlusStatus}");
                 ImGui.SameLine();
-                if(ImBrio.FontIconButton("refresh_Customize", FontAwesomeIcon.Sync, "Refresh Customize+ Status"))
+                if(ImBrio.FontIconButton("refresh_Customize", FontAwesomeIcon.Sync, global::Brio.Resources.Localize.Text("Refresh Customize+ Status")))
                 {
                     _customizePlusService.CheckStatus(true);
                 }
@@ -366,7 +367,7 @@ public class SettingsWindow : Window
     private void DrawAutoSaveSettings()
     {
         var enabled = _configurationService.Configuration.AutoSave.AutoSaveSystemEnabled;
-        if(ImGui.Checkbox("Auto-Save Enabled", ref enabled))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Auto-Save Enabled"), ref enabled))
         {
             _configurationService.Configuration.AutoSave.AutoSaveSystemEnabled = enabled;
             _configurationService.ApplyChange();
@@ -375,28 +376,28 @@ public class SettingsWindow : Window
         using(ImRaii.Disabled(!enabled))
         {
             var individual = _configurationService.Configuration.AutoSave.AutoSaveIndividualPoses;
-            if(ImGui.Checkbox("Save Individual Poses", ref individual))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Save Individual Poses"), ref individual))
             {
                 _configurationService.Configuration.AutoSave.AutoSaveIndividualPoses = individual;
                 _configurationService.ApplyChange();
             }
 
             var autoGPoseClear = _configurationService.Configuration.AutoSave.CleanAutoSaveOnLeavingGpose;
-            if(ImGui.Checkbox("Clean AutoSaves When Leaving GPose", ref autoGPoseClear))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Clean AutoSaves When Leaving GPose"), ref autoGPoseClear))
             {
                 _configurationService.Configuration.AutoSave.CleanAutoSaveOnLeavingGpose = autoGPoseClear;
                 _configurationService.ApplyChange();
             }
 
             var saveInterval = _configurationService.Configuration.AutoSave.AutoSaveInterval;
-            if(ImGui.SliderInt("Auto-Save Interval", ref saveInterval, 15, 500, "%d seconds"))
+            if(ImGui.SliderInt(global::Brio.Resources.Localize.Text("Auto-Save Interval"), ref saveInterval, 15, 500, "%d seconds"))
             {
                 _configurationService.Configuration.AutoSave.AutoSaveInterval = saveInterval;
                 _configurationService.ApplyChange();
             }
 
             var maxSaves = _configurationService.Configuration.AutoSave.MaxAutoSaves;
-            if(ImGui.SliderInt("Max Auto-Saves", ref maxSaves, 3, 80))
+            if(ImGui.SliderInt(global::Brio.Resources.Localize.Text("Max Auto-Saves"), ref maxSaves, 3, 80))
             {
                 _configurationService.Configuration.AutoSave.MaxAutoSaves = maxSaves;
                 _configurationService.ApplyChange();
@@ -406,10 +407,10 @@ public class SettingsWindow : Window
 
     private void DrawBrioIPC()
     {
-        if(ImGui.CollapsingHeader("Brio API & IPC"))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Brio API & IPC")))
         {
             bool enableBrioIpc = _configurationService.Configuration.IPC.EnableBrioIPC;
-            if(ImGui.Checkbox("Enable Brio IPC", ref enableBrioIpc))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Brio IPC"), ref enableBrioIpc))
             {
                 _configurationService.Configuration.IPC.EnableBrioIPC = enableBrioIpc;
                 _configurationService.ApplyChange();
@@ -417,7 +418,7 @@ public class SettingsWindow : Window
             ImGui.Text($"Brio IPC Status: {(enableBrioIpc ? "Active" : "Inactive")}");
 
             bool enableWebApi = _configurationService.Configuration.IPC.AllowWebAPI;
-            if(ImGui.Checkbox("Enable Brio API", ref enableWebApi))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Brio API"), ref enableWebApi))
             {
                 _configurationService.Configuration.IPC.AllowWebAPI = enableWebApi;
                 _configurationService.ApplyChange();
@@ -429,17 +430,17 @@ public class SettingsWindow : Window
 
     private void DrawNPCAppearanceHack()
     {
-        if(ImGui.CollapsingHeader("Appearance", ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Appearance"), ImGuiTreeNodeFlags.DefaultOpen))
         {
             bool enableBrioColor = _configurationService.Configuration.Appearance.EnableBrioColor;
-            if(ImGui.Checkbox("Enable Brio Color", ref enableBrioColor))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Brio Color"), ref enableBrioColor))
             {
                 _configurationService.Configuration.Appearance.EnableBrioColor = enableBrioColor;
                 _configurationService.ApplyChange();
             }
 
             bool enableBrioScale = _configurationService.Configuration.Appearance.EnableBrioScale;
-            if(ImGui.Checkbox("Enable Brio Scale", ref enableBrioScale))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Brio Scale"), ref enableBrioScale))
             {
                 _configurationService.Configuration.Appearance.EnableBrioScale = enableBrioScale;
                 _configurationService.ApplyChange();
@@ -464,7 +465,7 @@ public class SettingsWindow : Window
             }
 
             bool enableTinting = _configurationService.Configuration.Appearance.EnableTinting;
-            if(ImGui.Checkbox("Enable Tinting", ref enableTinting))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Tinting"), ref enableTinting))
             {
                 _configurationService.Configuration.Appearance.EnableTinting = enableTinting;
                 _configurationService.ApplyChange();
@@ -474,7 +475,7 @@ public class SettingsWindow : Window
 
     private void DrawPosingTab()
     {
-        ImBrio.SeparatorText("Options");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Options"));
 
         DrawPosingGeneralSection();
         DrawGPoseSection();
@@ -483,45 +484,45 @@ public class SettingsWindow : Window
 
     private void DrawGPoseSection()
     {
-        if(ImGui.CollapsingHeader("GPose", ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("GPose"), ImGuiTreeNodeFlags.DefaultOpen))
         {
             bool enableMouseHook = _configurationService.Configuration.Posing.DisableGPoseMouseSelect;
-            if(ImGui.Checkbox("Disable GPose Mouse Select", ref enableMouseHook))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Disable GPose Mouse Select"), ref enableMouseHook))
             {
                 _configurationService.Configuration.Posing.DisableGPoseMouseSelect = enableMouseHook;
                 _configurationService.ApplyChange();
             }
 
             bool enableBrioTargetChange = _configurationService.Configuration.Posing.BrioTargetChangesWithGPose;
-            if(ImGui.Checkbox("Brio Target Changes with GPose Target", ref enableBrioTargetChange))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Brio Target Changes with GPose Target"), ref enableBrioTargetChange))
             {
                 _configurationService.Configuration.Posing.BrioTargetChangesWithGPose = enableBrioTargetChange;
                 _configurationService.ApplyChange();
             }
 
             bool enableGPoseTargetChange = _configurationService.Configuration.Posing.GPoseTargetChangesWithBrio;
-            if(ImGui.Checkbox("GPose Target Changes with Brio Target", ref enableGPoseTargetChange))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("GPose Target Changes with Brio Target"), ref enableGPoseTargetChange))
             {
                 _configurationService.Configuration.Posing.GPoseTargetChangesWithBrio = enableGPoseTargetChange;
                 _configurationService.ApplyChange();
             }
 
             bool autoSelectModelTransform = _configurationService.Configuration.Posing.AutoSelectTransformOnEntitySelect;
-            if(ImGui.Checkbox("Select Model Transform on Entity Select", ref autoSelectModelTransform))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Select Model Transform on Entity Select"), ref autoSelectModelTransform))
             {
                 _configurationService.Configuration.Posing.AutoSelectTransformOnEntitySelect = autoSelectModelTransform;
                 _configurationService.ApplyChange();
             }
 
             bool autoSelectLight = _configurationService.Configuration.Posing.AutoSelectLightWhenClickingOnALight;
-            if(ImGui.Checkbox("Select Light in Light Window when Clicking a Light Entity", ref autoSelectLight))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Select Light in Light Window when Clicking a Light Entity"), ref autoSelectLight))
             {
                 _configurationService.Configuration.Posing.AutoSelectLightWhenClickingOnALight = autoSelectLight;
                 _configurationService.ApplyChange();
             }
 
             bool ifLightWindowOpenDontUseSceneManager = _configurationService.Configuration.Posing.IfLightWindowisOpenDontUseSceneManager;
-            if(ImGui.Checkbox("If Light Window is Open, Don't Show Light Widget in the Scene Manager", ref ifLightWindowOpenDontUseSceneManager))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("If Light Window is Open, Don't Show Light Widget in the Scene Manager"), ref ifLightWindowOpenDontUseSceneManager))
             {
                 _configurationService.Configuration.Posing.IfLightWindowisOpenDontUseSceneManager = ifLightWindowOpenDontUseSceneManager;
                 _configurationService.ApplyChange();
@@ -531,49 +532,49 @@ public class SettingsWindow : Window
 
     private void DrawOverlaySection()
     {
-        if(ImGui.CollapsingHeader("Overlay", ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Overlay"), ImGuiTreeNodeFlags.DefaultOpen))
         {
             bool defaultsOn = _configurationService.Configuration.Posing.OverlayDefaultsOn;
-            if(ImGui.Checkbox("Overlay Defaults On", ref defaultsOn))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Overlay Defaults On"), ref defaultsOn))
             {
                 _configurationService.Configuration.Posing.OverlayDefaultsOn = defaultsOn;
                 _configurationService.ApplyChange();
             }
 
-            ImBrio.SeparatorText("Gizmo");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Gizmo"));
 
             bool enableAdvanedGizmo = _configurationService.Configuration.Posing.IsAdvancedGizmoEnabled;
-            if(ImGui.Checkbox("Enable Advanced Gizmo by Default", ref enableAdvanedGizmo))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Advanced Gizmo by Default"), ref enableAdvanedGizmo))
             {
                 _configurationService.Configuration.Posing.IsAdvancedGizmoEnabled = enableAdvanedGizmo;
                 _configurationService.ApplyChange();
             }
 
             bool allowGizmoAxisFlip = _configurationService.Configuration.Posing.AllowGizmoAxisFlip;
-            if(ImGui.Checkbox("Allow Gizmo Axis Flip", ref allowGizmoAxisFlip))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Allow Gizmo Axis Flip"), ref allowGizmoAxisFlip))
             {
                 _configurationService.Configuration.Posing.AllowGizmoAxisFlip = allowGizmoAxisFlip;
                 _configurationService.ApplyChange();
             }
 
             bool hideGizmoWhenAdvancedPosingOpen = _configurationService.Configuration.Posing.HideGizmoWhenAdvancedPosingOpen;
-            if(ImGui.Checkbox("Hide Gizmo while Advanced Posing", ref hideGizmoWhenAdvancedPosingOpen))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Hide Gizmo while Advanced Posing"), ref hideGizmoWhenAdvancedPosingOpen))
             {
                 _configurationService.Configuration.Posing.HideGizmoWhenAdvancedPosingOpen = hideGizmoWhenAdvancedPosingOpen;
                 _configurationService.ApplyChange();
             }
 
             bool hideToolbarWhenAdvancedPosingOpen = _configurationService.Configuration.Posing.HideToolbarWhenAdvandedPosingOpen;
-            if(ImGui.Checkbox("Hide Toolbar while Advanced Posing", ref hideToolbarWhenAdvancedPosingOpen))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Hide Toolbar while Advanced Posing"), ref hideToolbarWhenAdvancedPosingOpen))
             {
                 _configurationService.Configuration.Posing.HideToolbarWhenAdvandedPosingOpen = hideToolbarWhenAdvancedPosingOpen;
                 _configurationService.ApplyChange();
             }
 
-            ImBrio.SeparatorText("Skeleton");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Skeleton"));
 
             bool showSkeletonLines = _configurationService.Configuration.Posing.ShowSkeletonLines;
-            if(ImGui.Checkbox("Show Skeleton Lines", ref showSkeletonLines))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show Skeleton Lines"), ref showSkeletonLines))
             {
                 _configurationService.Configuration.Posing.ShowSkeletonLines = showSkeletonLines;
                 _configurationService.ApplyChange();
@@ -582,21 +583,21 @@ public class SettingsWindow : Window
             using(ImRaii.Disabled(!showSkeletonLines))
             {
                 bool skeletonLineToCircle = _configurationService.Configuration.Posing.SkeletonLineToCircle;
-                if(ImGui.Checkbox("Draw skeleton line to edge of bone circle", ref skeletonLineToCircle))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Draw skeleton line to edge of bone circle"), ref skeletonLineToCircle))
                 {
                     _configurationService.Configuration.Posing.SkeletonLineToCircle = skeletonLineToCircle;
                     _configurationService.ApplyChange();
                 }
 
                 bool hideSkeletonWhenGizmoActive = _configurationService.Configuration.Posing.HideSkeletonWhenGizmoActive;
-                if(ImGui.Checkbox("Hide Skeleton when Gizmo Active", ref hideSkeletonWhenGizmoActive))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Hide Skeleton when Gizmo Active"), ref hideSkeletonWhenGizmoActive))
                 {
                     _configurationService.Configuration.Posing.HideSkeletonWhenGizmoActive = hideSkeletonWhenGizmoActive;
                     _configurationService.ApplyChange();
                 }
 
                 float lineThickness = _configurationService.Configuration.Posing.SkeletonLineThickness;
-                if(ImGui.DragFloat("Line Thickness", ref lineThickness, 0.01f, 0.01f, 20f))
+                if(ImGui.DragFloat(global::Brio.Resources.Localize.Text("Line Thickness"), ref lineThickness, 0.01f, 0.01f, 20f))
                 {
                     _configurationService.Configuration.Posing.SkeletonLineThickness = lineThickness;
                     _configurationService.ApplyChange();
@@ -604,41 +605,41 @@ public class SettingsWindow : Window
             }
 
             float circleSize = _configurationService.Configuration.Posing.BoneCircleSize;
-            if(ImGui.DragFloat("Circle Size", ref circleSize, 0.01f, 0.01f, 20f))
+            if(ImGui.DragFloat(global::Brio.Resources.Localize.Text("Circle Size"), ref circleSize, 0.01f, 0.01f, 20f))
             {
                 _configurationService.Configuration.Posing.BoneCircleSize = circleSize;
                 _configurationService.ApplyChange();
             }
 
-            ImBrio.SeparatorText("Overlay Colors");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Overlay Colors"));
 
-            ImGui.TextDisabled("Bone Circles");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Bone Circles"));
 
             using(ImRaii.PushIndent())
             {
                 Vector4 boneCircleNormalColor = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.BoneCircleNormalColor);
-                if(ImGui.ColorEdit4("Normal##bone", ref boneCircleNormalColor, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Normal##bone"), ref boneCircleNormalColor, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.BoneCircleNormalColor = ImGui.ColorConvertFloat4ToU32(boneCircleNormalColor);
                     _configurationService.ApplyChange();
                 }
 
                 Vector4 boneCircleInactiveColor = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.BoneCircleInactiveColor);
-                if(ImGui.ColorEdit4("Inactive##bone", ref boneCircleInactiveColor, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Inactive##bone"), ref boneCircleInactiveColor, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.BoneCircleInactiveColor = ImGui.ColorConvertFloat4ToU32(boneCircleInactiveColor);
                     _configurationService.ApplyChange();
                 }
 
                 Vector4 boneCircleHoveredColor = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.BoneCircleHoveredColor);
-                if(ImGui.ColorEdit4("Hovered##bone", ref boneCircleHoveredColor, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Hovered##bone"), ref boneCircleHoveredColor, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.BoneCircleHoveredColor = ImGui.ColorConvertFloat4ToU32(boneCircleHoveredColor);
                     _configurationService.ApplyChange();
                 }
 
                 Vector4 boneCircleSelectedColor = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.BoneCircleSelectedColor);
-                if(ImGui.ColorEdit4("Selected##bone", ref boneCircleSelectedColor, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Selected##bone"), ref boneCircleSelectedColor, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.BoneCircleSelectedColor = ImGui.ColorConvertFloat4ToU32(boneCircleSelectedColor);
                     _configurationService.ApplyChange();
@@ -646,10 +647,10 @@ public class SettingsWindow : Window
             }
 
             ImGui.Spacing();
-            ImGui.TextDisabled("Entity Colors");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Entity Colors"));
 
             bool standout = _configurationService.Configuration.Posing.ModelTransformStandout;
-            if(ImGui.Checkbox("Make the entity selections standout", ref standout))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Make the entity selections standout"), ref standout))
             {
                 _configurationService.Configuration.Posing.ModelTransformStandout = standout;
                 _configurationService.ApplyChange();
@@ -658,21 +659,21 @@ public class SettingsWindow : Window
             using(ImRaii.PushIndent())
             {
                 Vector4 modelTransformCircleStandOut = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.ModelTransformCircleStandOutColor);
-                if(ImGui.ColorEdit4("Actor Standout Color##model_transform", ref modelTransformCircleStandOut, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Actor Standout Color##model_transform"), ref modelTransformCircleStandOut, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.ModelTransformCircleStandOutColor = ImGui.ColorConvertFloat4ToU32(modelTransformCircleStandOut);
                     _configurationService.ApplyChange();
                 }
 
                 Vector4 lightCircleNormalColor = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.LightCircleNormalColor);
-                if(ImGui.ColorEdit4("Light Standout Color##light", ref lightCircleNormalColor, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Light Standout Color##light"), ref lightCircleNormalColor, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.LightCircleNormalColor = ImGui.ColorConvertFloat4ToU32(lightCircleNormalColor);
                     _configurationService.ApplyChange();
                 }
 
                 Vector4 worldObjectTypeOverlayColor = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.WorldObjectOverlayColor);
-                if(ImGui.ColorEdit4("World Object Standout Color##entitytype", ref worldObjectTypeOverlayColor, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("World Object Standout Color##entitytype"), ref worldObjectTypeOverlayColor, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.WorldObjectOverlayColor = ImGui.ColorConvertFloat4ToU32(worldObjectTypeOverlayColor);
                     _configurationService.ApplyChange();
@@ -680,19 +681,19 @@ public class SettingsWindow : Window
             }
 
             ImGui.Spacing();
-            ImGui.TextDisabled("Skeleton Lines");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Skeleton Lines"));
 
             using(ImRaii.PushIndent())
             {
                 Vector4 skeletonLineActive = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.SkeletonLineActiveColor);
-                if(ImGui.ColorEdit4("Active##line", ref skeletonLineActive, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Active##line"), ref skeletonLineActive, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.SkeletonLineActiveColor = ImGui.ColorConvertFloat4ToU32(skeletonLineActive);
                     _configurationService.ApplyChange();
                 }
 
                 Vector4 skeletonLineInactive = ImGui.ColorConvertU32ToFloat4(_configurationService.Configuration.Posing.SkeletonLineInactiveColor);
-                if(ImGui.ColorEdit4("Inactive##line", ref skeletonLineInactive, ImGuiColorEditFlags.NoInputs))
+                if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("Inactive##line"), ref skeletonLineInactive, ImGuiColorEditFlags.NoInputs))
                 {
                     _configurationService.Configuration.Posing.SkeletonLineInactiveColor = ImGui.ColorConvertFloat4ToU32(skeletonLineInactive);
                     _configurationService.ApplyChange();
@@ -700,10 +701,10 @@ public class SettingsWindow : Window
             }
 
             ImGui.Spacing();
-            ImGui.TextDisabled("Custom Bone Colors");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Custom Bone Colors"));
 
             bool usePerCategoryLineColors = _configurationService.Configuration.Posing.UsePerCategoryLineColors;
-            if(ImGui.Checkbox("Color Bone's by Category", ref usePerCategoryLineColors))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Color Bone's by Category"), ref usePerCategoryLineColors))
             {
                 _configurationService.Configuration.Posing.UsePerCategoryLineColors = usePerCategoryLineColors;
                 _configurationService.ApplyChange();
@@ -732,7 +733,7 @@ public class SettingsWindow : Window
                 }
             }
 
-            ImBrio.SeparatorText("Dot Offsets");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Dot Offsets"));
             DrawBoneOverlayOffsets();
         }
     }
@@ -745,13 +746,13 @@ public class SettingsWindow : Window
     private void DrawBoneOverlayOffsets()
     {
         bool useOverlayOffset = _configurationService.Configuration.Posing.UseOverlayOffset;
-        if(ImGui.Checkbox("Enable Overlay Offsets", ref useOverlayOffset))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Overlay Offsets"), ref useOverlayOffset))
         {
             _configurationService.Configuration.Posing.UseOverlayOffset = useOverlayOffset;
             _configurationService.ApplyChange();
         }
 
-        ImGui.TextDisabled("Offsets the bone's dots in the overlay");
+        ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Offsets the bone's dots in the overlay"));
 
         ImBrio.VerticalPadding(5);
 
@@ -773,7 +774,7 @@ public class SettingsWindow : Window
     {
         if(boneOffsets.Count == 0)
         {
-            ImGui.TextDisabled("No offsets. Add one below.");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No offsets. Add one below."));
             return;
         }
 
@@ -811,7 +812,7 @@ public class SettingsWindow : Window
             ImGui.TableNextColumn();
             ImGui.SetNextItemWidth(-1);
             var offset = bone.Value;
-            if(ImGui.DragFloat3("##offset", ref offset, 0.0001f, -10f, 10f, "%.4f"))
+            if(ImGui.DragFloat3(global::Brio.Resources.Localize.Text("##offset"), ref offset, 0.0001f, -10f, 10f, "%.4f"))
             {
                 boneOffsets[bone.Key] = offset;
                 _configurationService.ApplyChange();
@@ -835,11 +836,11 @@ public class SettingsWindow : Window
 
         ImGui.SameLine();
         ImGui.SetNextItemWidth(150 * ImGuiHelpers.GlobalScale);
-        ImGui.InputTextWithHint("###new_dotoffset", "or type a bone name", ref _newBoneOffsetName, 128);
+        ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("###new_dotoffset"), global::Brio.Resources.Localize.Text("or type a bone name"), ref _newBoneOffsetName, 128);
 
         ImGui.SameLine();
         var canAdd = !string.IsNullOrWhiteSpace(_newBoneOffsetName) && !boneOffsets.ContainsKey(_newBoneOffsetName.Trim());
-        if(ImBrio.FontIconButton("###add_dotoffset", FontAwesomeIcon.Plus, "Add bone dot offset", canAdd))
+        if(ImBrio.FontIconButton("###add_dotoffset", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Add bone dot offset"), canAdd))
         {
             boneOffsets[_newBoneOffsetName.Trim()] = Vector3.Zero;
             _configurationService.ApplyChange();
@@ -855,7 +856,7 @@ public class SettingsWindow : Window
             return;
 
         ImGui.SetNextItemWidth(-1);
-        ImGui.InputTextWithHint("###bonesearch", "Search", ref _boneOffsetSearch, 64);
+        ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("###bonesearch"), global::Brio.Resources.Localize.Text("Search"), ref _boneOffsetSearch, 64);
 
         ImGui.Separator();
 
@@ -920,7 +921,7 @@ public class SettingsWindow : Window
     private void DrawPosingGeneralSection()
     {
         var undoStackSize = _configurationService.Configuration.Posing.UndoStackSize;
-        if(ImGui.DragInt("Undo History", ref undoStackSize, 1, 0, 100))
+        if(ImGui.DragInt(global::Brio.Resources.Localize.Text("Undo History"), ref undoStackSize, 1, 0, 100))
         {
             _configurationService.Configuration.Posing.UndoStackSize = undoStackSize;
             _configurationService.ApplyChange();
@@ -969,16 +970,16 @@ public class SettingsWindow : Window
     bool resetSettings = false;
     private void DrawAdvancedTab()
     {
-        ImBrio.SeparatorText("Support");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Support"));
 
-        if(ImGui.Button("Copy Support Info to Clipboard"))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Copy Support Info to Clipboard")))
         {
             ImGui.SetClipboardText(Brio.GetDebugInfo());
         }
 
         ImGui.SameLine();
 
-        if(ImGui.Button("Copy Log to Clipboard"))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Copy Log to Clipboard")))
         {
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(Brio.GetDebugInfo())));
             Brio.Log.Warning("BRIOSUPPORT:" + base64);
@@ -992,9 +993,9 @@ public class SettingsWindow : Window
             ImGui.SetClipboardText(log);
         }
 
-        ImBrio.SeparatorText("Advanced");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Advanced"));
 
-        if(ImGui.CollapsingHeader("Scene Manager"))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Scene Manager")))
         {
             DrawOpenBrioSetting();
             DrawHideSettings();
@@ -1004,13 +1005,13 @@ public class SettingsWindow : Window
 
         DrawEnvironmentSection();
 
-        if(ImGui.CollapsingHeader("Settings", ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Settings"), ImGuiTreeNodeFlags.DefaultOpen))
         {
-            ImGui.Checkbox("Enable [ Reset Settings to Default ] Button", ref resetSettings);
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable [ Reset Settings to Default ] Button"), ref resetSettings);
 
             using(ImRaii.Disabled(!resetSettings))
             {
-                if(ImGui.Button("Reset Settings to Default", new(170 * ImGuiHelpers.GlobalScale, 0)))
+                if(ImGui.Button(global::Brio.Resources.Localize.Text("Reset Settings to Default"), new(170 * ImGuiHelpers.GlobalScale, 0)))
                 {
                     _configurationService.Reset();
                     resetSettings = false;
@@ -1021,31 +1022,31 @@ public class SettingsWindow : Window
 
     private void DrawEnvironmentSection()
     {
-        if(ImGui.CollapsingHeader("Environment"))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Environment")))
         {
             var resetTimeOnGPoseExit = _configurationService.Configuration.Environment.ResetTimeOnGPoseExit;
-            if(ImGui.Checkbox("Reset Time on GPose Exit", ref resetTimeOnGPoseExit))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Reset Time on GPose Exit"), ref resetTimeOnGPoseExit))
             {
                 _configurationService.Configuration.Environment.ResetTimeOnGPoseExit = resetTimeOnGPoseExit;
                 _configurationService.ApplyChange();
             }
 
             var resetWeatherOnGPoseExit = _configurationService.Configuration.Environment.ResetWeatherOnGPoseExit;
-            if(ImGui.Checkbox("Reset Weather on GPose Exit", ref resetWeatherOnGPoseExit))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Reset Weather on GPose Exit"), ref resetWeatherOnGPoseExit))
             {
                 _configurationService.Configuration.Environment.ResetWeatherOnGPoseExit = resetWeatherOnGPoseExit;
                 _configurationService.ApplyChange();
             }
 
             var resetWaterOnGPoseExit = _configurationService.Configuration.Environment.ResetWaterOnGPoseExit;
-            if(ImGui.Checkbox("Reset Water on GPose Exit", ref resetWaterOnGPoseExit))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Reset Water on GPose Exit"), ref resetWaterOnGPoseExit))
             {
                 _configurationService.Configuration.Environment.ResetWaterOnGPoseExit = resetWaterOnGPoseExit;
                 _configurationService.ApplyChange();
             }
 
             var resetAdvancedOnGPoseExit = _configurationService.Configuration.Environment.ResetAdvancedOnGPoseExit;
-            if(ImGui.Checkbox("Reset Advanced Environment on GPose Exit", ref resetAdvancedOnGPoseExit))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Reset Advanced Environment on GPose Exit"), ref resetAdvancedOnGPoseExit))
             {
                 _configurationService.Configuration.Environment.ResetAdvancedOnGPoseExit = resetAdvancedOnGPoseExit;
                 _configurationService.ApplyChange();
@@ -1065,39 +1066,39 @@ public class SettingsWindow : Window
 
     private void DrawKeysTab()
     {
-        ImBrio.SeparatorText("Options");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Options"));
 
         bool enableKeybinds = _configurationService.Configuration.InputManager.Enable;
-        if(ImGui.Checkbox("Enable keyboard shortcuts", ref enableKeybinds))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable keyboard shortcuts"), ref enableKeybinds))
         {
             _configurationService.Configuration.InputManager.Enable = enableKeybinds;
             _configurationService.ApplyChange();
         }
 
         bool enableKeyHandlingOnKeyMod = _configurationService.Configuration.InputManager.EnableKeyHandlingOnKeyMod;
-        if(ImGui.Checkbox("Consume [SPACE], [Shift], [Ctrl] & [Alt] when moving a FreeCam", ref enableKeyHandlingOnKeyMod))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Consume [SPACE], [Shift], [Ctrl] & [Alt] when moving a FreeCam"), ref enableKeyHandlingOnKeyMod))
         {
             _configurationService.Configuration.InputManager.EnableKeyHandlingOnKeyMod = enableKeyHandlingOnKeyMod;
             _configurationService.ApplyChange();
         }
 
         bool handlingAllOnKeys = _configurationService.Configuration.InputManager.EnableConsumeAllInput;
-        if(ImGui.Checkbox("Consume all game input when in G-Pose", ref handlingAllOnKeys))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Consume all game input when in G-Pose"), ref handlingAllOnKeys))
         {
             _configurationService.Configuration.InputManager.EnableConsumeAllInput = handlingAllOnKeys;
             _configurationService.ApplyChange();
         }
 
         bool showPrompts = _configurationService.Configuration.InputManager.ShowPromptsInGPose;
-        if(ImGui.Checkbox("Show prompts in GPose", ref showPrompts))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show prompts in GPose"), ref showPrompts))
         {
             _configurationService.Configuration.InputManager.ShowPromptsInGPose = showPrompts;
             _configurationService.ApplyChange();
         }
 
-        ImBrio.SeparatorText("Key Bindings");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Key Bindings"));
 
-        if(ImGui.CollapsingHeader("Free Camera"))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Free Camera")))
         {
             DrawKeyBind(InputAction.FreeCamera_Forward);
             DrawKeyBind(InputAction.FreeCamera_Backward);
@@ -1113,7 +1114,7 @@ public class SettingsWindow : Window
 
         using(ImRaii.Disabled(!enableKeybinds))
         {
-            if(ImGui.CollapsingHeader("Interface"))
+            if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Interface")))
             {
                 DrawKeyBind(InputAction.Interface_ToggleBrioWindow);
                 DrawKeyBind(InputAction.Posing_Undo);
@@ -1121,14 +1122,14 @@ public class SettingsWindow : Window
                 DrawKeyBind(InputAction.Interface_IncrementSmallModifier);
             }
 
-            if(ImGui.CollapsingHeader("XAT Cutscene"))
+            if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("XAT Cutscene")))
             {
                 DrawKeyBind(InputAction.Interface_StopCutscene);
                 DrawKeyBind(InputAction.Interface_StartAllActorsAnimations);
                 DrawKeyBind(InputAction.Interface_StopAllActorsAnimations);
             }
 
-            if(ImGui.CollapsingHeader("Posing"))
+            if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Posing")))
             {
                 DrawKeyBind(InputAction.Posing_ToggleOverlay);
                 DrawKeyBind(InputAction.Posing_HideOverlay);
@@ -1144,19 +1145,19 @@ public class SettingsWindow : Window
             }
         }
 
-        ImBrio.SeparatorText("Advanced");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Advanced"));
 
-        if(ImGui.CollapsingHeader("Advanced"))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Advanced")))
         {
             bool flipKeybindsPastNinety = _configurationService.Configuration.InputManager.FlipKeyBindsPastNinety;
-            if(ImGui.Checkbox("Flip Free Camera Keybinds Past -90/90 Degrees", ref flipKeybindsPastNinety))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Flip Free Camera Keybinds Past -90/90 Degrees"), ref flipKeybindsPastNinety))
             {
                 _configurationService.Configuration.InputManager.FlipKeyBindsPastNinety = flipKeybindsPastNinety;
                 _configurationService.ApplyChange();
             }
 
             bool disableScrollOnInputs = _configurationService.Configuration.InputManager.DisableScrollWheelOnInputs;
-            if(ImGui.Checkbox("Disable scroll wheel for input boxes and gizmos", ref disableScrollOnInputs))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Disable scroll wheel for input boxes and gizmos"), ref disableScrollOnInputs))
             {
                 _configurationService.Configuration.InputManager.DisableScrollWheelOnInputs = disableScrollOnInputs;
                 _configurationService.ApplyChange();

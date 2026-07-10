@@ -43,20 +43,20 @@ public class TimeWeatherWidget(TimeWeatherCapability weatherCapability) : Widget
         }
 
         ImBrio.CenterNextElementWithPadding(15);
-        var realTime = ImGui.SliderInt("##time_real"u8, ref minuteOfDay, 0, DayTime - 1, dateTime.ToShortTimeString(), ImGuiSliderFlags.NoInput);
-        ImBrio.AttachToolTip("Time of Day");
+        var realTime = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##time_real")u8, ref minuteOfDay, 0, DayTime - 1, dateTime.ToShortTimeString(), ImGuiSliderFlags.NoInput);
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Time of Day"));
 
         var time = false;
         var dragday = false;
         using(ImRaii.ItemWidth((ImBrio.GetRemainingWidth() / 2) - ImGui.GetStyle().ItemInnerSpacing.X))
         {
-            time = ImGui.SliderInt("##time_set"u8, ref minuteOfDay, 0, DayTime - 1, "%.0f"u8);
-            ImBrio.AttachToolTip("Time of Day (In Minutes)");
+            time = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##time_set")u8, ref minuteOfDay, 0, DayTime - 1, "%.0f"u8);
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Time of Day (In Minutes)"));
 
             ImGui.SameLine();
 
-            dragday = ImGui.SliderInt("##day_set"u8, ref dayOfMonth, 1, 31);
-            ImBrio.AttachToolTip("Day of Month");
+            dragday = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##day_set")u8, ref dayOfMonth, 1, 31);
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Day of Month"));
         }
 
         if(realTime || time || dragday)
@@ -99,7 +99,7 @@ public class TimeWeatherWidget(TimeWeatherCapability weatherCapability) : Widget
         ImBrio.CenterNextElementWithPadding(10);
         ImBrio.VerticalPadding(5);
         ImGui.InputInt("###current_weather_input"u8, ref currentWeather, 0, 0, default, ImGuiInputTextFlags.EnterReturnsTrue);
-        ImBrio.AttachToolTip("Weather ID");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Weather ID"));
 
         using(var popup = ImRaii.Popup("weather_selector"u8))
         {

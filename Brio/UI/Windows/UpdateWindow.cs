@@ -149,28 +149,29 @@ public class UpdateWindow : Window
         ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 5);
 
         using(ImRaii.PushColor(ImGuiCol.Button, new Vector4(0, 224, 148, 200) / 255))
-            if(ImGui.Button("Support on KoFi", buttonSize))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Support on KoFi"), buttonSize))
                 Process.Start(new ProcessStartInfo { FileName = "https://ko-fi.com/minmoosexiv", UseShellExecute = true });
         ImGui.SameLine();
 
         using(ImRaii.PushColor(ImGuiCol.Button, new Vector4(65, 90, 240, 200) / 255))
-            if(ImGui.Button("Brio Community Discord", buttonSize))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Brio Community Discord"), buttonSize))
                 Process.Start(new ProcessStartInfo { FileName = "https://discord.gg/GCb4srgEaH ", UseShellExecute = true });
         ImGui.SameLine();
 
         using(ImRaii.PushColor(ImGuiCol.Button, new Vector4(96, 108, 246, 200) / 255))
-            if(ImGui.Button("Aetherworks Discord", buttonSize))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Aetherworks Discord"), buttonSize))
                 Process.Start(new ProcessStartInfo { FileName = "https://discord.gg/KvGJCCnG8t", UseShellExecute = true });
         ImGui.SameLine();
 
         using(ImRaii.PushColor(ImGuiCol.Button, new Vector4(29, 161, 242, 200) / 255))
-            if(ImGui.Button("More Links", buttonSize))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("More Links"), buttonSize))
                 Process.Start(new ProcessStartInfo { FileName = "https://etheirystools.carrd.co", UseShellExecute = true });
 
         ImBrio.VerticalPadding(10);
 
         // Selector
-        ImBrio.ButtonSelectorStrip("brio_changelog_selector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected, [" Changelog ", "Supporters & Contributors"]);
+        ImBrio.ButtonSelectorStrip("brio_changelog_selector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected,
+            [Localize.Text(" Changelog "), Localize.Text("Supporters & Contributors")]);
 
         if(selected == 0)
         {
@@ -202,14 +203,14 @@ public class UpdateWindow : Window
         else
         {
             ImBrio.VerticalPadding(5);
-            ImGui.Text("Maintained & Developed by: Minmoose. Originally Developed by: Asgard. Happy Posing!");
+            ImGui.Text(global::Brio.Resources.Localize.Text("Maintained & Developed by: Minmoose. Originally Developed by: Asgard. Happy Posing!"));
             ImBrio.VerticalPadding(10);
 
             DrawSupporters();
         }
 
         ImGui.SetCursorPosX((ImGui.GetWindowSize().Y - CloseButtonWidth) / 2);
-        if(ImBrio.HoldButton("updateWindowClose", "Close", FontAwesomeIcon.SquareXmark, 0.7f, new Vector2(CloseButtonWidth, 0), centerTest: true, tooltip: "[HOLD TO CLOSE]\nTo open this window again click the `Information` button on the Brio Scene Manager!"))
+        if(ImBrio.HoldButton("updateWindowClose", global::Brio.Resources.Localize.Text("Close"), FontAwesomeIcon.SquareXmark, 0.7f, new Vector2(CloseButtonWidth, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("[HOLD TO CLOSE]\nTo open this window again click the `Information` button on the Brio Scene Manager!")))
         {
             IsOpen = false;
         }
@@ -261,8 +262,8 @@ public class UpdateWindow : Window
         {
             if(leftGearGroup.Success)
             {
-                ImGui.Text("An enormous thank you to the following,");
-                ImGui.Text("people for their support on KoFi / Patreon!");
+                ImGui.Text(global::Brio.Resources.Localize.Text("An enormous thank you to the following,"));
+                ImGui.Text(global::Brio.Resources.Localize.Text("people for their support on KoFi / Patreon!"));
 
                 ImBrio.VerticalPadding(5);
 
@@ -279,8 +280,8 @@ public class UpdateWindow : Window
         {
             if(rightGearGroup.Success)
             {
-                ImGui.Text("And another enormous thank you to the following,");
-                ImGui.Text("people for their contributions to Brio!");
+                ImGui.Text(global::Brio.Resources.Localize.Text("And another enormous thank you to the following,"));
+                ImGui.Text(global::Brio.Resources.Localize.Text("people for their contributions to Brio!"));
 
                 ImBrio.VerticalPadding(5);
 

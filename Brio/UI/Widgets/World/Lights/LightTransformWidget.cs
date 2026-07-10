@@ -23,17 +23,17 @@ public class LightTransformWidget(LightTransformCapability lightGizmoCapability)
     {
         LightEditor.DrawLightTransformHeader(Capability);
 
-        ImBrio.SeparatorText("Light Transform");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Light Transform"));
 
         _transformableEditor.Draw($"light_transform_{Capability.Entity.Id}", Capability.Light, 0.1f);
 
         var lightRenderingCapability = Capability.Light.GetCapability<LightRenderingCapability>();
 
-        ImBrio.SeparatorText("Light Properties");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Light Properties"));
 
         LightEditor.DrawLightProperties(lightRenderingCapability);
 
-        if(ImGui.CollapsingHeader("Advanced Settings"u8, ImGuiTreeNodeFlags.None))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Advanced Settings")u8, ImGuiTreeNodeFlags.None))
         {
             LightEditor.DrawAdvancedShadows(lightRenderingCapability);
         }

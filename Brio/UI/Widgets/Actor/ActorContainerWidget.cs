@@ -26,18 +26,18 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
     {
         if(ImGui.BeginMenu("New...###containerwidgetpopup_new"))
         {
-            if(ImGui.MenuItem("Actor###containerwidgetpopup_spawnbasic"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Actor###containerwidgetpopup_spawnbasic")))
             {
                 Capability.CreateCharacter(false, true, forceSpawnActorWithoutCompanion: true);
             }
-            if(ImGui.MenuItem("Actor with Companion###containerwidgetpopup_spawncompanion"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Actor with Companion###containerwidgetpopup_spawncompanion")))
             {
                 Capability.CreateCharacter(true, true);
             }
 
             ImGui.Separator();
 
-            if(ImGui.MenuItem("Prop###containerwidgetpopup_spawnprop"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Prop###containerwidgetpopup_spawnprop")))
             {
                 Capability.WorldObjectService.SpawnProp(new FFXIVClientStructs.FFXIV.Client.Graphics.Scene.WeaponCreateInfo
                 {
@@ -53,17 +53,17 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
                 });
             }
 
-            if(ImGui.MenuItem("Furniture Item###containerwidgetpopup_spawnfur"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Furniture Item###containerwidgetpopup_spawnfur")))
             {
                 Capability.WorldObjectService.SpawnFurniture("bgcommon/hou/outdoor/general/0332/asset/gar_b0_m0332.sgb");
             }
 
-            if(ImGui.MenuItem("World Object###containerwidgetpopup_spawnworld"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("World Object###containerwidgetpopup_spawnworld")))
             {
                 Capability.WorldObjectService.SpawnBgObject("bg/ffxiv/fst_f1/twn/common/bgparts/f1t0_a0_taru1.mdl");
             }
 
-            if(ImGui.MenuItem("VFX###containerwidgetpopup_spawnVFX"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("VFX###containerwidgetpopup_spawnVFX")))
             {
                 Capability.WorldObjectService.SpawnStaticVfx("bgcommon/world/common/vfx_for_bg/eff/val_obj001_o.avfx");
             }
@@ -80,7 +80,7 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
 
                 if(!overworldActors.Any())
                 {
-                    ImGui.TextDisabled("No world actors found");
+                    ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No world actors found"));
                 }
 
                 foreach(var actor in overworldActors)
@@ -105,7 +105,7 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
         {
             if(ImGui.BeginMenu("Actors###containerwidgetpopup_destroyActors"))
             {
-                if(ImGui.MenuItem("Confirm Destruction##containerwidgetpopup_destroyallActors"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction##containerwidgetpopup_destroyallActors")))
                 {
                     Capability.DestroyAll();
                 }

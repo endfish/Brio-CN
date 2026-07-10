@@ -34,10 +34,10 @@ public class StatusEffectSelector(string id) : Selector<StatusEffectSelectorHold
     {
         base.DrawOptions();
 
-        if(ImGui.Checkbox("###status_vfx_filter", ref this._VFXLockEnabled))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("###status_vfx_filter"), ref this._VFXLockEnabled))
             UpdateList();
         ImGui.SameLine();
-        ImGui.Text("Remove Status Effects that do not have a VFX.");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Remove Status Effects that do not have a VFX."));
 
     }
 

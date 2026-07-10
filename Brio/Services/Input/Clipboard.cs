@@ -79,7 +79,7 @@ public static class Clipboard
         if(popup.Success)
         {
             ImBrio.VerticalPadding(1);
-            if(ImGui.Button("Copy", new Vector2(85, 0)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Copy"), new Vector2(85, 0)))
             {
                 var baseData = ToCompressedBase64(data, version);
 
@@ -87,7 +87,7 @@ public static class Clipboard
                     ImGui.SetClipboardText(baseData);
             }
             ImBrio.VerticalPadding(1);
-            if(ImGui.Button("Paste", new Vector2(85, 0)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Paste"), new Vector2(85, 0)))
             {
                 if(FromCompressedBase64(ImGui.GetClipboardText(), out T? pastedData) == 1)
                 {

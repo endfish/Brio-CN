@@ -118,17 +118,17 @@ public class CatalogWindow : Window, IDisposable
 
         float iconSize = 48 * ImGuiHelpers.GlobalScale;
 
-        var favClicked = ImBrio.DrawRecentsStrip("Favorites", _quickAccess.GetFavorites(AccessStore), iconSize);
+        var favClicked = ImBrio.DrawRecentsStrip(Localize.Text("Favorites"), _quickAccess.GetFavorites(AccessStore), iconSize);
         if(favClicked is not null)
             SpawnEntry(favClicked);
 
-        var recentClicked = ImBrio.DrawRecentsStrip("Recently Spawned", _quickAccess.GetRecents(AccessStore), iconSize);
+        var recentClicked = ImBrio.DrawRecentsStrip(Localize.Text("Recently Spawned"), _quickAccess.GetRecents(AccessStore), iconSize);
         if(recentClicked is not null)
             SpawnEntry(recentClicked);
 
-        List<string> items = ["Furniture", "World Objects", "VFX", "Spawn by Path"];
+        List<string> items = [Localize.Text("Furniture"), Localize.Text("World Objects"), "VFX", Localize.Text("Spawn by Path")];
         if(ConfigurationService.Instance.IsDebug)
-            items.Add("Metadata");
+            items.Add(Localize.Text("Metadata"));
 
         if(ImBrio.ButtonSelectorStrip("emote_category_filter", Vector2.Zero, ref categorySelection, [.. items]))
         {
@@ -145,7 +145,7 @@ public class CatalogWindow : Window, IDisposable
                     DrawFurnitureFilters();
 
                     if(_isLoading)
-                        ImGui.TextUnformatted("Loading furniture data...");
+                        ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Loading furniture data..."));
                     if(_furnitureDisplayMode == CatalogDisplayMode.Grid)
                         DrawFurnitureGrid();
                     else
@@ -205,7 +205,7 @@ public class CatalogWindow : Window, IDisposable
 
             if(_pathsLoading)
             {
-                ImGui.TextUnformatted("Loading paths...");
+                ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Loading paths..."));
                 return;
             }
             else if(!string.IsNullOrEmpty(_pathsError))
@@ -219,17 +219,17 @@ public class CatalogWindow : Window, IDisposable
     {
         float buttonWidth = 110 * ImGuiHelpers.GlobalScale;
 
-        ImGui.TextUnformatted("Enter a game path (.sgb, .avfx, etc.)");
+        ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Enter a game path (.sgb, .avfx, etc.)"));
 
         ImBrio.HorizontalPadding(2);
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - (buttonWidth + 5));
-        ImGui.InputTextWithHint("###spawn_path", "e.g. bgcommon/hou/indoor/general/0001/asset/fun_b0_m0001.sgb", ref _spawnPath, 512);
+        ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("###spawn_path"), global::Brio.Resources.Localize.Text("e.g. bgcommon/hou/indoor/general/0001/asset/fun_b0_m0001.sgb"), ref _spawnPath, 512);
 
         ImGui.SameLine();
 
         using(ImRaii.Disabled(string.IsNullOrWhiteSpace(_spawnPath)))
-            if(ImGui.Button("Spawn BgObject", new Vector2(buttonWidth, 0)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Spawn BgObject"), new Vector2(buttonWidth, 0)))
             {
                 var objectPath = new ObjectPath(_spawnPath);
                 if(objectPath.IsValid)
@@ -270,38 +270,38 @@ public class CatalogWindow : Window, IDisposable
 
     private void DrawMetadataToolbar()
     {
-        if(ImBrio.ToggelFontIconButton("meta_target_user", FontAwesomeIcon.User, new Vector2(24, 5), _metaTarget == PathTarget.User, tooltip: "Edit User Store"))
+        if(ImBrio.ToggelFontIconButton("meta_target_user", FontAwesomeIcon.User, new Vector2(24, 5), _metaTarget == PathTarget.User, tooltip: global::Brio.Resources.Localize.Text("Edit User Store")))
             SetMetaTarget(PathTarget.User);
 
         ImGui.SameLine();
 
-        if(ImBrio.ToggelFontIconButton("meta_target_plugin", FontAwesomeIcon.Box, new Vector2(24, 5), _metaTarget == PathTarget.Plugin, tooltip: "Edit Plugin Store"))
+        if(ImBrio.ToggelFontIconButton("meta_target_plugin", FontAwesomeIcon.Box, new Vector2(24, 5), _metaTarget == PathTarget.Plugin, tooltip: global::Brio.Resources.Localize.Text("Edit Plugin Store")))
             SetMetaTarget(PathTarget.Plugin);
 
         ImGui.SameLine(0, 12 * ImGuiHelpers.GlobalScale);
 
-        if(ImBrio.ToggelFontIconButton("meta_kind_model", FontAwesomeIcon.Cube, new Vector2(24, 5), _metaKind == ObjectPathKind.Model, tooltip: "Models"))
+        if(ImBrio.ToggelFontIconButton("meta_kind_model", FontAwesomeIcon.Cube, new Vector2(24, 5), _metaKind == ObjectPathKind.Model, tooltip: global::Brio.Resources.Localize.Text("Models")))
             _metaKind = ObjectPathKind.Model;
 
         ImGui.SameLine();
 
-        if(ImBrio.ToggelFontIconButton("meta_kind_vfx", FontAwesomeIcon.Fire, new Vector2(24, 5), _metaKind == ObjectPathKind.VFX, tooltip: "VFX"))
+        if(ImBrio.ToggelFontIconButton("meta_kind_vfx", FontAwesomeIcon.Fire, new Vector2(24, 5), _metaKind == ObjectPathKind.VFX, tooltip: global::Brio.Resources.Localize.Text("VFX")))
             _metaKind = ObjectPathKind.VFX;
 
         ImGui.SameLine(0, 12 * ImGuiHelpers.GlobalScale);
 
-        if(ImBrio.FontIconButton("meta_export", FontAwesomeIcon.FileExport, "Export current store to a file"))
+        if(ImBrio.FontIconButton("meta_export", FontAwesomeIcon.FileExport, global::Brio.Resources.Localize.Text("Export current store to a file")))
             ExportMetadata();
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("meta_import", FontAwesomeIcon.FileImport, "Import a file into the current store"))
+        if(ImBrio.FontIconButton("meta_import", FontAwesomeIcon.FileImport, global::Brio.Resources.Localize.Text("Import a file into the current store")))
             ImportMetadata();
 
         ImGui.SameLine();
 
         bool canReveal = !string.IsNullOrEmpty(_metaLastExport) && File.Exists(_metaLastExport);
-        if(ImBrio.FontIconButton("meta_reveal", FontAwesomeIcon.FolderOpen, "Open exported file location", canReveal))
+        if(ImBrio.FontIconButton("meta_reveal", FontAwesomeIcon.FolderOpen, global::Brio.Resources.Localize.Text("Open exported file location"), canReveal))
             RevealExport();
     }
 
@@ -313,7 +313,7 @@ public class CatalogWindow : Window, IDisposable
 
         if(rows.Count == 0)
         {
-            ImGui.TextUnformatted("No items match the current filter.");
+            ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("No items match the current filter."));
             return;
         }
 
@@ -355,18 +355,18 @@ public class CatalogWindow : Window, IDisposable
     {
         if(_metaEditing is null || string.IsNullOrEmpty(_metaSelectedPath))
         {
-            ImGui.TextUnformatted("Select a path to edit its metadata.");
+            ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Select a path to edit its metadata."));
             return;
         }
 
-        if(ImBrio.FontIconButton("meta_preview_spawn", FontAwesomeIcon.PlusCircle, "Spawn preview"))
+        if(ImBrio.FontIconButton("meta_preview_spawn", FontAwesomeIcon.PlusCircle, global::Brio.Resources.Localize.Text("Spawn preview")))
             SpawnMetaPreview();
 
         ImGui.SameLine();
 
         using(ImRaii.Disabled(_metaPreview is not { IsValid: true }))
         {
-            if(ImBrio.FontIconButton("meta_preview_destroy", FontAwesomeIcon.Ban, "Destroy preview"))
+            if(ImBrio.FontIconButton("meta_preview_destroy", FontAwesomeIcon.Ban, global::Brio.Resources.Localize.Text("Destroy preview")))
             {
                 _worldObjectService.Destroy(_metaPreview!);
                 _metaPreview = null;
@@ -375,7 +375,7 @@ public class CatalogWindow : Window, IDisposable
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("meta_preview_destroy_all", FontAwesomeIcon.Bomb, "Destroy all world objects"))
+        if(ImBrio.FontIconButton("meta_preview_destroy_all", FontAwesomeIcon.Bomb, global::Brio.Resources.Localize.Text("Destroy all world objects")))
         {
             _worldObjectService.DestroyAll();
             _metaPreview = null;
@@ -387,20 +387,20 @@ public class CatalogWindow : Window, IDisposable
         ImGui.Separator();
 
         var name = _metaEditing.Name;
-        ImGui.TextUnformatted("Name");
+        ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Name"));
         ImGui.SetNextItemWidth(-1);
-        if(ImGui.InputText("###meta_name", ref name, 256))
+        if(ImGui.InputText(global::Brio.Resources.Localize.Text("###meta_name"), ref name, 256))
             _metaEditing.Name = name;
 
         var description = _metaEditing.Description;
-        ImGui.TextUnformatted("Description");
-        if(ImGui.InputTextMultiline("###meta_desc", ref description, 1024, new Vector2(-1, 60 * ImGuiHelpers.GlobalScale)))
+        ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Description"));
+        if(ImGui.InputTextMultiline(global::Brio.Resources.Localize.Text("###meta_desc"), ref description, 1024, new Vector2(-1, 60 * ImGuiHelpers.GlobalScale)))
             _metaEditing.Description = description;
 
         var expansion = _metaEditing.Expansion;
-        ImGui.TextUnformatted("Expansion");
+        ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Expansion"));
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 32 * ImGuiHelpers.GlobalScale);
-        if(ImGui.InputTextWithHint("###meta_exp", "e.g. Dawntrail", ref expansion, 64))
+        if(ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("###meta_exp"), global::Brio.Resources.Localize.Text("e.g. Dawntrail"), ref expansion, 64))
             _metaEditing.Expansion = expansion;
 
         var pathExpansion = _metaSelectedInfo?.Expansion;
@@ -410,7 +410,7 @@ public class CatalogWindow : Window, IDisposable
 
         if(_metaKind == ObjectPathKind.VFX)
         {
-            ImBrio.SeparatorText("VFX Playback");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("VFX Playback"));
 
             int length = _metaEditing.Length;
             ImGui.SetNextItemWidth(120 * ImGuiHelpers.GlobalScale);
@@ -418,31 +418,31 @@ public class CatalogWindow : Window, IDisposable
                 _metaEditing.Length = length;
 
             bool repeats = _metaEditing.Repeats;
-            if(ImGui.Checkbox("Repeats###meta_repeats", ref repeats))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Repeats###meta_repeats"), ref repeats))
                 _metaEditing.Repeats = repeats;
 
             bool requiresRefresh = _metaEditing.RequiresRefresh;
-            if(ImGui.Checkbox("Requires Refresh###meta_requires_refresh", ref requiresRefresh))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Requires Refresh###meta_requires_refresh"), ref requiresRefresh))
                 _metaEditing.RequiresRefresh = requiresRefresh;
         }
 
-        ImBrio.SeparatorText("Subtypes");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Subtypes"));
         DrawStringListEditor("meta_sub", _metaEditing.Subtypes, ref _metaSubtypeInput, _metaSelectedInfo?.Subtype);
 
-        ImBrio.SeparatorText("Asset Types");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Asset Types"));
         DrawStringListEditor("meta_asset", _metaEditing.AssetType, ref _metaAssetInput, _metaSelectedInfo?.AssetType);
 
-        ImBrio.SeparatorText("Tags");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Tags"));
         DrawStringListEditor("meta_tag", _metaEditing.Tags, ref _metaTagInput);
 
-        ImBrio.SeparatorText("Known Territories");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Known Territories"));
         DrawTerritoryEditor();
 
         ImGui.Separator();
 
         bool exists = _pathMetadata.StoreFor(_metaTarget).Entries.ContainsKey(PathData.Hash(_metaSelectedPath));
 
-        if(ImBrio.FontIconButton("###meta_save", FontAwesomeIcon.Save, "Save"))
+        if(ImBrio.FontIconButton("###meta_save", FontAwesomeIcon.Save, global::Brio.Resources.Localize.Text("Save")))
         {
             _pathMetadata.Set(_metaTarget, _metaSelectedPath, _metaEditing);
             LoadMetaEditing(_metaSelectedPath, _metaSelectedInfo);
@@ -452,7 +452,7 @@ public class CatalogWindow : Window, IDisposable
 
         using(ImRaii.Disabled(!exists))
         {
-            if(ImBrio.FontIconButton("###meta_delete", FontAwesomeIcon.Trash, "Delete"))
+            if(ImBrio.FontIconButton("###meta_delete", FontAwesomeIcon.Trash, global::Brio.Resources.Localize.Text("Delete")))
             {
                 _pathMetadata.Remove(_metaTarget, _metaSelectedPath);
                 LoadMetaEditing(_metaSelectedPath, _metaSelectedInfo);
@@ -461,7 +461,7 @@ public class CatalogWindow : Window, IDisposable
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("###meta_revert", FontAwesomeIcon.Undo, "Revert unsaved changes"))
+        if(ImBrio.FontIconButton("###meta_revert", FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Text("Revert unsaved changes")))
             LoadMetaEditing(_metaSelectedPath, _metaSelectedInfo);
     }
 
@@ -512,12 +512,12 @@ public class CatalogWindow : Window, IDisposable
         var values = _metaEditing!.KnownTerritoryLocations;
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 60 * ImGuiHelpers.GlobalScale);
-        ImGui.InputTextWithHint("###meta_terr_input", "Territory Id...", ref _metaTerritoryInput, 16);
+        ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("###meta_terr_input"), global::Brio.Resources.Localize.Text("Territory Id..."), ref _metaTerritoryInput, 16);
         bool confirmed = ImBrio.IsItemConfirmed();
 
         ImGui.SameLine();
 
-        bool add = ImBrio.FontIconButton("###meta_terr_add", FontAwesomeIcon.Plus, "Add", int.TryParse(_metaTerritoryInput, out _));
+        bool add = ImBrio.FontIconButton("###meta_terr_add", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Add"), int.TryParse(_metaTerritoryInput, out _));
         if((add || confirmed) && int.TryParse(_metaTerritoryInput, out var parsed))
         {
             if(!values.Contains(parsed))
@@ -527,7 +527,7 @@ public class CatalogWindow : Window, IDisposable
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("##meta_terr_current", FontAwesomeIcon.MapMarkerAlt, "Add current territory"))
+        if(ImBrio.FontIconButton("##meta_terr_current", FontAwesomeIcon.MapMarkerAlt, global::Brio.Resources.Localize.Text("Add current territory")))
         {
             int current = (int)_clientState.TerritoryType;
             if(!values.Contains(current))
@@ -638,17 +638,17 @@ public class CatalogWindow : Window, IDisposable
     {
         bool applay = false;
         ImGui.SetNextItemWidth((ImBrio.GetRemainingWidth() - 125) * ImGuiHelpers.GlobalScale);
-        if(ImGui.InputTextWithHint("###vfx_search", "Search...", ref searchText, 256))
+        if(ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("###vfx_search"), global::Brio.Resources.Localize.Text("Search..."), ref searchText, 256))
             applay = true;
 
         ImGui.SameLine();
 
-        if(ImBrio.ToggelFontIconButton($"{id}_compact", FontAwesomeIcon.List, new Vector2(24, 5), mode == CatalogDisplayMode.Compact, tooltip: "Compact View"))
+        if(ImBrio.ToggelFontIconButton($"{id}_compact", FontAwesomeIcon.List, new Vector2(24, 5), mode == CatalogDisplayMode.Compact, tooltip: global::Brio.Resources.Localize.Text("Compact View")))
             mode = CatalogDisplayMode.Compact;
 
         ImGui.SameLine();
 
-        if(ImBrio.ToggelFontIconButton($"###{id}_grid", FontAwesomeIcon.BorderAll, new Vector2(24, 5), mode == CatalogDisplayMode.Grid, tooltip: "Grid View"))
+        if(ImBrio.ToggelFontIconButton($"###{id}_grid", FontAwesomeIcon.BorderAll, new Vector2(24, 5), mode == CatalogDisplayMode.Grid, tooltip: global::Brio.Resources.Localize.Text("Grid View")))
             mode = CatalogDisplayMode.Grid;
 
         return applay;
@@ -673,17 +673,17 @@ public class CatalogWindow : Window, IDisposable
             ApplyModelFilter();
 
         float third = (ImGui.GetContentRegionAvail().X - ImGui.GetStyle().ItemSpacing.X * 2) / 3f;
-        if(ImBrio.MultiComboBox("###model_exp", _modelExpansionOptions, ref _selectedModelExpansions, third, "All Expansions"))
+        if(ImBrio.MultiComboBox("###model_exp", _modelExpansionOptions, ref _selectedModelExpansions, third, Localize.Text("All Expansions")))
             ApplyModelFilter();
 
         ImGui.SameLine();
 
-        if(ImBrio.MultiComboBox("###model_sub", _modelSubtypeOptions, ref _selectedModelSubtypes, third, "All Subtypes"))
+        if(ImBrio.MultiComboBox("###model_sub", _modelSubtypeOptions, ref _selectedModelSubtypes, third, Localize.Text("All Subtypes")))
             ApplyModelFilter();
 
         ImGui.SameLine();
 
-        if(ImBrio.MultiComboBox("###model_asset", _modelAssetOptions, ref _selectedModelAssets, third, "All Asset Types"))
+        if(ImBrio.MultiComboBox("###model_asset", _modelAssetOptions, ref _selectedModelAssets, third, Localize.Text("All Asset Types")))
             ApplyModelFilter();
 
         ImGui.TextUnformatted($"{_filteredModels.Count:N0} of {_allModels.Count:N0} items");
@@ -694,12 +694,12 @@ public class CatalogWindow : Window, IDisposable
             ApplyVfxFilter();
 
         float half = (ImGui.GetContentRegionAvail().X - ImGui.GetStyle().ItemSpacing.X) / 2f;
-        if(ImBrio.MultiComboBox("###vfx_exp", _vfxExpansionOptions, ref _selectedVfxExpansions, half, "All Expansions"))
+        if(ImBrio.MultiComboBox("###vfx_exp", _vfxExpansionOptions, ref _selectedVfxExpansions, half, Localize.Text("All Expansions")))
             ApplyVfxFilter();
 
         ImGui.SameLine();
 
-        if(ImBrio.MultiComboBox("###vfx_asset", _vfxAssetOptions, ref _selectedVfxAssets, half, "All Asset Types"))
+        if(ImBrio.MultiComboBox("###vfx_asset", _vfxAssetOptions, ref _selectedVfxAssets, half, Localize.Text("All Asset Types")))
             ApplyVfxFilter();
 
         ImGui.TextUnformatted($"{_filteredVfx.Count:N0} of {_allVfx.Count:N0} items");
@@ -715,7 +715,7 @@ public class CatalogWindow : Window, IDisposable
 
         if(rows.Count == 0)
         {
-            ImGui.TextUnformatted("No items match the current filter.");
+            ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("No items match the current filter."));
             return;
         }
 
@@ -764,7 +764,7 @@ public class CatalogWindow : Window, IDisposable
 
         if(items.Count == 0)
         {
-            ImGui.TextUnformatted("No items match the current filter.");
+            ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("No items match the current filter."));
             return;
         }
 
@@ -805,7 +805,7 @@ public class CatalogWindow : Window, IDisposable
 
         if(_furnitureRows.Count == 0)
         {
-            ImGui.TextUnformatted("No items match the current filter.");
+            ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("No items match the current filter."));
             return;
         }
 
@@ -850,7 +850,7 @@ public class CatalogWindow : Window, IDisposable
 
         if(_filteredFurnishings.Count == 0)
         {
-            ImGui.TextUnformatted("No items match the current filter.");
+            ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("No items match the current filter."));
             return;
         }
 
@@ -918,7 +918,7 @@ public class CatalogWindow : Window, IDisposable
             bool fav = IsFav(kind, path);
             if(ImGui.MenuItem(fav ? "Remove Favorite" : "Add Favorite"))
                 ToggleFav(kind, path, name, iconId);
-            if(ImGui.MenuItem("Copy Path"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Copy Path")))
                 ImGui.SetClipboardText(path);
             ImGui.EndPopup();
         }

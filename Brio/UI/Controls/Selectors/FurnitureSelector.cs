@@ -46,6 +46,7 @@ public class FurnitureSelector(string id) : Selector<FurnitureDatabase.Furniture
 
         ImGui.SameLine();
 
-        ImGui.Text($"{item.Name}\n{item.Category}\n{(item.Indoors ? "Indoor" : "Outdoor")}");
+        var placement = global::Brio.Resources.Localize.Text(item.Indoors ? "Indoor" : "Outdoor");
+        ImGui.Text($"{item.Name}\n{item.Category}\n{placement}");
     }
 }

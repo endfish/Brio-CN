@@ -95,7 +95,7 @@ public class AutoSaveWindow : Window, IDisposable
 
         using(ImRaii.PushColor(ImGuiCol.Text, UIConstants.GizmoMagenta))
         {
-            ImGui.Text("ATTENTION: Brio will **NOT** make AutoSaves with this window open!");
+            ImGui.Text(global::Brio.Resources.Localize.Text("ATTENTION: Brio will **NOT** make AutoSaves with this window open!"));
         }
 
         var windowSize = ImGui.GetWindowSize();
@@ -123,13 +123,13 @@ public class AutoSaveWindow : Window, IDisposable
                     }
 
                     if(_autoSaves.Count == 0)
-                        ImGui.TextDisabled("No auto-saves found!");
+                        ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No auto-saves found!"));
                 }
             }
 
             using(ImRaii.Disabled(_selectedEntry is null || !_selectedEntry.IsValid))
             {
-                if(ImBrio.Button("Load", FontAwesomeIcon.FileImport, new(120, 0), centerTest: true, tooltip: "Load this auto-save"))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("Load"), FontAwesomeIcon.FileImport, new(120, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Load this auto-save")))
                 {
                     _autoSaveService.LoadAutoSave(_selectedEntry!, _destroyAll, _useRelativeLightPositions, _useRelativeWorldObjectPositions, _importOptions);
                 }
@@ -155,7 +155,7 @@ public class AutoSaveWindow : Window, IDisposable
             if(_autoSavePoses.Count > 0)
             {
                 ImGui.Separator();
-                ImGui.TextUnformatted("Poses:");
+                ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Poses:"));
 
                 float applyAreaHeight = ((ImBrio.GetLineHeight() + ImGui.GetStyle().ItemSpacing.Y) * 2) + ImGui.GetStyle().ItemSpacing.Y;
                 float posesListHeight = Math.Max(20, ImBrio.GetRemainingHeight() - applyAreaHeight);
@@ -181,9 +181,9 @@ public class AutoSaveWindow : Window, IDisposable
                 string comboPreview = _selectedActorIndex == 0 ? "Selected Actor" : actors[_selectedActorIndex - 1].FriendlyName;
 
                 ImGui.SetNextItemWidth(ImBrio.GetRemainingWidth());
-                if(ImGui.BeginCombo("###actor_combo", comboPreview))
+                if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###actor_combo"), comboPreview))
                 {
-                    if(ImGui.Selectable("Selected Actor###actor_sel", _selectedActorIndex == 0))
+                    if(ImGui.Selectable(global::Brio.Resources.Localize.Text("Selected Actor###actor_sel"), _selectedActorIndex == 0))
                         _selectedActorIndex = 0;
 
                     for(int i = 0; i < actors.Count; i++)
@@ -196,13 +196,13 @@ public class AutoSaveWindow : Window, IDisposable
 
                 using(ImRaii.Disabled(_selectedPoseEntry is null))
                 {
-                    if(ImBrio.Button("Apply Pose", FontAwesomeIcon.Running, new(ImBrio.GetRemainingWidth(), 0), centerTest: true, tooltip: "Apply selected pose to actor"))
+                    if(ImBrio.Button(global::Brio.Resources.Localize.Text("Apply Pose"), FontAwesomeIcon.Running, new(ImBrio.GetRemainingWidth(), 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Apply selected pose to actor")))
                         ApplySelectedPose(actors);
                 }
             }
             else
             {
-                ImGui.Text("Poses: None");
+                ImGui.Text(global::Brio.Resources.Localize.Text("Poses: None"));
             }
         }
     }

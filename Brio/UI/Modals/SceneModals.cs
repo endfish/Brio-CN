@@ -33,15 +33,15 @@ public class ExportSceneModal : Modal
 
         ImBrio.SeparatorText($" Author ");
         ImGui.SetNextItemWidth(-float.Epsilon);
-        ImGui.InputText("###export_author", ref _author, 100);
+        ImGui.InputText(global::Brio.Resources.Localize.Text("###export_author"), ref _author, 100);
 
         ImBrio.SeparatorText($" Description ");
         ImGui.SetNextItemWidth(-float.Epsilon);
-        ImGui.InputText("###export_description", ref _description, 250);
+        ImGui.InputText(global::Brio.Resources.Localize.Text("###export_description"), ref _description, 250);
 
         float buttonW = (MinimumSize.X / 2) - 12;
 
-        if(ImBrio.Button("Export", FontAwesomeIcon.FileExport, new(buttonW, 0), centerTest: true, tooltip: "Export Scene to a file"))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Export"), FontAwesomeIcon.FileExport, new(buttonW, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Export Scene to a file")))
         {
             FileUIHelpers.ShowExportSceneModal(_sceneService, string.IsNullOrEmpty(_author) ? null : _author, string.IsNullOrEmpty(_description) ? null : _description);
             Close();
@@ -49,7 +49,7 @@ public class ExportSceneModal : Modal
 
         ImGui.SameLine();
 
-        if(ImBrio.Button("Cancel", FontAwesomeIcon.Times, new(buttonW, 0), centerTest: true))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Cancel"), FontAwesomeIcon.Times, new(buttonW, 0), centerTest: true))
             Close();
     }
 }
@@ -78,17 +78,17 @@ public class SaveProjectModal : Modal
 
         ImBrio.SeparatorText($" Name ");
         ImGui.SetNextItemWidth(-float.Epsilon);
-        ImGui.InputText("###save_project_name", ref _name, 100);
+        ImGui.InputText(global::Brio.Resources.Localize.Text("###save_project_name"), ref _name, 100);
 
         ImBrio.SeparatorText($" Description ");
         ImGui.SetNextItemWidth(-float.Epsilon);
-        ImGui.InputText("###save_project_description", ref _description, 250);
+        ImGui.InputText(global::Brio.Resources.Localize.Text("###save_project_description"), ref _description, 250);
 
         float buttonW = (MinimumSize.X / 2) - 12;
 
         using(ImRaii.Disabled(string.IsNullOrEmpty(_name)))
         {
-            if(ImBrio.Button("Save", FontAwesomeIcon.Save, new(buttonW, 0), centerTest: true, tooltip: "Save as a new Project"))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("Save"), FontAwesomeIcon.Save, new(buttonW, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Save as a new Project")))
             {
                 _projectSystem.NewProject(_name, string.IsNullOrEmpty(_description) ? null : _description);
                 Close();
@@ -97,7 +97,7 @@ public class SaveProjectModal : Modal
 
         ImGui.SameLine();
 
-        if(ImBrio.Button("Cancel", FontAwesomeIcon.Times, new(buttonW, 0), centerTest: true))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Cancel"), FontAwesomeIcon.Times, new(buttonW, 0), centerTest: true))
             Close();
     }
 }
@@ -127,7 +127,7 @@ public class ImportSceneModal : Modal
 
         float buttonW = (MinimumSize.X / 2) - 12;
 
-        if(ImBrio.Button("Choose File & Load", FontAwesomeIcon.FileImport, new(buttonW, 0), centerTest: true, tooltip: "Choose a scene file and load it"))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Choose File & Load"), FontAwesomeIcon.FileImport, new(buttonW, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Choose a scene file and load it")))
         {
             FileUIHelpers.ShowImportSceneModal(_sceneService, _destroyAll, _useRelativeLightPositions, _useRelativeWorldObjectPositions, _importOptions);
             Close();
@@ -135,7 +135,7 @@ public class ImportSceneModal : Modal
 
         ImGui.SameLine();
 
-        if(ImBrio.Button("Cancel", FontAwesomeIcon.Times, new(buttonW, 0), centerTest: true))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Cancel"), FontAwesomeIcon.Times, new(buttonW, 0), centerTest: true))
             Close();
     }
 }

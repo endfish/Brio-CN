@@ -61,25 +61,25 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
 
     protected override void DrawOptions()
     {
-        if(ImGui.Checkbox("Battle NPCs", ref showBNpcs))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Battle NPCs"), ref showBNpcs))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImGui.Checkbox("Event NPCs", ref showENpcs))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Event NPCs"), ref showENpcs))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImGui.Checkbox("Mounts", ref showMounts))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Mounts"), ref showMounts))
             UpdateList();
 
-        if(ImGui.Checkbox("Companions", ref showCompanions))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Companions"), ref showCompanions))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImGui.Checkbox("Ornaments", ref showOrnaments))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Ornaments"), ref showOrnaments))
             UpdateList();
     }
 

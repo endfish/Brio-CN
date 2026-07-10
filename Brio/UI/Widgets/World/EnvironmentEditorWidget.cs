@@ -31,7 +31,7 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
             case 0:
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Particles", FontAwesomeIcon.Redo, "Reset All Particle Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Particles"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Particle Properties"),
                      Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Particles)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Particles;
@@ -43,7 +43,7 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
                     _textureSelector.Select(new TextureId(env->EnvState.Particles.TextureId));
                     ImGui.OpenPopup("particle_texture_selector"u8);
                 }
-                ImBrio.AttachToolTip("Click to open texture selector");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Click to open texture selector"));
 
                 bool didParticlesChange = false;
 
@@ -69,45 +69,45 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
                 ImBrio.CenterNextElementWithPadding(10);
                 ImBrio.VerticalPadding(5);
                 didParticlesChange |= ImGui.InputUInt("###particleTexture"u8, ref env->EnvState.Particles.TextureId);
-                ImBrio.AttachToolTip("Particle Texture ID");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Texture ID"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Particle Properties");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Particle Properties"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.SliderFloat("###particleIntensity"u8, ref env->EnvState.Particles.Intensity, 0.0f, 1.0f);
-                ImBrio.AttachToolTip("Particle Count");
+                didParticlesChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###particleIntensity")u8, ref env->EnvState.Particles.Intensity, 0.0f, 1.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Count"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.SliderFloat("###particleSize"u8, ref env->EnvState.Particles.Size, 0.0f, 20.0f);
-                ImBrio.AttachToolTip("Particle Size");
+                didParticlesChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###particleSize")u8, ref env->EnvState.Particles.Size, 0.0f, 20.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Size"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.ColorEdit4("###particleColor"u8, ref env->EnvState.Particles.Color);
-                ImBrio.AttachToolTip("Particle Color");
+                didParticlesChange |= ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("###particleColor")u8, ref env->EnvState.Particles.Color);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.SliderFloat("###particleGlow"u8, ref env->EnvState.Particles.Glow, 0.0f, 10.0f);
-                ImBrio.AttachToolTip("Particle Glow");
+                didParticlesChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###particleGlow")u8, ref env->EnvState.Particles.Glow, 0.0f, 10.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Glow"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Particle Sub-Properties");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Particle Sub-Properties"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.SliderFloat("###particleSpread"u8, ref env->EnvState.Particles.Spread, 0.0f, 10.0f);
-                ImBrio.AttachToolTip("Particle Spread");
+                didParticlesChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###particleSpread")u8, ref env->EnvState.Particles.Spread, 0.0f, 10.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Spread"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.SliderFloat("###particleWeight"u8, ref env->EnvState.Particles.Weight, 0.0f, 10.0f);
-                ImBrio.AttachToolTip("Particle Weight");
+                didParticlesChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###particleWeight")u8, ref env->EnvState.Particles.Weight, 0.0f, 10.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Weight"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.SliderFloat("###particleSpeed"u8, ref env->EnvState.Particles.Speed, 0.0f, 1.0f);
-                ImBrio.AttachToolTip("Particle Speed");
+                didParticlesChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###particleSpeed")u8, ref env->EnvState.Particles.Speed, 0.0f, 1.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Speed"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didParticlesChange |= ImGui.SliderFloat("###particleSpin"u8, ref env->EnvState.Particles.Spin, 0.05f, 5.0f);
-                ImBrio.AttachToolTip("Particle Spin");
+                didParticlesChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###particleSpin")u8, ref env->EnvState.Particles.Spin, 0.05f, 5.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particle Spin"));
 
                 ImBrio.VerticalPadding(3);
 
@@ -118,41 +118,41 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
             case 1:
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Rain", FontAwesomeIcon.Redo, "Reset All Rain Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Rain"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Rain Properties"),
                     Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Rain)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Rain;
                 }
 
                 ImBrio.CenterNextElementWithPadding(15);
-                var didRainChange = ImGui.SliderFloat("###rainIntensity"u8, ref env->EnvState.Rain.Intensity, 0.0f, 1.0f);
-                ImBrio.AttachToolTip("Rain Intensity");
+                var didRainChange = ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###rainIntensity")u8, ref env->EnvState.Rain.Intensity, 0.0f, 1.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain Intensity"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didRainChange |= ImGui.SliderFloat("###rainThickness"u8, ref env->EnvState.Rain.Size, 0.0f, 1.0f);
-                ImBrio.AttachToolTip("Rain Line Thickness");
+                didRainChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###rainThickness")u8, ref env->EnvState.Rain.Size, 0.0f, 1.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain Line Thickness"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didRainChange |= ImGui.SliderFloat("###rainWeight"u8, ref env->EnvState.Rain.Weight, 0.0f, 10.0f);
-                ImBrio.AttachToolTip("Rain Weight");
+                didRainChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###rainWeight")u8, ref env->EnvState.Rain.Weight, 0.0f, 10.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain Weight"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Color");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didRainChange |= ImGui.ColorEdit4("###rainColor"u8, ref env->EnvState.Rain.Color);
-                ImBrio.AttachToolTip("Rain Color");
+                didRainChange |= ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("###rainColor")u8, ref env->EnvState.Rain.Color);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain Color"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Advanced");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Advanced"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didRainChange |= ImGui.SliderFloat("###rainScattering"u8, ref env->EnvState.Rain.Scatter, 0.0f, 10.0f);
-                ImBrio.AttachToolTip("Rain Scattering");
+                didRainChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###rainScattering")u8, ref env->EnvState.Rain.Scatter, 0.0f, 10.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain Scattering"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didRainChange |= ImGui.SliderFloat("###rainRaindrops"u8, ref env->EnvState.Rain.Raindrops, 0.0f, 1.0f);
-                ImBrio.AttachToolTip("Raindrops");
+                didRainChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###rainRaindrops")u8, ref env->EnvState.Rain.Raindrops, 0.0f, 1.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Raindrops"));
 
                 ImBrio.VerticalPadding(3);
 
@@ -163,7 +163,7 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
             case 2:
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Wind", FontAwesomeIcon.Redo, "Reset All Rain Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Wind"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Rain Properties"),
                     Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Wind)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Wind;
@@ -171,15 +171,15 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
 
                 ImBrio.CenterNextElementWithPadding(15);
                 var didWindChange = ImBrio.SliderAngle("###windDirectionu", ref env->EnvState.Wind.Direction, 0.0f, MathF.PI);
-                ImBrio.AttachToolTip("Wind Direction");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Wind Direction"));
 
                 ImBrio.CenterNextElementWithPadding(15);
                 didWindChange |= ImBrio.SliderAngle("###windAngle", ref env->EnvState.Wind.Angle, 0.0f, 180.0f);
-                ImBrio.AttachToolTip("Wind Angle");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Wind Angle"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didWindChange |= ImGui.SliderFloat("###windSpeed"u8, ref env->EnvState.Wind.Speed, -30.0f, 100f);
-                ImBrio.AttachToolTip("Wind Speed");
+                didWindChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###windSpeed")u8, ref env->EnvState.Wind.Speed, -30.0f, 100f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Wind Speed"));
 
                 ImBrio.VerticalPadding(3);
 
@@ -190,38 +190,38 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
             case 3:
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Fog", FontAwesomeIcon.Redo, "Reset All Fog Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Fog"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Fog Properties"),
                      Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Fog)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Fog;
                 }
 
                 ImBrio.CenterNextElementWithPadding(15);
-                var didFogChange = ImGui.ColorEdit4("###fogColor"u8, ref env->EnvState.Fog.Color);
-                ImBrio.AttachToolTip("Fog Color");
+                var didFogChange = ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("###fogColor")u8, ref env->EnvState.Fog.Color);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Fog Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didFogChange |= ImGui.SliderFloat("###fogDistance"u8, ref env->EnvState.Fog.Distance, 0.0f, 1000f);
-                ImBrio.AttachToolTip("Fog Distance");
+                didFogChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###fogDistance")u8, ref env->EnvState.Fog.Distance, 0.0f, 1000f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Fog Distance"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didFogChange |= ImGui.SliderFloat("###fogThickness"u8, ref env->EnvState.Fog.Thickness, 0.0f, 50f);
-                ImBrio.AttachToolTip("Fog Thickness");
+                didFogChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###fogThickness")u8, ref env->EnvState.Fog.Thickness, 0.0f, 50f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Fog Thickness"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didFogChange |= ImGui.SliderFloat("###fogOpacity"u8, ref env->EnvState.Fog.FogOpacity, 0.0f, 10f);
-                ImBrio.AttachToolTip("Fog Opacity");
+                didFogChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###fogOpacity")u8, ref env->EnvState.Fog.FogOpacity, 0.0f, 10f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Fog Opacity"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Sky Opacity & Smoothness");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Sky Opacity & Smoothness"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didFogChange |= ImGui.SliderFloat("###skyOpacity"u8, ref env->EnvState.Fog.SkyOpacity, 0.0f, 10f);
-                ImBrio.AttachToolTip("Sky Opacity");
+                didFogChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###skyOpacity")u8, ref env->EnvState.Fog.SkyOpacity, 0.0f, 10f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Sky Opacity"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didFogChange |= ImGui.SliderFloat("###skySmoothness"u8, ref env->EnvState.Fog.SkySmoothness, 0.0f, 1000f);
-                ImBrio.AttachToolTip("Sky Smoothness");
+                didFogChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###skySmoothness")u8, ref env->EnvState.Fog.SkySmoothness, 0.0f, 1000f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Sky Smoothness"));
 
                 ImBrio.VerticalPadding(3);
 

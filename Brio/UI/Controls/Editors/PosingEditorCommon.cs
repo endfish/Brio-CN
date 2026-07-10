@@ -32,14 +32,14 @@ public static class PosingEditorCommon
                 Game.Posing.Skeletons.Bone? bone = posing.SkeletonPosing.GetBone(selectedIsBone.Value);
                 if(bone != null && bone.Skeleton.IsValid && bone.Freeze)
                 {
-                    ImGui.Text("This bone's transform values are frozen.");
+                    ImGui.Text(global::Brio.Resources.Localize.Text("This bone's transform values are frozen."));
                 }
             }
             else
             {
                 if(posing.ModelPosing.IsTransformFrozen)
                 {
-                    ImGui.Text("This actor's transform values are frozen.");
+                    ImGui.Text(global::Brio.Resources.Localize.Text("This actor's transform values are frozen."));
                 }
             }
         }
@@ -54,7 +54,7 @@ public static class PosingEditorCommon
             ImGui.Separator();
 
             var selected = options.TransformComponents.HasFlag(TransformComponents.Position);
-            if(ImGui.Checkbox("Position", ref selected))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Position"), ref selected))
             {
                 if(selected)
                     options.TransformComponents |= TransformComponents.Position;
@@ -63,7 +63,7 @@ public static class PosingEditorCommon
             }
 
             selected = options.TransformComponents.HasFlag(TransformComponents.Rotation);
-            if(ImGui.Checkbox("Rotation", ref selected))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Rotation"), ref selected))
             {
                 if(selected)
                     options.TransformComponents |= TransformComponents.Rotation;
@@ -72,7 +72,7 @@ public static class PosingEditorCommon
             }
 
             selected = options.TransformComponents.HasFlag(TransformComponents.Scale);
-            if(ImGui.Checkbox("Scale", ref selected))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Scale"), ref selected))
             {
                 if(selected)
                     options.TransformComponents |= TransformComponents.Scale;
@@ -83,7 +83,7 @@ public static class PosingEditorCommon
             ImGui.Separator();
 
             selected = options.ApplyModelTransform;
-            if(ImGui.Checkbox("Model Transform", ref selected))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Model Transform"), ref selected))
             {
                 options.ApplyModelTransform = selected;
             }
@@ -92,14 +92,14 @@ public static class PosingEditorCommon
 
     public static void DrawBoneFilterEditor(BoneFilter filter, PosingService? posingService)
     {
-        if(ImBrio.FontIconButton("select_all", FontAwesomeIcon.Check, "Select All"))
+        if(ImBrio.FontIconButton("select_all", FontAwesomeIcon.Check, global::Brio.Resources.Localize.Text("Select All")))
         {
             filter.EnableAll();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("select_none", FontAwesomeIcon.Minus, "Select None"))
+        if(ImBrio.FontIconButton("select_none", FontAwesomeIcon.Minus, global::Brio.Resources.Localize.Text("Select None")))
         {
             filter.DisableAll();
         }
@@ -109,7 +109,7 @@ public static class PosingEditorCommon
         {
             ImGui.SameLine();
 
-            if(ImBrio.ToggelFontIconButton("keep_gizmo", FontAwesomeIcon.LocationCrosshairs, new(0), posingService.GizmoStaysWhenAllBonesAreDisabled, tooltip: "Keep gizmo active even when all items in the filter are disabled"))
+            if(ImBrio.ToggelFontIconButton("keep_gizmo", FontAwesomeIcon.LocationCrosshairs, new(0), posingService.GizmoStaysWhenAllBonesAreDisabled, tooltip: global::Brio.Resources.Localize.Text("Keep gizmo active even when all items in the filter are disabled")))
             {
                 posingService.GizmoStaysWhenAllBonesAreDisabled = !posingService.GizmoStaysWhenAllBonesAreDisabled;
             }
@@ -280,18 +280,18 @@ public static class PosingEditorCommon
 
             using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor, enabled))
             {
-                if(ImGui.Button("IK", buttonSize))
+                if(ImGui.Button(global::Brio.Resources.Localize.Text("IK"), buttonSize))
                     ImGui.OpenPopup("transform_ik_popup");
 
-                ImBrio.AttachToolTip("Inverse Kinematics");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Inverse Kinematics"));
             }
         }
         else
         {
             ImGui.BeginDisabled();
-            ImGui.Button("IK", buttonSize);
+            ImGui.Button(global::Brio.Resources.Localize.Text("IK"), buttonSize);
             ImGui.EndDisabled();
-            ImBrio.AttachToolTip("Inverse Kinematics");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Inverse Kinematics"));
         }
     }
 }

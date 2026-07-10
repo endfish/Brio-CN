@@ -318,14 +318,14 @@ public class PosingGraphicalWindow : Window, IDisposable
         if(posing.SkeletonPosing.CharacterIsIVCS)
         {
             bool showGenitalia = _configurationService.Configuration.Posing.ShowGenitaliaInAdvancedPoseWindow;
-            if(ImGui.Checkbox("Show Genitalia", ref showGenitalia))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show Genitalia"), ref showGenitalia))
             {
                 _configurationService.Configuration.Posing.ShowGenitaliaInAdvancedPoseWindow = showGenitalia;
             }
         }
 
         var swapped = _configurationService.Configuration.Posing.GraphicalSidesSwapped;
-        if(ImGui.Checkbox("Swap Sides", ref swapped))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Swap Sides"), ref swapped))
         {
             _configurationService.Configuration.Posing.GraphicalSidesSwapped = swapped;
         }
@@ -359,7 +359,7 @@ public class PosingGraphicalWindow : Window, IDisposable
             if(ImBrio.FontIconButton(FontAwesomeIcon.MinusSquare, new Vector2(width, 0)))
                 posing.ClearSelection();
         }
-        ImBrio.AttachToolTip("Clear Selection");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Clear Selection"));
 
 
         ImGui.SameLine();
@@ -374,7 +374,7 @@ public class PosingGraphicalWindow : Window, IDisposable
             if(ImBrio.FontIconButton(FontAwesomeIcon.LevelUpAlt, new Vector2(width, 0)))
                 posing.SetBoneSelection(new BonePoseInfoId(parentBone!.Name, parentBone!.PartialId, PoseInfoSlot.Character), false);
         }
-        ImBrio.AttachToolTip("Select Parent");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Select Parent"));
 
         ImGui.SameLine();
 
@@ -388,14 +388,14 @@ public class PosingGraphicalWindow : Window, IDisposable
     {
         var buttonSize = new Vector2((ImGui.GetContentRegionAvail().X / 2.0f) - (ImGui.GetStyle().FramePadding.X * 2) + 2, 0);
 
-        if(ImBrio.Button("Import##import_pose", FontAwesomeIcon.FileDownload, buttonSize))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Import##import_pose"), FontAwesomeIcon.FileDownload, buttonSize))
             ImGui.OpenPopup("DrawImportPoseMenuPopup");
 
         FileUIHelpers.DrawImportPoseMenuPopup("posingGraphicalWindow", posing, true);
 
         ImGui.SameLine();
 
-        if(ImBrio.Button("Export##export_pose", FontAwesomeIcon.Save, buttonSize))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Export##export_pose"), FontAwesomeIcon.Save, buttonSize))
             ImGui.OpenPopup("DrawExportPoseMenuPopup");
 
         FileUIHelpers.DrawExportPoseMenuPopup(posing);
@@ -525,8 +525,8 @@ public class PosingGraphicalWindow : Window, IDisposable
 
         if(appearance.IsHuman is false)
         {
-            ImGui.Text("Graphical posing is only available for humanoid characters.");
-            if(ImGui.Button("Make Human"))
+            ImGui.Text(global::Brio.Resources.Localize.Text("Graphical posing is only available for humanoid characters."));
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Make Human")))
                 appearance.MakeHuman();
 
             ImGui.PopStyleVar(1);

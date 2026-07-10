@@ -13,7 +13,7 @@ public class WorldRenderingWidget(WorldRenderingCapability worldRenderingCapabil
     {
         var isWaterFrozen = Capability.WorldRenderingService.IsWaterFrozen;
 
-        if(ImGui.Checkbox("Freeze Water", ref isWaterFrozen))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Freeze Water"), ref isWaterFrozen))
         {
             Capability.WorldRenderingService.IsWaterFrozen = isWaterFrozen;
         }

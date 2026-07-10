@@ -73,24 +73,24 @@ public class StatusEffectsWidget(StatusEffectCapability capability) : Widget<Sta
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("status_effects_add", FontAwesomeIcon.Plus, "Add Effect", canAdd))
+        if(ImBrio.FontIconButton("status_effects_add", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Add Effect"), canAdd))
             ApplyStatusEffect();
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("status_effects_remove", FontAwesomeIcon.Minus, "Remove Effect", isSelectedPlaying))
+        if(ImBrio.FontIconButton("status_effects_remove", FontAwesomeIcon.Minus, global::Brio.Resources.Localize.Text("Remove Effect"), isSelectedPlaying))
             Capability.RemoveStatus((ushort)_selectedStatus);
 
         ImGui.SameLine();
 
-        ImGui.Checkbox("###status_vfx_filter", ref _VFXLockEnabled);
+        ImGui.Checkbox(global::Brio.Resources.Localize.Text("###status_vfx_filter"), ref _VFXLockEnabled);
         if(ImGui.IsItemHovered())
             ImGui.SetTooltip("Hide Status Effects that have no VFX.");
 
         ImGui.SameLine();
 
 
-        if(ImBrio.FontIconButton("status_effects_search", FontAwesomeIcon.Search, "Search"))
+        if(ImBrio.FontIconButton("status_effects_search", FontAwesomeIcon.Search, global::Brio.Resources.Localize.Text("Search")))
         {
             _globalStatusEffectSelector.Select(null, false);
             ImGui.OpenPopup("status_effect_search");

@@ -19,9 +19,9 @@ public class LightEditor
         if(light == null) return;
 
         // Falloff Mode
-        ImGui.Text("Light Falloff Mode:"u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Light Falloff Mode:")u8);
         ImBrio.CenterNextElementWithPadding(15);
-        if(ImGui.BeginCombo("###falloffMode"u8, $"{light->FalloffType.ToString()}"))
+        if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###falloffMode")u8, $"{light->FalloffType.ToString()}"))
         {
             foreach(var value in Enum.GetValues<FalloffType>())
             {
@@ -32,22 +32,22 @@ public class LightEditor
             }
             ImGui.EndCombo();
         }
-        ImBrio.AttachToolTip("Light Falloff Mode");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Light Falloff Mode"));
 
         // Shadows
         //
 
-        ImGui.Text("Character Shadow Range:"u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Character Shadow Range:")u8);
         ImBrio.CenterNextElementWithPadding(15);
-        ImGui.DragFloat("###shadowRange"u8, ref light->CharacterShadowRange, 0.1f, 0.001f, 1000.0f);
+        ImGui.DragFloat(global::Brio.Resources.Localize.Text("###shadowRange")u8, ref light->CharacterShadowRange, 0.1f, 0.001f, 1000.0f);
 
-        ImGui.Text("Shadow Plane Near:"u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Shadow Plane Near:")u8);
         ImBrio.CenterNextElementWithPadding(15);
-        ImGui.DragFloat("###shadowNear"u8, ref light->ShadowPlaneNear, 0.01f, 0.001f, 1000.0f);
+        ImGui.DragFloat(global::Brio.Resources.Localize.Text("###shadowNear")u8, ref light->ShadowPlaneNear, 0.01f, 0.001f, 1000.0f);
 
-        ImGui.Text("Shadow Plane Far:"u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Shadow Plane Far:")u8);
         ImBrio.CenterNextElementWithPadding(15);
-        ImGui.DragFloat("###shadowFar"u8, ref light->ShadowPlaneFar, 0.01f, 0.001f, 1000.0f);
+        ImGui.DragFloat(global::Brio.Resources.Localize.Text("###shadowFar")u8, ref light->ShadowPlaneFar, 0.01f, 0.001f, 1000.0f);
     }
 
     public static unsafe void DrawAdvancedSettings(LightRenderingCapability Capability)
@@ -56,7 +56,7 @@ public class LightEditor
         if(light == null) return;
 
         ImBrio.VerticalPadding(5);
-        ImGui.Text("Falloff Mode / Power & Light Range"u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Falloff Mode / Power & Light Range")u8);
 
 
         ImBrio.VerticalPadding(5);
@@ -71,7 +71,7 @@ public class LightEditor
 
         //ImGui.SameLine();
 
-        //if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, "Reset Light Properties", Capability.HasOverride))
+        //if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Light Properties"), Capability.HasOverride))
         //{
         //    Capability.Reset();
         //}
@@ -124,12 +124,12 @@ public class LightEditor
         {
             case LightType.SpotLight:
                 ImBrio.CenterNextElementWithPadding(15);
-                ImGui.SliderFloat("###lightAngle"u8, ref light->SpotLightAngleDegrees, 0.0f, 180.0f, "%0.0f Degrees"u8);
-                ImBrio.AttachToolTip("Spot Light Angle");
+                ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###lightAngle")u8, ref light->SpotLightAngleDegrees, 0.0f, 180.0f, "%0.0f Degrees"u8);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Spot Light Angle"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                ImGui.SliderFloat("###lightSmothing"u8, ref light->AngularFalloffDegrees, 0.0f, 180.0f, "%0.0f Degrees"u8);
-                ImBrio.AttachToolTip("Spot Light Smothing");
+                ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###lightSmothing")u8, ref light->AngularFalloffDegrees, 0.0f, 180.0f, "%0.0f Degrees"u8);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Spot Light Smothing"));
                 break;
 
             case LightType.FlatLight:
@@ -142,59 +142,59 @@ public class LightEditor
                 using(ImRaii.ItemWidth(half))
                 {
                     ImGui.SliderAngle("###lightAngle_x"u8, ref light->FlatLightSkewAngleDegrees.X, -90, 90);
-                    ImBrio.AttachToolTip("Flat Light X");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Flat Light X"));
 
                     ImGui.SameLine(0, spacing);
 
                     ImGui.SliderAngle("###lightAngle_y"u8, ref light->FlatLightSkewAngleDegrees.Y, -90, 90);
-                    ImBrio.AttachToolTip("Flat Light Y");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Flat Light Y"));
                 }
 
                 ImBrio.CenterNextElementWithPadding(15);
-                ImGui.SliderFloat("###lightAngleSlider"u8, ref light->AngularFalloffDegrees, 0.0f, 180.0f, "%0.0f Degrees"u8);
-                ImBrio.AttachToolTip("Flat Light Falloff");
+                ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###lightAngleSlider")u8, ref light->AngularFalloffDegrees, 0.0f, 180.0f, "%0.0f Degrees"u8);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Flat Light Falloff"));
                 break;
         }
 
         // Falloff Power
         ImBrio.CenterNextElementWithPadding(15);
-        ImGui.DragFloat("###falloffPower"u8, ref light->FalloffFactor, 0.01f, 0.0f, 1000.0f);
-        ImBrio.AttachToolTip("Light Falloff Factor Power");
+        ImGui.DragFloat(global::Brio.Resources.Localize.Text("###falloffPower")u8, ref light->FalloffFactor, 0.01f, 0.0f, 1000.0f);
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Light Falloff Factor Power"));
 
         // Range
         ImBrio.CenterNextElementWithPadding(15);
-        if(ImGui.DragFloat("###lightRange"u8, ref light->Range, 0.1f, 0, 900))
+        if(ImGui.DragFloat(global::Brio.Resources.Localize.Text("###lightRange")u8, ref light->Range, 0.1f, 0, 900))
             Capability.GameLight.NeedsUpdate = true;
-        ImBrio.AttachToolTip("Light Range");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Light Range"));
 
         //
 
         ImBrio.VerticalPadding(5);
-        ImBrio.SeparatorText("Color & Intensity");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Color & Intensity"));
 
         var color = Vector3.SquareRoot(light->Color / 6);
         ImBrio.CenterNextElementWithPadding(15);
-        if(ImGui.ColorEdit3("###colorEdit3"u8, ref color, ImGuiColorEditFlags.Hdr))
+        if(ImGui.ColorEdit3(global::Brio.Resources.Localize.Text("###colorEdit3")u8, ref color, ImGuiColorEditFlags.Hdr))
         {
             light->Color = color * color * 6;
         }
-        ImBrio.AttachToolTip("Light Color");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Light Color"));
 
         var intensity = light->Intensity;
         ImBrio.CenterNextElementWithPadding(15);
-        if(ImGui.DragFloat("###intensity"u8, ref intensity, 0.01f, 0.0f, 100.0f))
+        if(ImGui.DragFloat(global::Brio.Resources.Localize.Text("###intensity")u8, ref intensity, 0.01f, 0.0f, 100.0f))
         {
             light->Intensity = intensity;
         }
-        ImBrio.AttachToolTip("Intensity");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Intensity"));
 
         //
 
         ImBrio.VerticalPadding(5);
-        ImBrio.SeparatorText("Shadows & Reflections");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Shadows & Reflections"));
 
         var flag = light->LightFlags.HasFlag(LightFlags.Reflection);
-        if(ImGui.Checkbox("Enable Material Reflections"u8, ref flag))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Material Reflections")u8, ref flag))
         {
             light->LightFlags ^= LightFlags.Reflection;
         }
@@ -229,7 +229,7 @@ public class LightEditor
 
         ImBrio.VerticalSeparator(24);
 
-        if(ImBrio.ToggelFontIconButton($"save_{Capability.Entity.Id}", FontAwesomeIcon.BookBookmark, new Vector2(25, 0), false, tooltip: "Light Presets"))
+        if(ImBrio.ToggelFontIconButton($"save_{Capability.Entity.Id}", FontAwesomeIcon.BookBookmark, new Vector2(25, 0), false, tooltip: global::Brio.Resources.Localize.Text("Light Presets")))
         {
             ImGui.OpenPopup($"DrawPresetPopup");
         }

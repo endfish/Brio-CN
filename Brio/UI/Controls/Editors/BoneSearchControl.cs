@@ -19,7 +19,7 @@ public class BoneSearchControl
         using(ImRaii.PushId(id))
         {
             ImGui.SetNextItemWidth(-1);
-            ImGui.InputText("###search_term", ref _searchTerm, 256);
+            ImGui.InputText(global::Brio.Resources.Localize.Text("###search_term"), ref _searchTerm, 256);
 
             using(var child = ImRaii.Child("###bone_search_editor_child", new Vector2(400, ImGui.GetTextLineHeight() * 25f), true))
             {

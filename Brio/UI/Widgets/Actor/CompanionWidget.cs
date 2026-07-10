@@ -35,7 +35,7 @@ public unsafe class CompanionWidget(CompanionCapability capability) : Widget<Com
     public override void DrawPopup()
     {
         if(Capability.Character.HasSpawnedCompanion())
-            if(ImGui.MenuItem("Destroy Companion###companionowner_popup_destroy"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Destroy Companion###companionowner_popup_destroy")))
                 Capability.DestroyCompanion();
     }
 

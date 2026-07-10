@@ -55,7 +55,7 @@ public class PosingTransformEditor
 
             using(ImRaii.Disabled(isBone == false))
             {
-                if(ImBrio.FontIconButton("propagate", FontAwesomeIcon.Compress, "Propagate", realBone?.EligibleForIK == true))
+                if(ImBrio.FontIconButton("propagate", FontAwesomeIcon.Compress, global::Brio.Resources.Localize.Text("Propagate"), realBone?.EligibleForIK == true))
                     ImGui.OpenPopup("transform_propagate_popup");
 
                 if(compactMode)
@@ -70,7 +70,7 @@ public class PosingTransformEditor
             {
                 ImBrio.VerticalSeparator(24, 1);
 
-                if(ImBrio.FontIconButton("bone_search", FontAwesomeIcon.Search, "Bone Search"))
+                if(ImBrio.FontIconButton("bone_search", FontAwesomeIcon.Search, global::Brio.Resources.Localize.Text("Bone Search")))
                 {
                     ImGui.OpenPopup("widget_bone_search_popup");
                 }
@@ -79,7 +79,7 @@ public class PosingTransformEditor
 
                 using(ImRaii.Disabled(posingCapability.Selected.Value is None))
                 {
-                    if(ImBrio.FontIconButton("clear_selection", FontAwesomeIcon.MinusSquare, "Clear Selection"))
+                    if(ImBrio.FontIconButton("clear_selection", FontAwesomeIcon.MinusSquare, global::Brio.Resources.Localize.Text("Clear Selection")))
                         posingCapability.ClearSelection();
                 }
 
@@ -97,22 +97,22 @@ public class PosingTransformEditor
                     if(ImBrio.FontIconButton(FontAwesomeIcon.LevelUpAlt))
                         posingCapability.SetBoneSelection(new BonePoseInfoId(parentBone!.Name, parentBone!.PartialId, PoseInfoSlot.Character), false);
                 }
-                ImBrio.AttachToolTip("Select Parent");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Select Parent"));
             }
 
             ImBrio.VerticalSeparator(24, 1);
 
             using(ImRaii.Disabled(selectedIsBone.HasValue)) // This is borken to all hell
-                if(ImBrio.FontIconButton("copypaste", FontAwesomeIcon.Clipboard, "Copy & Paste Transform"))
+                if(ImBrio.FontIconButton("copypaste", FontAwesomeIcon.Clipboard, global::Brio.Resources.Localize.Text("Copy & Paste Transform")))
                     ImGui.OpenPopup("CopyPastePopup");
             if(selectedIsBone.HasValue)
-                ImBrio.AttachToolTip("Copy & Paste is currently only available for Model Transform");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Copy & Paste is currently only available for Model Transform"));
 
             ImGui.SameLine();
 
             using(ImRaii.Disabled(!posingCapability.CanResetBone(realBone)))
             {
-                if(ImBrio.FontIconButtonRight("resetTransform", FontAwesomeIcon.Retweet, 1, tooltip: "Reset Bone"))
+                if(ImBrio.FontIconButtonRight("resetTransform", FontAwesomeIcon.Retweet, 1, tooltip: global::Brio.Resources.Localize.Text("Reset Bone")))
                 {
                     posingCapability.ResetSelectedBone();
                 }
@@ -308,7 +308,7 @@ public class PosingTransformEditor
         var didChange = false;
 
         bool propBool = propagate.HasFlag(TransformComponents.Position);
-        if(ImGui.Checkbox("P###propagate_position", ref propBool))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("P###propagate_position"), ref propBool))
         {
             didChange |= true;
             propagate = propBool ? propagate | TransformComponents.Position : propagate & ~TransformComponents.Position;
@@ -318,7 +318,7 @@ public class PosingTransformEditor
 
         ImGui.SameLine();
         propBool = propagate.HasFlag(TransformComponents.Rotation);
-        if(ImGui.Checkbox("R###propagate_rotation", ref propBool))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("R###propagate_rotation"), ref propBool))
         {
             didChange |= true;
             propagate = propBool ? propagate | TransformComponents.Rotation : propagate & ~TransformComponents.Rotation;
@@ -329,7 +329,7 @@ public class PosingTransformEditor
         ImGui.SameLine();
 
         propBool = propagate.HasFlag(TransformComponents.Scale);
-        if(ImGui.Checkbox("S###propagate_scale", ref propBool))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("S###propagate_scale"), ref propBool))
         {
             didChange |= true;
             propagate = propBool ? propagate | TransformComponents.Scale : propagate & ~TransformComponents.Scale;

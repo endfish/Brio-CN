@@ -107,7 +107,7 @@ public abstract class ItemEntryBase : EntryBase
         ImGui.Spacing();
         ImGui.Spacing();
 
-        ImGui.Text("Tags:");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Tags:"));
         ImGui.SameLine();
         DrawTags(window);
     }
@@ -144,7 +144,7 @@ public abstract class ItemEntryBase : EntryBase
             return;
 
         ImGui.SameLine();
-        if(ImGui.SmallButton("+"))
+        if(ImGui.SmallButton(global::Brio.Resources.Localize.Text("+")))
         {
             _tagName = "";
             _tagAction = TagAction.New;
@@ -153,13 +153,13 @@ public abstract class ItemEntryBase : EntryBase
 
         if(_contextSource != null && ImGui.BeginPopup("tag_context_menu"))
         {
-            if(ImGui.MenuItem("Rename"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Rename")))
             {
                 _tagName = _contextSource.Name;
                 _tagAction = TagAction.Rename;
                 openTagNamePopup = true;
             }
-            if(ImGui.MenuItem("Delete"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Delete")))
             {
                 RemoveTag(_contextSource.Name);
             }
@@ -168,7 +168,7 @@ public abstract class ItemEntryBase : EntryBase
 
         if(ImGui.BeginPopup("author_tag_context_menu"))
         {
-            ImGui.Text("Author");
+            ImGui.Text(global::Brio.Resources.Localize.Text("Author"));
             ImGui.EndPopup();
         }
 
@@ -179,7 +179,7 @@ public abstract class ItemEntryBase : EntryBase
             ImGui.SetKeyboardFocusHere();
 
             ImGui.Text(_tagAction == TagAction.Rename ? "New tag name:" : "Tag name:");
-            if(ImGui.InputText("###tag_name_input", ref _tagName, 64, ImGuiInputTextFlags.EnterReturnsTrue))
+            if(ImGui.InputText(global::Brio.Resources.Localize.Text("###tag_name_input"), ref _tagName, 64, ImGuiInputTextFlags.EnterReturnsTrue))
             {
                 if(_tagAction == TagAction.Rename && _contextSource != null)
                     RemoveTag(_contextSource.Name);

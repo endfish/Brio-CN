@@ -13,28 +13,28 @@ public class WorldObjectLifetimeWidget(WorldObjectLifetimeCapability capability)
 
     public override void DrawQuickIcons()
     {
-        if(ImBrio.FontIconButton("bglifetime_clone", FontAwesomeIcon.Clone, "Clone", Capability.CanClone))
+        if(ImBrio.FontIconButton("bglifetime_clone", FontAwesomeIcon.Clone, global::Brio.Resources.Localize.Text("Clone"), Capability.CanClone))
         {
             Capability.Clone();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("bglifetime_movetocamera", FontAwesomeIcon.CaretSquareDown, "Move to Camera"))
+        if(ImBrio.FontIconButton("bglifetime_movetocamera", FontAwesomeIcon.CaretSquareDown, global::Brio.Resources.Localize.Text("Move to Camera")))
         {
             Capability.MoveToCamera();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.HoldButton("bglifetime_destroy", "", FontAwesomeIcon.Trash, 1f, new(40, 0), centerTest: true, tooltip: "[HOLD TO DESTROY]", onlyIcon: true))
+        if(ImBrio.HoldButton("bglifetime_destroy", global::Brio.Resources.Localize.Text(""), FontAwesomeIcon.Trash, 1f, new(40, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("[HOLD TO DESTROY]"), onlyIcon: true))
         {
             Capability.Destroy();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("bglifetime_rename", FontAwesomeIcon.Signature, "Rename"))
+        if(ImBrio.FontIconButton("bglifetime_rename", FontAwesomeIcon.Signature, global::Brio.Resources.Localize.Text("Rename")))
         {
             ModalManager.Instance.OpenRenameModal(Capability.Entity);
         }
@@ -49,10 +49,10 @@ public class WorldObjectLifetimeWidget(WorldObjectLifetimeCapability capability)
             ModalManager.Instance.OpenRenameModal(Capability.Entity);
         }
 
-        if(Capability.CanClone && ImGui.MenuItem("Clone###bglifetime_popup_clone"))
+        if(Capability.CanClone && ImGui.MenuItem(global::Brio.Resources.Localize.Text("Clone###bglifetime_popup_clone")))
             Capability.Clone();
 
-        if(ImGui.MenuItem("Move to Camera###bglifetime_popup_move"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Move to Camera###bglifetime_popup_move")))
             Capability.MoveToCamera();
 
         if(Capability.CanDestroy)
@@ -61,7 +61,7 @@ public class WorldObjectLifetimeWidget(WorldObjectLifetimeCapability capability)
 
             if(ImGui.BeginMenu("Destroy###bglifetime_popup_destroy"))
             {
-                if(ImGui.MenuItem("Confirm Destruction###bglifetime_popup_destroy_confirm"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###bglifetime_popup_destroy_confirm")))
                     Capability.Destroy();
 
                 ImGui.EndMenu();

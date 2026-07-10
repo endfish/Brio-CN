@@ -81,19 +81,19 @@ public class SpawnMenu
         {
             if(_actorSpawnService != null)
             {
-                ImBrio.SeparatorText("Actors");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Actors"));
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.User, "Actor", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.User, global::Brio.Resources.Localize.Text("Actor"), buttonSize))
                 {
                     _actorSpawnService.CreateCharacter(out _, SpawnFlags.Default, true);
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.PlusSquare, "Actor with Companion", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.PlusSquare, global::Brio.Resources.Localize.Text("Actor with Companion"), buttonSize))
                 {
                     _actorSpawnService.CreateCharacter(out _, SpawnFlags.WithCompanionSlot, false);
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, "Actor from World...", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, global::Brio.Resources.Localize.Text("Actor from World..."), buttonSize))
                 {
                     ImGui.OpenPopup("FromWorldPopup");
                 }
@@ -106,7 +106,7 @@ public class SpawnMenu
 
                     if(!overworldActors.Any())
                     {
-                        ImGui.TextDisabled("No world actors found");
+                        ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No world actors found"));
                     }
 
                     foreach(var actor in overworldActors)
@@ -128,15 +128,15 @@ public class SpawnMenu
             if(_worldObjectService != null)
             {
                 ImGui.Spacing();
-                ImBrio.SeparatorText("Objects");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Objects"));
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Couch, "Open Object Catalog", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Couch, global::Brio.Resources.Localize.Text("Open Object Catalog"), buttonSize))
                 {
                     UIManager.Instance.ToggleCatalogWindow();
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Cubes, "Prop", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Cubes, global::Brio.Resources.Localize.Text("Prop"), buttonSize))
                 {
                     _worldObjectService.SpawnProp(new FFXIVClientStructs.FFXIV.Client.Graphics.Scene.WeaponCreateInfo
                     {
@@ -153,17 +153,17 @@ public class SpawnMenu
                     });
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Chair, "Furniture Item", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Chair, global::Brio.Resources.Localize.Text("Furniture Item"), buttonSize))
                 {
                     _worldObjectService.SpawnFurniture("bgcommon/hou/outdoor/general/0332/asset/gar_b0_m0332.sgb");
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Boxes, "World Object", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Boxes, global::Brio.Resources.Localize.Text("World Object"), buttonSize))
                 {
                     _worldObjectService.SpawnBgObject("bg/ffxiv/fst_f1/twn/common/bgparts/f1t0_a0_taru1.mdl");
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Burst, "VFX", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Burst, global::Brio.Resources.Localize.Text("VFX"), buttonSize))
                 {
                     _worldObjectService.SpawnStaticVfx("bgcommon/world/common/vfx_for_bg/eff/val_obj001_o.avfx");
                 }
@@ -172,24 +172,24 @@ public class SpawnMenu
             if(_lightingService != null)
             {
                 ImGui.Spacing();
-                ImBrio.SeparatorText("Lights");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Lights"));
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Lightbulb, "Spot Light", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Lightbulb, global::Brio.Resources.Localize.Text("Spot Light"), buttonSize))
                 {
                     _lightingService.SpawnLight(LightType.SpotLight);
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Lightbulb, "Point Light", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Lightbulb, global::Brio.Resources.Localize.Text("Point Light"), buttonSize))
                 {
                     _lightingService.SpawnLight(LightType.PointLight);
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Lightbulb, "Flat Light", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Lightbulb, global::Brio.Resources.Localize.Text("Flat Light"), buttonSize))
                 {
                     _lightingService.SpawnLight(LightType.FlatLight);
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, "Light from World...", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, global::Brio.Resources.Localize.Text("Light from World..."), buttonSize))
                 {
                     ImGui.OpenPopup("FromWorldLightPopup");
                 }
@@ -210,7 +210,7 @@ public class SpawnMenu
 
                         if(worldLights.Count == 0)
                         {
-                            ImGui.TextDisabled("No world lights found");
+                            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No world lights found"));
                         }
                         else
                         {
@@ -247,15 +247,15 @@ public class SpawnMenu
             if(_cameraManager != null)
             {
                 ImGui.Spacing();
-                ImBrio.SeparatorText("Cameras");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Cameras"));
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Camera, "Brio Camera", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Camera, global::Brio.Resources.Localize.Text("Brio Camera"), buttonSize))
                 {
                     _cameraManager.CreateCamera(CameraType.Game);
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Video, "Free-Cam", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Video, global::Brio.Resources.Localize.Text("Free-Cam"), buttonSize))
                 {
                     _cameraManager.CreateCamera(CameraType.Free);
                     ImGui.CloseCurrentPopup();
@@ -263,9 +263,9 @@ public class SpawnMenu
             }
 
             ImGui.Spacing();
-            ImBrio.SeparatorText("Other");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Other"));
 
-            if(ImBrio.IconButtonWithText(FontAwesomeIcon.Image, "Reference Image", buttonSize))
+            if(ImBrio.IconButtonWithText(FontAwesomeIcon.Image, global::Brio.Resources.Localize.Text("Reference Image"), buttonSize))
             {
                 ImGui.CloseCurrentPopup();
 
@@ -279,7 +279,7 @@ public class SpawnMenu
                     });
             }
 
-            if(ImBrio.IconButtonWithText(FontAwesomeIcon.FolderPlus, "Folder", buttonSize))
+            if(ImBrio.IconButtonWithText(FontAwesomeIcon.FolderPlus, global::Brio.Resources.Localize.Text("Folder"), buttonSize))
             {
                 _entityManager.CreateEntityOnEntityContainer<FolderEntity>($"Folder");
             }

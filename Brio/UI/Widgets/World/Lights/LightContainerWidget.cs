@@ -24,7 +24,7 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
                     var worldLights = Capability.GetWorldLights().OrderBy(x => x.distance).ToList();
                     if(worldLights.Count == 0)
                     {
-                        ImGui.TextDisabled("No world lights found");
+                        ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No world lights found"));
                     }
                     else
                     {
@@ -46,7 +46,7 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
                 ImGui.EndMenu();
             }
 
-            if(ImGui.MenuItem("Open Light Window###containerwidgetpopup_openWindow"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Open Light Window###containerwidgetpopup_openWindow")))
             {
                 Capability.OpenLightWindow();
             }
@@ -55,15 +55,15 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
             {
                 ImGui.Separator();
 
-                if(ImGui.MenuItem("Spot Light###containerwidgetpopup_spawn_SpotLight"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Spot Light###containerwidgetpopup_spawn_SpotLight")))
                 {
                     Capability.LightingService.SpawnLight(LightType.SpotLight);
                 }
-                if(ImGui.MenuItem("Area Light###containerwidgetpopup_spawn_SpotLight"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Area Light###containerwidgetpopup_spawn_SpotLight")))
                 {
                     Capability.LightingService.SpawnLight(LightType.PointLight);
                 }
-                if(ImGui.MenuItem("Flat Light###containerwidgetpopup_spawn_SpotLight"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Flat Light###containerwidgetpopup_spawn_SpotLight")))
                 {
                     Capability.LightingService.SpawnLight(LightType.FlatLight);
                 }
@@ -74,7 +74,7 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
             {
                 if(ImGui.BeginMenu("Lights###containerwidgetpopup_destroyLights"))
                 {
-                    if(ImGui.MenuItem("Confirm Destruction##containerwidgetpopup_destroyallLights"))
+                    if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction##containerwidgetpopup_destroyallLights")))
                     {
                         Capability.LightingService.DestroyAll();
                     }

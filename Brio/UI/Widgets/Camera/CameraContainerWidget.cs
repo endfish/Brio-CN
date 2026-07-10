@@ -16,7 +16,7 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
     {
         using(ImRaii.Disabled(Capability.IsAllowed == false))
         {
-            if(ImGui.MenuItem("Open Camera Editor###containerwidgetpopup_OpenAdvance"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Open Camera Editor###containerwidgetpopup_OpenAdvance")))
             {
                 Capability.OpenCameraWindow();
             }
@@ -25,11 +25,11 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
             {
                 ImGui.Separator();
 
-                if(ImGui.MenuItem("Camera###containerwidgetpopup_newcamera"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Camera###containerwidgetpopup_newcamera")))
                 {
                     Capability.VirtualCameraManager.CreateCamera(CameraType.Game);
                 }
-                if(ImGui.MenuItem("Free-Cam###containerwidgetpopup_newfreecamera"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Free-Cam###containerwidgetpopup_newfreecamera")))
                 {
                     Capability.VirtualCameraManager.CreateCamera(CameraType.Free);
                 }
@@ -41,7 +41,7 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
             {
                 if(ImGui.BeginMenu("Cameras###containerwidgetpopup_destroyallCameras"))
                 {
-                    if(ImGui.MenuItem("Confirm Destruction###containerwidgetpopup_destroyall_confirmCameras"))
+                    if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###containerwidgetpopup_destroyall_confirmCameras")))
                     {
                         Capability.VirtualCameraManager.DestroyAll();
                     }

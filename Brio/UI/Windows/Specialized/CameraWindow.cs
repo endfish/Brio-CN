@@ -51,10 +51,10 @@ public class CameraWindow : Window, IDisposable
 
         ImBrio.VerticalPadding(2);
 
-        ImGui.Text("Select Camera to Edit:");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Select Camera to Edit:"));
         ImBrio.CenterNextElementWithPadding(15);
         using(ImRaii.Disabled(_virtualCameraService.CamerasCount == 0))
-            if(ImGui.BeginCombo("###setCamera"u8, $"{_virtualCameraService.SelectedCameraEntity?.FriendlyName}"))
+            if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###setCamera")u8, $"{_virtualCameraService.SelectedCameraEntity?.FriendlyName}"))
             {
                 var list = _virtualCameraService.SpawnedCameraEntities;
                 list.Add(_virtualCameraService.GetDefaultCamera()!);
@@ -68,7 +68,7 @@ public class CameraWindow : Window, IDisposable
                 ImGui.EndCombo();
             }
 
-        ImBrio.AttachToolTip("Current Camera");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Current Camera"));
 
 
         if(_virtualCameraService.SelectedCameraEntity is null || _virtualCameraService.SelectedCameraEntity.IsAttached == false)

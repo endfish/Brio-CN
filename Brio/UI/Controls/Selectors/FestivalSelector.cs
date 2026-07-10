@@ -32,12 +32,12 @@ public class FestivalSelector(string id, IEnumerable<FestivalEntry> entries) : S
 
     protected override void DrawOptions()
     {
-        if(ImGui.Checkbox("Show Unknown", ref _showUnknown))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show Unknown"), ref _showUnknown))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImGui.Checkbox("Show Unsafe", ref _showUnsafe))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Show Unsafe"), ref _showUnsafe))
             UpdateList();
     }
 

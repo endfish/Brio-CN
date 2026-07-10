@@ -47,17 +47,17 @@ public class WorldObjectSelector(string id) : GamePathSelector(id)
 
         float third = (ImGui.GetContentRegionAvail().X - ImGui.GetStyle().ItemSpacing.X * 2) / 3f;
 
-        if(ImBrio.MultiComboBox("###worldobject_exp", _expansionOptions, ref _selectedExpansions, third, "All Expansions"))
+        if(ImBrio.MultiComboBox("###worldobject_exp", _expansionOptions, ref _selectedExpansions, third, global::Brio.Resources.Localize.Text("All Expansions")))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImBrio.MultiComboBox("###worldobject_sub", _subtypeOptions, ref _selectedSubtypes, third, "All Subtypes"))
+        if(ImBrio.MultiComboBox("###worldobject_sub", _subtypeOptions, ref _selectedSubtypes, third, global::Brio.Resources.Localize.Text("All Subtypes")))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImBrio.MultiComboBox("###worldobject_asset", _assetOptions, ref _selectedAssets, third, "All Asset Types"))
+        if(ImBrio.MultiComboBox("###worldobject_asset", _assetOptions, ref _selectedAssets, third, global::Brio.Resources.Localize.Text("All Asset Types")))
             UpdateList();
     }
 }

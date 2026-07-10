@@ -51,7 +51,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("import", FontAwesomeIcon.FileDownload, "Import Pose"))
+        if(ImBrio.FontIconButton("import", FontAwesomeIcon.FileDownload, global::Brio.Resources.Localize.Text("Import Pose")))
         {
             ImGui.OpenPopup("DrawImportPoseMenuPopup");
         }
@@ -60,28 +60,28 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("export", FontAwesomeIcon.Save, "Save Pose"))
+        if(ImBrio.FontIconButton("export", FontAwesomeIcon.Save, global::Brio.Resources.Localize.Text("Save Pose")))
             ImGui.OpenPopup("DrawExportPoseMenuPopup");
 
         FileUIHelpers.DrawExportPoseMenuPopup(Capability);
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, "Undo", Capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
+        if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, global::Brio.Resources.Localize.Text("Undo"), Capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
         {
             Capability.Undo();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, "Redo", Capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
+        if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, global::Brio.Resources.Localize.Text("Redo"), Capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
         {
             Capability.Redo();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("flipButton", FontAwesomeIcon.Repeat, "Mirror Pose"))
+        if(ImBrio.FontIconButton("flipButton", FontAwesomeIcon.Repeat, global::Brio.Resources.Localize.Text("Mirror Pose")))
         {
             Capability.MirrorPose();
         }
@@ -97,7 +97,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
         }
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, "Reset Pose", Capability.HasOverride()))
+        if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Pose"), Capability.HasOverride()))
         {
             ImGui.OpenPopup("widget_reset_pose_popup");
         }
@@ -125,7 +125,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
         {
             {
                 var buttonSize = new Vector2(155 * ImGuiHelpers.GlobalScale, 0);
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Undo, "Reset Pose", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Text("Reset Pose"), buttonSize))
                 {
                     Capability.Reset(false, false);
                     ImGui.CloseCurrentPopup();
@@ -133,7 +133,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
                 using(ImRaii.Disabled(!Capability.HasOverride(Capability.SkeletonPosing.FilterNonFaceBones)))
                 {
-                    if(ImBrio.IconButtonWithText(FontAwesomeIcon.ChildReaching, "Reset Body", buttonSize))
+                    if(ImBrio.IconButtonWithText(FontAwesomeIcon.ChildReaching, global::Brio.Resources.Localize.Text("Reset Body"), buttonSize))
                     {
                         Capability.Snapshot(false, reconcile: false);
                         Capability.SkeletonPosing.PoseInfo.Clear(Capability.SkeletonPosing.FilterNonFaceBones);
@@ -143,7 +143,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
                 using(ImRaii.Disabled(!Capability.HasOverride(Capability.SkeletonPosing.FilterFaceBones)))
                 {
-                    if(ImBrio.IconButtonWithText(FontAwesomeIcon.Smile, "Reset Face", buttonSize))
+                    if(ImBrio.IconButtonWithText(FontAwesomeIcon.Smile, global::Brio.Resources.Localize.Text("Reset Face"), buttonSize))
                     {
                         Capability.SkeletonPosing.PoseInfo.Clear(Capability.SkeletonPosing.FilterFaceBones);
                         ImGui.CloseCurrentPopup();

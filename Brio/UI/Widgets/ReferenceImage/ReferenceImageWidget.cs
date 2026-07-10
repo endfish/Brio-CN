@@ -33,7 +33,7 @@ public class ReferenceImageWidget(ReferenceImageCapability capability) : Widget<
 
         if(ImGui.BeginMenu("Destroy##image_destroy"))
         {
-            if(ImGui.MenuItem("Confirm Destruction###image_destroy_confirm"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###image_destroy_confirm")))
                 Capability.Destroy();
 
             ImGui.EndMenu();

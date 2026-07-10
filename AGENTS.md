@@ -17,7 +17,9 @@ Chinese localization branch.
 
 ## Localization
 
-- Prefer `Localize.Get("ui.some.key", "English fallback")` for UI strings.
+- Prefer `Localize.Get("ui.some.key", "English fallback")` for structured UI
+  strings and `Localize.Text("English label###stable_id")` for direct ImGui
+  labels. `Localize.Text` preserves the `##`/`###` ID suffix automatically.
 - Put Simplified Chinese text in
   `Brio/Resources/Embedded/Language/zh-CN.json`.
 - Do not hard-code Chinese strings in `.cs` files unless there is no practical
@@ -36,6 +38,6 @@ Chinese localization branch.
 
 - `i18n` adds language overlay loading and maps Dalamud Simplified Chinese
   client language to `zh-CN`.
-- `zh-CN` currently contains the first UI pass for the main window, entity tree
-  roots, actor/camera lifetime controls, posing controls, appearance controls,
-  unified spawn menu, and time/weather controls.
+- `zh-CN` contains the Brio 0.8 UI localization pass, including the catalog,
+  world-object categories, settings, actor/camera/light controls, posing,
+  environment controls, timelines, scene tools, and metadata tools.

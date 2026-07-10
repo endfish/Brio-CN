@@ -393,7 +393,7 @@ public class EntityHierarchyView(EntityManager entityManager, GPoseService gPose
         var nodeStartPos = ImGui.GetCursorPos();
 
         ImGui.SameLine();
-        ImGui.Text(" ");
+        ImGui.Text(global::Brio.Resources.Localize.Text(" "));
 
         ImGui.SameLine();
 

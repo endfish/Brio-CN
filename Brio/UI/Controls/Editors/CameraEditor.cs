@@ -34,7 +34,7 @@ public static class CameraEditor
             {
                 var width = -ImGui.CalcTextSize("XxxxxX").X;
 
-                if(ImBrio.ToggelFontIconButton("portraitMode", FontAwesomeIcon.Mobile, new Vector2(0, 0), camera.IsPortraitMode, tooltip: "Portrait Mode"))
+                if(ImBrio.ToggelFontIconButton("portraitMode", FontAwesomeIcon.Mobile, new Vector2(0, 0), camera.IsPortraitMode, tooltip: global::Brio.Resources.Localize.Text("Portrait Mode")))
                 {
                     camera.TogglePortraitMode();
                     capability.Snapshot();
@@ -42,7 +42,7 @@ public static class CameraEditor
 
                 ImBrio.VerticalSeparator(24);
 
-                if(ImBrio.ToggelFontIconButton("save", FontAwesomeIcon.BookBookmark, new Vector2(25, 0), false, tooltip: "Camera Presets"))
+                if(ImBrio.ToggelFontIconButton("save", FontAwesomeIcon.BookBookmark, new Vector2(25, 0), false, tooltip: global::Brio.Resources.Localize.Text("Camera Presets")))
                 {
                     ImGui.OpenPopup($"DrawPresetPopup");
                 }
@@ -51,14 +51,14 @@ public static class CameraEditor
 
                 ImBrio.VerticalSeparator(24);
 
-                if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, "Undo", capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && capability.CanUndo))
+                if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, global::Brio.Resources.Localize.Text("Undo"), capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && capability.CanUndo))
                 {
                     capability.Undo();
                 }
 
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, "Redo", capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && capability.CanRedo))
+                if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, global::Brio.Resources.Localize.Text("Redo"), capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && capability.CanRedo))
                 {
                     capability.Redo();
                 }
@@ -75,7 +75,7 @@ public static class CameraEditor
 
                 using(ImRaii.Disabled(camera.FreeCamValues.IsMovementEnabled == false))
                 {
-                    if(ImBrio.ToggelFontIconButton("LateralMovement", FontAwesomeIcon.SolarPanel, new Vector2(25, 0), camera.FreeCamValues.Move2D, tooltip: "Lateral Movement"))
+                    if(ImBrio.ToggelFontIconButton("LateralMovement", FontAwesomeIcon.SolarPanel, new Vector2(25, 0), camera.FreeCamValues.Move2D, tooltip: global::Brio.Resources.Localize.Text("Lateral Movement")))
                     {
                         camera.FreeCamValues.Move2D = !camera.FreeCamValues.Move2D;
                         capability.Snapshot();
@@ -85,7 +85,7 @@ public static class CameraEditor
                 //
 
                 using(ImRaii.Disabled(camera.Position == camera.SpawnPosition))
-                    if(ImBrio.SeparatorTextButton("Transform", FontAwesomeIcon.Undo, "Reset Transform"))
+                    if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Transform"), FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Text("Reset Transform")))
                     {
                         camera.Position = camera.SpawnPosition;
                         capability.Snapshot();
@@ -118,7 +118,7 @@ public static class CameraEditor
                 //
 
                 using(ImRaii.Disabled(!camera.IsOverridden))
-                    if(ImBrio.SeparatorTextButton("Properties", FontAwesomeIcon.Undo, "Reset to Default"))
+                    if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Properties"), FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Text("Reset to Default")))
                     {
                         camera.FoV = 0f;
                         camera.PivotRotation = 0;
@@ -131,7 +131,7 @@ public static class CameraEditor
 
                 ImBrio.Icon(FontAwesomeIcon.Panorama);
                 ImGui.SameLine();
-                ImBrio.AttachToolTip("FOV");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("FOV"));
 
                 float fov = camera.FoV;
                 ImBrio.CenterNextElementWithPadding(5);
@@ -142,7 +142,7 @@ public static class CameraEditor
 
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButtonRight("resetFoV", FontAwesomeIcon.Undo, 1f, "Reset", fov != 0))
+                if(ImBrio.FontIconButtonRight("resetFoV", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset"), fov != 0))
                 {
                     camera.FoV = 0f;
                     capability.Snapshot();
@@ -152,7 +152,7 @@ public static class CameraEditor
 
                 ImBrio.Icon(FontAwesomeIcon.CameraRotate);
                 ImGui.SameLine();
-                ImBrio.AttachToolTip("Pivot");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Pivot"));
 
                 ImBrio.CenterNextElementWithPadding(5);
 
@@ -164,7 +164,7 @@ public static class CameraEditor
 
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButtonRight("resetRotation", FontAwesomeIcon.Undo, 1f, "Reset", pivoRotation != 0))
+                if(ImBrio.FontIconButtonRight("resetRotation", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset"), pivoRotation != 0))
                 {
                     camera.PivotRotation = 0;
                     capability.Snapshot();
@@ -174,7 +174,7 @@ public static class CameraEditor
 
                 ImBrio.Icon(FontAwesomeIcon.Walking);
                 ImGui.SameLine();
-                ImBrio.AttachToolTip("Movement Speed");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Movement Speed"));
 
                 ImBrio.CenterNextElementWithPadding(5);
 
@@ -186,7 +186,7 @@ public static class CameraEditor
 
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButtonRight("resetMovementSpeed", FontAwesomeIcon.Undo, 1f, "Reset Movement Speed", moveSpeed != capability._configurationService.Configuration.Interface.DefaultFreeCameraMovementSpeed))
+                if(ImBrio.FontIconButtonRight("resetMovementSpeed", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset Movement Speed"), moveSpeed != capability._configurationService.Configuration.Interface.DefaultFreeCameraMovementSpeed))
                 {
                     camera.FreeCamValues.MovementSpeed = capability._configurationService.Configuration.Interface.DefaultFreeCameraMovementSpeed;
                     capability.Snapshot();
@@ -196,7 +196,7 @@ public static class CameraEditor
 
                 ImBrio.Icon(FontAwesomeIcon.Mouse);
                 ImGui.SameLine();
-                ImBrio.AttachToolTip("Mouse Sensitivity");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Mouse Sensitivity"));
 
                 ImBrio.CenterNextElementWithPadding(5);
 
@@ -208,16 +208,16 @@ public static class CameraEditor
 
                 ImGui.SameLine();
 
-                if(ImBrio.FontIconButtonRight("resetMouseSensitivity", FontAwesomeIcon.Undo, 1f, "Reset Mouse Sensitivity", mouseSpeed != capability._configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity))
+                if(ImBrio.FontIconButtonRight("resetMouseSensitivity", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset Mouse Sensitivity"), mouseSpeed != capability._configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity))
                 {
                     camera.FreeCamValues.MouseSensitivity = capability._configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity;
                     capability.Snapshot();
                 }
 
-                ImBrio.SeparatorText("Advanced");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Advanced"));
 
                 var delimit = camera.FreeCamValues.DelimitAngle;
-                if(ImGui.Checkbox("Delimit Camera Angle", ref delimit))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Delimit Camera Angle"), ref delimit))
                 {
                     camera.FreeCamValues.DelimitAngle = delimit;
                     capability.Snapshot();
@@ -241,7 +241,7 @@ public static class CameraEditor
                 {
                     var width = -ImGui.CalcTextSize("XxxxxX").X;
 
-                    if(ImBrio.ToggelFontIconButton("portraitMode", FontAwesomeIcon.Mobile, new Vector2(0, 0), camera.IsPortraitMode, tooltip: "Portrait Mode"))
+                    if(ImBrio.ToggelFontIconButton("portraitMode", FontAwesomeIcon.Mobile, new Vector2(0, 0), camera.IsPortraitMode, tooltip: global::Brio.Resources.Localize.Text("Portrait Mode")))
                     {
                         camera.TogglePortraitMode();
                         capability.Snapshot();
@@ -249,7 +249,7 @@ public static class CameraEditor
 
                     ImBrio.VerticalSeparator(24);
 
-                    if(ImBrio.ToggelFontIconButton("save", FontAwesomeIcon.BookBookmark, new Vector2(25, 0), camera.FreeCamValues.Move2D, tooltip: "Presets"))
+                    if(ImBrio.ToggelFontIconButton("save", FontAwesomeIcon.BookBookmark, new Vector2(25, 0), camera.FreeCamValues.Move2D, tooltip: global::Brio.Resources.Localize.Text("Presets")))
                     {
                         ImGui.OpenPopup("DrawPresetPopup");
                     }
@@ -258,14 +258,14 @@ public static class CameraEditor
 
                     ImBrio.VerticalSeparator(24);
 
-                    if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, "Undo", capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && capability.CanUndo))
+                    if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, global::Brio.Resources.Localize.Text("Undo"), capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && capability.CanUndo))
                     {
                         capability.Undo();
                     }
 
                     ImGui.SameLine();
 
-                    if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, "Redo", capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && capability.CanRedo))
+                    if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, global::Brio.Resources.Localize.Text("Redo"), capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && capability.CanRedo))
                     {
                         capability.Redo();
                     }
@@ -273,7 +273,7 @@ public static class CameraEditor
                     //
 
                     using(ImRaii.Disabled(camera.PositionOffset == Vector3.Zero))
-                        if(ImBrio.SeparatorTextButton("Transform", FontAwesomeIcon.Undo, "Reset Transform"))
+                        if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Transform"), FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Text("Reset Transform")))
                         {
                             camera.PositionOffset = Vector3.Zero;
                             capability.Snapshot();
@@ -307,7 +307,7 @@ public static class CameraEditor
                     //
 
                     using(ImRaii.Disabled(!camera.IsOverridden))
-                        if(ImBrio.SeparatorTextButton("Properties", FontAwesomeIcon.Undo, "Reset to Default"))
+                        if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Properties"), FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Text("Reset to Default")))
                         {
                             camera.Zoom = 2.5f;
                             camera.FoV = 0f;
@@ -319,7 +319,7 @@ public static class CameraEditor
 
                     ImBrio.Icon(FontAwesomeIcon.ArrowsUpDownLeftRight);
                     ImGui.SameLine();
-                    ImBrio.AttachToolTip("Zoom");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Zoom"));
 
                     float zoom = camera.Zoom;
                     ImBrio.CenterNextElementWithPadding(5);
@@ -330,7 +330,7 @@ public static class CameraEditor
 
                     ImGui.SameLine();
 
-                    if(ImBrio.FontIconButtonRight("resetZoom", FontAwesomeIcon.Undo, 1f, "Reset", zoom != 2.5))
+                    if(ImBrio.FontIconButtonRight("resetZoom", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset"), zoom != 2.5))
                     {
                         camera.Zoom = 2.5f;
                         capability.Snapshot();
@@ -340,7 +340,7 @@ public static class CameraEditor
 
                     ImBrio.Icon(FontAwesomeIcon.Panorama);
                     ImGui.SameLine();
-                    ImBrio.AttachToolTip("FOV");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("FOV"));
 
                     float fov = camera.FoV;
                     ImBrio.CenterNextElementWithPadding(5);
@@ -351,7 +351,7 @@ public static class CameraEditor
 
                     ImGui.SameLine();
 
-                    if(ImBrio.FontIconButtonRight("resetFoV", FontAwesomeIcon.Undo, 1f, "Reset", fov != 0))
+                    if(ImBrio.FontIconButtonRight("resetFoV", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset"), fov != 0))
                     {
                         camera.FoV = 0f;
                         capability.Snapshot();
@@ -361,7 +361,7 @@ public static class CameraEditor
 
                     ImBrio.Icon(FontAwesomeIcon.CameraRotate);
                     ImGui.SameLine();
-                    ImBrio.AttachToolTip("Pivot");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Pivot"));
 
                     ImBrio.CenterNextElementWithPadding(5);
 
@@ -373,7 +373,7 @@ public static class CameraEditor
 
                     ImGui.SameLine();
 
-                    if(ImBrio.FontIconButtonRight("resetRotation", FontAwesomeIcon.Undo, 1f, "Reset", pivotRotation != 0))
+                    if(ImBrio.FontIconButtonRight("resetRotation", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset"), pivotRotation != 0))
                     {
                         camera.PivotRotation = 0;
                         capability.Snapshot();
@@ -387,34 +387,34 @@ public static class CameraEditor
 
                     ImBrio.Icon(FontAwesomeIcon.UsersViewfinder);
                     ImGui.SameLine();
-                    ImBrio.AttachToolTip("Pan");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Pan"));
 
                     Vector2 pan = camera.Pan;
                     ImBrio.CenterNextElementWithPadding(5);
-                    if(ImGui.DragFloat2("###pan", ref pan, 0.001f))
+                    if(ImGui.DragFloat2(global::Brio.Resources.Localize.Text("###pan"), ref pan, 0.001f))
                         camera.Pan = pan;
                     anyActiveThisFrame |= ImGui.IsItemActive();
-                    ImBrio.AttachToolTip("Pan");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Pan"));
 
                     //
 
                     ImBrio.Icon(FontAwesomeIcon.ArrowsSpin);
                     ImGui.SameLine();
-                    ImBrio.AttachToolTip("Angle");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Angle"));
 
                     Vector2 angle = camera.Angle;
                     ImBrio.CenterNextElementWithPadding(5);
-                    if(ImGui.DragFloat2("###angle", ref angle, 0.001f))
+                    if(ImGui.DragFloat2(global::Brio.Resources.Localize.Text("###angle"), ref angle, 0.001f))
                         camera.Angle = angle;
                     anyActiveThisFrame |= ImGui.IsItemActive();
-                    ImBrio.AttachToolTip("Angle");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Angle"));
 
                     //
 
-                    ImBrio.SeparatorText("Advanced");
+                    ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Advanced"));
 
                     var disable = camera.DisableCollision;
-                    if(ImGui.Checkbox("Disable Collision", ref disable))
+                    if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Disable Collision"), ref disable))
                     {
                         camera.DisableCollision = disable;
                     }
@@ -422,7 +422,7 @@ public static class CameraEditor
                     ImGui.SameLine();
 
                     var delimit = camera.DelimitCamera;
-                    if(ImGui.Checkbox("Delimit Camera", ref delimit))
+                    if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Delimit Camera"), ref delimit))
                     {
                         camera.DelimitCamera = delimit;
                     }
@@ -439,7 +439,7 @@ public static class CameraEditor
         var camera = capability.VirtualCamera;
 
         using(ImRaii.Disabled(camera.IsSelectingActor))
-            if(ImBrio.SeparatorTextButton("Target Entity", FontAwesomeIcon.Undo, "Target Entity"))
+            if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Target Entity"), FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Text("Target Entity")))
             {
                 camera.TargetOffset = new Vector3(0);
                 camera.SelectedActorName = "Select an actor to track";
@@ -447,7 +447,7 @@ public static class CameraEditor
             }
 
         using(ImRaii.Disabled(capability._entityManager.SelectedEntity is not ActorEntity))
-            if(ImBrio.FontIconButton("recenter_on_selected", FontAwesomeIcon.Bullseye, "Recenter on Selected Actor"))
+            if(ImBrio.FontIconButton("recenter_on_selected", FontAwesomeIcon.Bullseye, global::Brio.Resources.Localize.Text("Recenter on Selected Actor")))
             {
                 var entity = capability._entityManager.SelectedEntity;
                 if(entity is ActorEntity actor)
@@ -508,13 +508,13 @@ public static class CameraEditor
     {
         var cameraValues = _cameraCapability.CameraEntity.VirtualCamera.CutsceneCamValues;
 
-        ImGui.Text("Camera Path ");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Camera Path "));
 
         ImGui.InputText(string.Empty, ref cameraValues.CameraPath, 0, ImGuiInputTextFlags.ReadOnly);
 
         ImGui.SameLine();
 
-        if(ImGui.Button("Browse"))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Browse")))
         {
             UIManager.Instance.FileDialogManager.OpenFileDialog("Browse for XAT Camera File", "XAT Camera File {.xcp}",
                 (success, path) =>
@@ -544,13 +544,13 @@ public static class CameraEditor
 
         using(ImRaii.Disabled(string.IsNullOrEmpty(cameraValues.CameraPath)))
         {
-            ImGui.Checkbox("Enable FOV", ref _cutsceneManager.CameraSettings.EnableFOV);
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable FOV"), ref _cutsceneManager.CameraSettings.EnableFOV);
 
             ImGui.Separator();
 
-            ImGui.Text("Disabling FOV will make for a less accurate Camera, but might");
-            ImGui.Text("provide for an easer way to support more character sizes without");
-            ImGui.Text("changing the Camera's Scale & Offset!");
+            ImGui.Text(global::Brio.Resources.Localize.Text("Disabling FOV will make for a less accurate Camera, but might"));
+            ImGui.Text(global::Brio.Resources.Localize.Text("provide for an easer way to support more character sizes without"));
+            ImGui.Text(global::Brio.Resources.Localize.Text("changing the Camera's Scale & Offset!"));
 
             ImGui.Separator();
 
@@ -559,11 +559,11 @@ public static class CameraEditor
 
             ImGui.Separator();
 
-            ImGui.Checkbox("Loop", ref _cutsceneManager.CameraSettings.Loop);
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Loop"), ref _cutsceneManager.CameraSettings.Loop);
 
-            ImGui.Checkbox("Hide Brio On Play  (Press 'Shift + B' to Stop Cutscene)", ref _cutsceneManager.CloseWindowsOnPlay);
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Hide Brio On Play  (Press 'Shift + B' to Stop Cutscene)"), ref _cutsceneManager.CloseWindowsOnPlay);
 
-            ImGui.Checkbox("###delay_Start", ref _cutsceneManager.DelayStart);
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("###delay_Start"), ref _cutsceneManager.DelayStart);
             if(ImGui.IsItemHovered())
                 ImGui.SetTooltip("Start Delay");
 
@@ -577,15 +577,15 @@ public static class CameraEditor
 
             ImGui.SameLine();
             ImGui.SetCursorPosX(LabelStart);
-            ImGui.Text("Start Delay");
+            ImGui.Text(global::Brio.Resources.Localize.Text("Start Delay"));
 
             ImGui.Separator();
 
-            ImGui.Checkbox("Start All Actors Animations On Play", ref _cutsceneManager.StartAllActorAnimationsOnPlay);
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Start All Actors Animations On Play"), ref _cutsceneManager.StartAllActorAnimationsOnPlay);
 
             using(ImRaii.Disabled(_cutsceneManager.StartAllActorAnimationsOnPlay == false))
             {
-                ImGui.Checkbox("###animation_delay_Start", ref _cutsceneManager.DelayAnimationStart);
+                ImGui.Checkbox(global::Brio.Resources.Localize.Text("###animation_delay_Start"), ref _cutsceneManager.DelayAnimationStart);
                 if(ImGui.IsItemHovered())
                     ImGui.SetTooltip("Animation Start Delay");
 
@@ -599,20 +599,20 @@ public static class CameraEditor
 
                 ImGui.SameLine();
                 ImGui.SetCursorPosX(LabelStart);
-                ImGui.Text("Animation Delay");
+                ImGui.Text(global::Brio.Resources.Localize.Text("Animation Delay"));
             }
 
             ImGui.Separator();
 
-            ImGui.Text("The time-scale for the delay functions are in Milliseconds!");
-            ImGui.Text("1000 Milliseconds = 1 Second");
+            ImGui.Text(global::Brio.Resources.Localize.Text("The time-scale for the delay functions are in Milliseconds!"));
+            ImGui.Text(global::Brio.Resources.Localize.Text("1000 Milliseconds = 1 Second"));
 
             ImGui.Separator();
 
             var isrunning = _cutsceneManager.IsRunning;
             using(ImRaii.Disabled(isrunning))
             {
-                if(ImGui.Button("Play"))
+                if(ImGui.Button(global::Brio.Resources.Localize.Text("Play")))
                 {
                     _cutsceneManager.StartPlayback();
                 }
@@ -622,7 +622,7 @@ public static class CameraEditor
 
             using(ImRaii.Disabled(!isrunning))
             {
-                if(ImGui.Button("Stop"))
+                if(ImGui.Button(global::Brio.Resources.Localize.Text("Stop")))
                 {
                     _cutsceneManager.StopPlayback();
                 }

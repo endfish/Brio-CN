@@ -57,7 +57,7 @@ public static class AppearanceEditorCommon
             capability.PenumbraService.OpenPenumbra();
         }
 
-        ImBrio.AttachToolTip("Open Penumbra");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Open Penumbra"));
         ImGui.SameLine();
 
         var currentCollection = capability.CurrentCollection;
@@ -98,11 +98,11 @@ public static class AppearanceEditorCommon
             }
         }
 
-        ImBrio.AttachToolTip("Apply Penumbra Collection.");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Apply Penumbra Collection."));
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("actorappearancewidget_reset", FontAwesomeIcon.Undo, 1, "Reset Collection", capability.IsCollectionOverridden))
+        if(ImBrio.FontIconButtonRight("actorappearancewidget_reset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Collection"), capability.IsCollectionOverridden))
             capability.ResetCollection();
     }
 
@@ -117,7 +117,7 @@ public static class AppearanceEditorCommon
             capability.GlamourerService.OpenGlamourer();
         }
 
-        ImBrio.AttachToolTip("Open Glamourer");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Open Glamourer"));
         ImGui.SameLine();
 
         var currentDesign = capability.CurrentDesign;
@@ -166,14 +166,14 @@ public static class AppearanceEditorCommon
         }
 
         if(capability.HasMCDF)
-            ImBrio.AttachToolTip("Unable to apply Glamourer Design while a MCDF is applied!");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Unable to apply Glamourer Design while a MCDF is applied!"));
         else
-            ImBrio.AttachToolTip("Apply Glamourer Design.");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Apply Glamourer Design."));
 
         ImGui.SameLine();
 
         using(ImRaii.Disabled(capability.HasMCDF))
-            if(ImBrio.FontIconButtonRight("actorappearancewidget_DesignReset", FontAwesomeIcon.Undo, 1, "Reset Design"))
+            if(ImBrio.FontIconButtonRight("actorappearancewidget_DesignReset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Design")))
                 capability.ResetDesign();
 
     }
@@ -186,12 +186,12 @@ public static class AppearanceEditorCommon
 
         ImBrio.VerticalPadding(2);
 
-        if(ImGui.Button("C+", new Vector2(25 * ImGuiHelpers.GlobalScale)))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("C+"), new Vector2(25 * ImGuiHelpers.GlobalScale)))
         {
             capability.CustomizePlusService.OpenCustomizePlus();
         }
 
-        ImBrio.AttachToolTip("Open Customize+");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Open Customize+"));
         ImGui.SameLine();
 
         ImGui.SetNextItemWidth(_lableWidth * ImGuiHelpers.GlobalScale);
@@ -261,14 +261,14 @@ public static class AppearanceEditorCommon
         }
 
         if(capability.HasMCDF)
-            ImBrio.AttachToolTip("Unable to apply Customize+ profile while a MCDF is applied!");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Unable to apply Customize+ profile while a MCDF is applied!"));
         else
-            ImBrio.AttachToolTip("Apply Customize+ profile.");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Apply Customize+ profile."));
 
         ImGui.SameLine();
 
         using(ImRaii.Disabled(capability.HasMCDF))
-            if(ImBrio.FontIconButtonRight("actorappearancewidget_ProfileReset", FontAwesomeIcon.Undo, 1, "Reset C+ Profile"))
+            if(ImBrio.FontIconButtonRight("actorappearancewidget_ProfileReset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset C+ Profile")))
                 capability.ResetProfile();
     }
 
@@ -309,7 +309,7 @@ public static class AppearanceEditorCommon
             {
                 if(popup.Success)
                 {
-                    if(ImGui.ColorPicker4("###color", ref tempColor))
+                    if(ImGui.ColorPicker4(global::Brio.Resources.Localize.Text("###color"), ref tempColor))
                     {
                         color = Square(tempColor);
                         didChange = true;
@@ -339,7 +339,7 @@ public static class AppearanceEditorCommon
             {
                 if(popup.Success)
                 {
-                    if(ImGui.ColorPicker3("###color", ref tempColor))
+                    if(ImGui.ColorPicker3(global::Brio.Resources.Localize.Text("###color"), ref tempColor))
                     {
                         color = Square(tempColor);
                         didChange = true;

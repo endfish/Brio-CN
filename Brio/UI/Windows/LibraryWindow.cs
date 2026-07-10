@@ -344,7 +344,7 @@ public class LibraryWindow : Window, IDisposable
             {
                 ImGui.SameLine();
 
-                if(ImBrio.Button("Browse for File", FontAwesomeIcon.FolderOpen, new Vector2(155, 0)))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("Browse for File"), FontAwesomeIcon.FolderOpen, new Vector2(155, 0)))
                     DoBrowse();
 
                 if(ImGui.IsItemHovered())
@@ -468,7 +468,7 @@ public class LibraryWindow : Window, IDisposable
 
                     if(isPoseModal)
                     {
-                        if(ImBrio.Button("##importPoseOptionButton", FontAwesomeIcon.Cog, new Vector2(25, 0), tooltip: "Import Options"))
+                        if(ImBrio.Button(global::Brio.Resources.Localize.Text("##importPoseOptionButton"), FontAwesomeIcon.Cog, new Vector2(25, 0), tooltip: global::Brio.Resources.Localize.Text("Import Options")))
                         {
                             ImGui.OpenPopup("import_options_popup_lib");
                         }
@@ -488,7 +488,7 @@ public class LibraryWindow : Window, IDisposable
                     if(doDisable)
                         ImGui.BeginDisabled();
 
-                    if(ImBrio.Button("Import", FontAwesomeIcon.Check, new Vector2(100, 0)))
+                    if(ImBrio.Button(global::Brio.Resources.Localize.Text("Import"), FontAwesomeIcon.Check, new Vector2(100, 0)))
                     {
                         if(_selected != null)
                         {
@@ -501,7 +501,7 @@ public class LibraryWindow : Window, IDisposable
 
                     ImGui.SameLine();
 
-                    if(ImBrio.Button("Cancel", FontAwesomeIcon.Times, new Vector2(100, 0)))
+                    if(ImBrio.Button(global::Brio.Resources.Localize.Text("Cancel"), FontAwesomeIcon.Times, new Vector2(100, 0)))
                     {
                         Close();
                     }
@@ -784,7 +784,7 @@ public class LibraryWindow : Window, IDisposable
 
                             using(ImRaii.PushColor(ImGuiCol.FrameBg, 0x000000))
                             {
-                                if(ImGui.InputText("###library_search_input", ref _searchText, 256,
+                                if(ImGui.InputText(global::Brio.Resources.Localize.Text("###library_search_input"), ref _searchText, 256,
                                     ImGuiInputTextFlags.NoHorizontalScroll | ImGuiInputTextFlags.NoUndoRedo
                                     | ImGuiInputTextFlags.CallbackAlways,
                                     OnSearchFunc))
@@ -1059,7 +1059,7 @@ public class LibraryWindow : Window, IDisposable
 
     private void DrawFooter()
     {
-        if(ImBrio.Button("Add new source", FontAwesomeIcon.Plus, new Vector2(0, 0), centerTest: true))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Add new source"), FontAwesomeIcon.Plus, new Vector2(0, 0), centerTest: true))
         {
             if(_isModal)
             {
@@ -1073,7 +1073,7 @@ public class LibraryWindow : Window, IDisposable
 
         int size = (int)_configurationService.Configuration.Library.IconSize;
         ImGui.SetNextItemWidth(FooterScaleSliderWidth);
-        if(ImGui.SliderInt("###library_scale_slider", ref size, MinEntrySize, MaxEntrySize, ""))
+        if(ImGui.SliderInt(global::Brio.Resources.Localize.Text("###library_scale_slider"), ref size, MinEntrySize, MaxEntrySize, ""))
         {
             _configurationService.Configuration.Library.IconSize = size;
         }
@@ -1085,7 +1085,7 @@ public class LibraryWindow : Window, IDisposable
 
         if(_isRescanning || _libraryManager.IsScanning)
         {
-            ImGui.TextDisabled("Scanning...");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Scanning..."));
         }
         else
         {

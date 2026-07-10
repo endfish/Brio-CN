@@ -706,7 +706,7 @@ public static partial class ImBrio
         using var combo = ImRaii.Combo(id, preview, ImGuiComboFlags.HeightLarge);
         if(combo.Success)
         {
-            if(selected.Count > 0 && ImGui.Selectable("Clear###clear_all", false, ImGuiSelectableFlags.DontClosePopups))
+            if(selected.Count > 0 && ImGui.Selectable(global::Brio.Resources.Localize.Text("Clear###clear_all"), false, ImGuiSelectableFlags.DontClosePopups))
             {
                 selected.Clear();
                 changed = true;

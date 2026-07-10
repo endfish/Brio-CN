@@ -46,7 +46,7 @@ public class FurnitureDatabase
                 var catName = PlacementTypes.TryGetValue(meta.Unknown0, out var pt)
                     ? pt
                     : meta.Category.ToString();
-                indoorCatMap[catRow.Item.RowId] = catName;
+                indoorCatMap[catRow.Item.RowId] = global::Brio.Resources.Localize.Text(catName);
             }
 
             foreach(var row in indoorSheet)
@@ -57,7 +57,7 @@ public class FurnitureDatabase
                 if(string.IsNullOrWhiteSpace(name)) continue;
 
                 indoorCatMap.TryGetValue(item.Value.RowId, out var cat);
-                list.Add(new FurnitureInfo(name, row.ModelKey, true, cat ?? "Uncategorised", item.Value.Icon));
+                list.Add(new FurnitureInfo(name, row.ModelKey, true, cat ?? global::Brio.Resources.Localize.Text("Uncategorised"), item.Value.Icon));
             }
         }
 
@@ -71,7 +71,7 @@ public class FurnitureDatabase
             foreach(var catRow in outdoorCatList)
             {
                 if(!outdoorCatMeta.TryGetRow(catRow.Category.RowId, out var meta)) continue;
-                outdoorCatMap[catRow.Item.RowId] = meta.Category.ToString();
+                outdoorCatMap[catRow.Item.RowId] = global::Brio.Resources.Localize.Text(meta.Category.ToString());
             }
 
             foreach(var row in outdoorSheet)
@@ -82,7 +82,7 @@ public class FurnitureDatabase
                 if(string.IsNullOrWhiteSpace(name)) continue;
 
                 outdoorCatMap.TryGetValue(item.Value.RowId, out var cat);
-                list.Add(new FurnitureInfo(name, row.ModelKey, false, cat ?? "Uncategorised", item.Value.Icon));
+                list.Add(new FurnitureInfo(name, row.ModelKey, false, cat ?? global::Brio.Resources.Localize.Text("Uncategorised"), item.Value.Icon));
             }
         }
 

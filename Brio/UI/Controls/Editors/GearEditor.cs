@@ -39,25 +39,25 @@ public class GearEditor()
 
         didChange |= DrawReset(ref currentAppearance, originalAppearance);
 
-        if(ImBrio.FontIconButton("erase_equipment", FontAwesomeIcon.Eraser, "Remove all Equipment"))
+        if(ImBrio.FontIconButton("erase_equipment", FontAwesomeIcon.Eraser, global::Brio.Resources.Localize.Text("Remove all Equipment")))
         {
             _capability.RemoveAllEquipment();
         }
 
         ImGui.SameLine();
-        if(ImBrio.FontIconButton("apply_smallclothes", FontAwesomeIcon.UserShield, "Equip NPC Smallclothes"))
+        if(ImBrio.FontIconButton("apply_smallclothes", FontAwesomeIcon.UserShield, global::Brio.Resources.Localize.Text("Equip NPC Smallclothes")))
         {
             _capability.ApplySmallclothes();
         }
 
         ImGui.SameLine();
-        if(ImBrio.FontIconButton("apply_emperors", FontAwesomeIcon.UserNinja, "Equip Emperor's Set"))
+        if(ImBrio.FontIconButton("apply_emperors", FontAwesomeIcon.UserNinja, global::Brio.Resources.Localize.Text("Equip Emperor's Set")))
         {
             _capability.ApplyEmperors();
         }
 
         ImGui.SameLine();
-        if(ImBrio.FontIconButton("apply_invisibleclothes", FontAwesomeIcon.LowVision, "Equip Invisible Clothes"))
+        if(ImBrio.FontIconButton("apply_invisibleclothes", FontAwesomeIcon.LowVision, global::Brio.Resources.Localize.Text("Equip Invisible Clothes")))
         {
             _capability.ApplyInvisibleClothes();
         }
@@ -70,7 +70,7 @@ public class GearEditor()
         {
             if(leftGearGroup.Success)
             {
-                if(ImGui.Checkbox("Replaces Main Hand with a Prop###weaponsprops", ref _mainProp))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Replaces Main Hand with a Prop###weaponsprops"), ref _mainProp))
                 {
                     if(_mainProp == false)
                         currentAppearance.Weapons.MainHand = originalAppearance.Weapons.MainHand;
@@ -102,7 +102,7 @@ public class GearEditor()
         {
             if(rightGearGroup.Success)
             {
-                if(ImGui.Checkbox("Replaces Off-Hand with a Prop###offweaponsprops", ref _offHandProp))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Replaces Off-Hand with a Prop###offweaponsprops"), ref _offHandProp))
                 {
                     if(_offHandProp == false)
                         currentAppearance.Weapons.OffHand = originalAppearance.Weapons.OffHand;
@@ -138,7 +138,7 @@ public class GearEditor()
 
         var resetTo = ImGui.GetCursorPos();
         bool equipChanged = !currentAppearance.Equipment.Equals(originalAppearance.Equipment) || !currentAppearance.Weapons.Equals(originalAppearance.Weapons) || !currentAppearance.Runtime.Equals(originalAppearance.Runtime);
-        if(ImBrio.FontIconButtonRight("reset_equipment", FontAwesomeIcon.Undo, 1, "Reset Equipment", equipChanged))
+        if(ImBrio.FontIconButtonRight("reset_equipment", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Equipment"), equipChanged))
         {
             currentAppearance.Equipment = originalAppearance.Equipment;
             currentAppearance.Weapons = originalAppearance.Weapons;
@@ -231,7 +231,7 @@ public class GearEditor()
                         ImGui.SameLine();
 
                         bool isToggled = appearance.Runtime.IsVisorToggled;
-                        if(ImBrio.FontIconButton("visor", FontAwesomeIcon.Mask, "Visor", bordered: false, textColor: isToggled ? 0xFF555555 : null))
+                        if(ImBrio.FontIconButton("visor", FontAwesomeIcon.Mask, global::Brio.Resources.Localize.Text("Visor"), bordered: false, textColor: isToggled ? 0xFF555555 : null))
                         {
                             appearance.Runtime.IsVisorToggled = !isToggled;
                             didChange |= true;
@@ -241,7 +241,7 @@ public class GearEditor()
 
                         // Icon choice inspired by anamnesis
                         bool IsEars = appearance.Runtime.IsVieraEarsHidden;
-                        if(ImBrio.FontIconButton("ears", FontAwesomeIcon.Deaf, "Viera Ears Hidden", bordered: false, textColor: IsEars ? 0xFF555555 : null))
+                        if(ImBrio.FontIconButton("ears", FontAwesomeIcon.Deaf, global::Brio.Resources.Localize.Text("Viera Ears Hidden"), bordered: false, textColor: IsEars ? 0xFF555555 : null))
                         {
                             appearance.Runtime.IsVieraEarsHidden = !IsEars;
                             didChange |= true;
@@ -284,7 +284,7 @@ public class GearEditor()
                         {
                             ImBrio.VerticalPadding(3);
 
-                            if(ImBrio.FontIconButton("erase_equipment_popup", FontAwesomeIcon.Eraser, "Remove Equipment"))
+                            if(ImBrio.FontIconButton("erase_equipment_popup", FontAwesomeIcon.Eraser, global::Brio.Resources.Localize.Text("Remove Equipment")))
                             {
                                 equip = SpecialAppearances.None;
                                 didChange |= true;
@@ -292,7 +292,7 @@ public class GearEditor()
                             }
 
                             ImGui.SameLine();
-                            if(ImBrio.FontIconButton("apply_smallclothes_popup", FontAwesomeIcon.UserShield, "Equip NPC Smallclothes"))
+                            if(ImBrio.FontIconButton("apply_smallclothes_popup", FontAwesomeIcon.UserShield, global::Brio.Resources.Localize.Text("Equip NPC Smallclothes")))
                             {
                                 equip = SpecialAppearances.Smallclothes;
                                 didChange |= true;
@@ -300,7 +300,7 @@ public class GearEditor()
                             }
 
                             ImGui.SameLine();
-                            if(ImBrio.FontIconButton("apply_emperors_popup", FontAwesomeIcon.UserNinja, "Equip Emperor's Set"))
+                            if(ImBrio.FontIconButton("apply_emperors_popup", FontAwesomeIcon.UserNinja, global::Brio.Resources.Localize.Text("Equip Emperor's Set")))
                             {
                                 equip = SpecialAppearances.EmperorsMainSlotsEquipment;
                                 didChange |= true;
@@ -426,7 +426,7 @@ public class GearEditor()
                     if(slot == ActorEquipSlot.MainHand)
                     {
                         ImGui.SameLine();
-                        if(ImBrio.FontIconButton("attachweapon", FontAwesomeIcon.FistRaised, "Attach Weapon", bordered: false))
+                        if(ImBrio.FontIconButton("attachweapon", FontAwesomeIcon.FistRaised, global::Brio.Resources.Localize.Text("Attach Weapon"), bordered: false))
                         {
                             _capability.AttachWeapon();
                         }
@@ -468,7 +468,7 @@ public class GearEditor()
                         {
                             ImBrio.VerticalPadding(3);
 
-                            if(ImBrio.FontIconButton("erase_equipment_popup", FontAwesomeIcon.Eraser, "Remove Equipment"))
+                            if(ImBrio.FontIconButton("erase_equipment_popup", FontAwesomeIcon.Eraser, global::Brio.Resources.Localize.Text("Remove Equipment")))
                             {
                                 if(slot == ActorEquipSlot.MainHand)
                                 {
@@ -561,7 +561,7 @@ public class GearEditor()
                     }
 
                     ImGui.SameLine();
-                    if(ImBrio.FontIconButton("attachweapon", FontAwesomeIcon.FistRaised, "Attach Weapon", bordered: false))
+                    if(ImBrio.FontIconButton("attachweapon", FontAwesomeIcon.FistRaised, global::Brio.Resources.Localize.Text("Attach Weapon"), bordered: false))
                     {
                         _capability.AttachWeapon();
                     }

@@ -54,26 +54,26 @@ public class FileUIHelpers
 
     public static void DrawImportSettingsPopup(ref SceneImportOptions options, ref bool overrideCurrentScene, ref bool relativeLightPositions, ref bool relativeObjectPositions)
     {
-        if(ImBrio.FontIconButton("scene_import_settings", FontAwesomeIcon.Cog, "Import Options"))
+        if(ImBrio.FontIconButton("scene_import_settings", FontAwesomeIcon.Cog, global::Brio.Resources.Localize.Text("Import Options")))
             ImGui.OpenPopup("##scene_import_settings");
 
         using var popup = ImRaii.Popup("##scene_import_settings");
         if(!popup)
             return;
 
-        ImBrio.SeparatorText("Scene");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Scene"));
 
-        ImGui.Checkbox("Override Current Scene###opt_override", ref overrideCurrentScene);
+        ImGui.Checkbox(global::Brio.Resources.Localize.Text("Override Current Scene###opt_override"), ref overrideCurrentScene);
 
-        ImBrio.SeparatorText("Positions");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Positions"));
 
-        ImGui.Checkbox("Relative Light Positions###opt_rel_light", ref relativeLightPositions);
-        ImGui.Checkbox("Relative Object Positions###opt_rel_obj", ref relativeObjectPositions);
+        ImGui.Checkbox(global::Brio.Resources.Localize.Text("Relative Light Positions###opt_rel_light"), ref relativeLightPositions);
+        ImGui.Checkbox(global::Brio.Resources.Localize.Text("Relative Object Positions###opt_rel_obj"), ref relativeObjectPositions);
 
-        ImBrio.SeparatorText("Categories");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Categories"));
 
         bool all = (options & _allCategories) == _allCategories;
-        if(ImGui.Checkbox("All###cat_all", ref all))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("All###cat_all"), ref all))
             options = all ? options | _allCategories : options & ~_allCategories;
 
         foreach(var (flag, label) in _importCategories)
@@ -95,18 +95,18 @@ public class FileUIHelpers
             var buttonSize = new Vector2(MenuWidth * ImGuiHelpers.GlobalScale, 0);
 
             using(ImRaii.Disabled(projectSystem.CurrentProject is null))
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Save, "Save Scene", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Save, global::Brio.Resources.Localize.Text("Save Scene"), buttonSize))
                 {
                     projectSystem.SaveProject(projectSystem.CurrentProject!);
                     Brio.NotifyInfo("Scene saved.");
                     ImGui.CloseCurrentPopup();
                 }
             if(projectSystem.CurrentProject is null)
-                ImBrio.AttachToolTip("No project loaded to save to");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("No project loaded to save to"));
             if(ImGui.IsItemHovered())
                 ImGui.SetTooltip("Save this Scene in the currently loaded Project");
 
-            if(ImBrio.IconButtonWithText(FontAwesomeIcon.FileCirclePlus, "Save as new...", buttonSize))
+            if(ImBrio.IconButtonWithText(FontAwesomeIcon.FileCirclePlus, global::Brio.Resources.Localize.Text("Save as new..."), buttonSize))
             {
                 ModalManager.Instance.OpenSaveProjectModal();
                 ImGui.CloseCurrentPopup();
@@ -114,7 +114,7 @@ public class FileUIHelpers
             if(ImGui.IsItemHovered())
                 ImGui.SetTooltip("Save this Scene as a new Project");
 
-            if(ImBrio.IconButtonWithText(FontAwesomeIcon.FileImport, "Load Scene", buttonSize))
+            if(ImBrio.IconButtonWithText(FontAwesomeIcon.FileImport, global::Brio.Resources.Localize.Text("Load Scene"), buttonSize))
             {
                 projectWindow.IsOpen = true;
             }
@@ -124,20 +124,20 @@ public class FileUIHelpers
             ImGui.Spacing();
             ImGui.Separator();
 
-            if(ImBrio.IconButtonWithText(FontAwesomeIcon.Clock, "Load Auto-Saves", buttonSize))
+            if(ImBrio.IconButtonWithText(FontAwesomeIcon.Clock, global::Brio.Resources.Localize.Text("Load Auto-Saves"), buttonSize))
             {
                 UIManager.Instance.ToggleAutoSaveWindow();
             }
             if(ImGui.IsItemHovered())
                 ImGui.SetTooltip("Load an Auto-Saves on this scene");
 
-            ImBrio.SeparatorText("Export");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Export"));
 
             //using(ImRaii.Disabled(projectSystem.CurrentProject is null))
             using(ImRaii.Group())
             using(ImRaii.Disabled(true))
             {
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Upload, "Export Scene", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Upload, global::Brio.Resources.Localize.Text("Export Scene"), buttonSize))
                 {
                     ModalManager.Instance.OpenExportSceneModal();
                     ImGui.CloseCurrentPopup();
@@ -145,7 +145,7 @@ public class FileUIHelpers
                 if(ImGui.IsItemHovered())
                     ImGui.SetTooltip("Export this Scene to a file");
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Download, "Import Scene", buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Download, global::Brio.Resources.Localize.Text("Import Scene"), buttonSize))
                 {
                     ModalManager.Instance.OpenImportSceneModal();
                     ImGui.CloseCurrentPopup();
@@ -153,7 +153,7 @@ public class FileUIHelpers
                 if(ImGui.IsItemHovered())
                     ImGui.SetTooltip("Import a Scene from a file");
             }
-            ImBrio.AttachToolTip("Importing/Exporting disabled until 0.8.1");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Importing/Exporting disabled until 0.8.1"));
         }
     }
 
@@ -217,7 +217,7 @@ public class FileUIHelpers
 
             using(ImRaii.Disabled(string.IsNullOrEmpty(state.Name) || !state.Selection.Values.Any(v => v)))
             {
-                if(ImBrio.Button("Save as Preset", FontAwesomeIcon.Save, buttonSize, centerTest: true))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("Save as Preset"), FontAwesomeIcon.Save, buttonSize, centerTest: true))
                 {
                     if(kind == PresetType.Light)
                     {
@@ -257,7 +257,7 @@ public class FileUIHelpers
             var size = new Vector2(buttonSize.X / 2, 0);
             using(ImRaii.Disabled(state.Selected is null))
             {
-                if(state.Mode != 0 && ImBrio.Button("Load", FontAwesomeIcon.FileImport, size, centerTest: true))
+                if(state.Mode != 0 && ImBrio.Button(global::Brio.Resources.Localize.Text("Load"), FontAwesomeIcon.FileImport, size, centerTest: true))
                 {
                     if(kind == PresetType.Light)
                     {
@@ -318,7 +318,7 @@ public class FileUIHelpers
                 }
                 ImGui.SameLine();
 
-                if(ImBrio.HoldButton("preset_delete", "Delete", FontAwesomeIcon.Trash, 1.1f, size, centerTest: true, tooltip: "[HOLD]\nDelete Preset"))
+                if(ImBrio.HoldButton("preset_delete", global::Brio.Resources.Localize.Text("Delete"), FontAwesomeIcon.Trash, 1.1f, size, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("[HOLD]\nDelete Preset")))
                 {
                     presetSystem.DeletePreset(state.Selected!);
                     state.Selected = null;
@@ -475,11 +475,11 @@ public class FileUIHelpers
 
             ImBrio.SeparatorText($"Import Pose [{capability.Entity.FriendlyName}]");
 
-            ImGui.Checkbox("Freeze Actor", ref freezeOnLoad);
-            ImBrio.AttachToolTip("Freeze the actor on import");
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Freeze Actor"), ref freezeOnLoad);
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Freeze the actor on import"));
 
-            ImGui.Checkbox("Smart Import", ref smartDefaults);
-            ImBrio.AttachToolTip("""
+            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Smart Import"), ref smartDefaults);
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
 
                 Smart Import will adapt the loading process based on the pose being imported.
 
@@ -489,7 +489,7 @@ public class FileUIHelpers
                 - If trying to load the pose as an expression, will automatically determine if the pose was made after Dawntrail and adapt the import process accordingly.
                 """);
 
-            ImBrio.SeparatorText("Import Type");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Import Type"));
 
             _importType[0] = doBody;
             _importType[1] = doExpression;
@@ -503,11 +503,11 @@ public class FileUIHelpers
 
             using(ImRaii.Disabled(doExpression || doBody))
             {
-                if(ImBrio.Button("Custom Import Options", FontAwesomeIcon.Cog, new(width, height), centerTest: true, tooltip: "Custom Bone Import Options"))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("Custom Import Options"), FontAwesomeIcon.Cog, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Custom Bone Import Options")))
                     ImGui.OpenPopup($"import_{tag}_optionsImportPoseMenuPopup");
             }
 
-            ImBrio.SeparatorText("Transform Options");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Transform Options"));
 
             transformComponents ??= capability.PosingService.DefaultImporterOptions.TransformComponents;
 
@@ -515,7 +515,7 @@ public class FileUIHelpers
             {
                 using(ImRaii.Disabled(doExpression))
                 {
-                    if(ImBrio.ToggelFontIconButton("ImportPosition", FontAwesomeIcon.ArrowsUpDownLeftRight, buttonSize, transformComponents.Value.HasFlag(TransformComponents.Position), tooltip: "Import Position"))
+                    if(ImBrio.ToggelFontIconButton("ImportPosition", FontAwesomeIcon.ArrowsUpDownLeftRight, buttonSize, transformComponents.Value.HasFlag(TransformComponents.Position), tooltip: global::Brio.Resources.Localize.Text("Import Position")))
                     {
                         if(transformComponents.Value.HasFlag(TransformComponents.Position))
                             transformComponents &= ~TransformComponents.Position;
@@ -523,7 +523,7 @@ public class FileUIHelpers
                             transformComponents |= TransformComponents.Position;
                     }
                     ImGui.SameLine();
-                    if(ImBrio.ToggelFontIconButton("ImportRotation", FontAwesomeIcon.ArrowsSpin, buttonSize, transformComponents.Value.HasFlag(TransformComponents.Rotation), tooltip: "Import Rotation"))
+                    if(ImBrio.ToggelFontIconButton("ImportRotation", FontAwesomeIcon.ArrowsSpin, buttonSize, transformComponents.Value.HasFlag(TransformComponents.Rotation), tooltip: global::Brio.Resources.Localize.Text("Import Rotation")))
                     {
                         if(transformComponents.Value.HasFlag(TransformComponents.Rotation))
                             transformComponents &= ~TransformComponents.Rotation;
@@ -531,7 +531,7 @@ public class FileUIHelpers
                             transformComponents |= TransformComponents.Rotation;
                     }
                     ImGui.SameLine();
-                    if(ImBrio.ToggelFontIconButton("ImportScale", FontAwesomeIcon.ExpandAlt, buttonSize, transformComponents.Value.HasFlag(TransformComponents.Scale), tooltip: "Import Scale"))
+                    if(ImBrio.ToggelFontIconButton("ImportScale", FontAwesomeIcon.ExpandAlt, buttonSize, transformComponents.Value.HasFlag(TransformComponents.Scale), tooltip: global::Brio.Resources.Localize.Text("Import Scale")))
                     {
                         if(transformComponents.Value.HasFlag(TransformComponents.Scale))
                             transformComponents &= ~TransformComponents.Scale;
@@ -541,7 +541,7 @@ public class FileUIHelpers
                 }
 
                 ImGui.SameLine();
-                if(ImBrio.ToggelFontIconButton("ImportTransform", FontAwesomeIcon.ArrowsToCircle, buttonSize, doTransform, tooltip: "Import Model Transform"))
+                if(ImBrio.ToggelFontIconButton("ImportTransform", FontAwesomeIcon.ArrowsToCircle, buttonSize, doTransform, tooltip: global::Brio.Resources.Localize.Text("Import Model Transform")))
                 {
                     doTransform = !doTransform;
                 }
@@ -552,11 +552,11 @@ public class FileUIHelpers
                 }
             }
 
-            ImBrio.SeparatorText("Import");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Import"));
 
             if(importPose is not null)
             {
-                if(ImBrio.Button("Apply This Pose", FontAwesomeIcon.PersonRays, new(width, height), centerTest: true, tooltip: "Apply the Selected Pose"))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("Apply This Pose"), FontAwesomeIcon.PersonRays, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Apply the Selected Pose")))
                 {
                     isCMP = importPose.Value.IsT1;
                     _ = ImportPose(capability, importPose.Value, transformComponents: transformComponents, applyModelTransformOverride: doTransform);
@@ -565,13 +565,13 @@ public class FileUIHelpers
             }
             else
             {
-                if(ImBrio.Button("From File...", FontAwesomeIcon.FileDownload, new(width, height), centerTest: true, tooltip: "Import Pose from File"))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("From File..."), FontAwesomeIcon.FileDownload, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Import Pose from File")))
                 {
                     ShowImportPoseModal(capability, transformComponents: transformComponents, applyModelTransformOverride: doTransform);
                 }
 
                 using(ImRaii.Disabled(false))
-                    if(ImBrio.Button("From Clipboard", FontAwesomeIcon.Paste, new(width, height), centerTest: true, tooltip: "Import Pose from Clipboard"))
+                    if(ImBrio.Button(global::Brio.Resources.Localize.Text("From Clipboard"), FontAwesomeIcon.Paste, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Import Pose from Clipboard")))
                     {
                         var data = ImGui.GetClipboardText();
                         Clipboard.FromCompressedBase64<PoseFile>(data, out var pose);
@@ -595,26 +595,26 @@ public class FileUIHelpers
                     }
 
                 using(ImRaii.Disabled(_lastused is null))
-                    if(ImBrio.Button("Reapply Last Pose", FontAwesomeIcon.PersonWalkingArrowLoopLeft, new(width, height), centerTest: true, tooltip: "Reapply Last Imported Pose"))
+                    if(ImBrio.Button(global::Brio.Resources.Localize.Text("Reapply Last Pose"), FontAwesomeIcon.PersonWalkingArrowLoopLeft, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Reapply Last Imported Pose")))
                     {
                         _ = ImportPose(capability, _lastused!.Value, transformComponents: transformComponents, applyModelTransformOverride: doTransform);
                     }
 
                 using(ImRaii.Disabled(_stash is null))
-                    if(ImBrio.Button("Load From Stash", FontAwesomeIcon.Archive, new(width, height), centerTest: true, tooltip: "Load from the Pose Stash"))
+                    if(ImBrio.Button(global::Brio.Resources.Localize.Text("Load From Stash"), FontAwesomeIcon.Archive, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Load from the Pose Stash")))
                     {
                         _ = ImportPose(capability, _stash!.Value, transformComponents: transformComponents, applyModelTransformOverride: doTransform);
                     }
 
-                ImBrio.SeparatorText("Presets");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Presets"));
 
-                if(ImGui.Button("Import A-Pose", new(width, height)))
+                if(ImGui.Button(global::Brio.Resources.Localize.Text("Import A-Pose"), new(width, height)))
                 {
                     capability.LoadResourcesPose("Data.BrioAPose.pose", freezeOnLoad: freezeOnLoad, asBody: true);
                     ImGui.CloseCurrentPopup();
                 }
 
-                if(ImGui.Button("Import T-Pose", new(width, height)))
+                if(ImGui.Button(global::Brio.Resources.Localize.Text("Import T-Pose"), new(width, height)))
                 {
                     capability.LoadResourcesPose("Data.BrioTPose.pose", freezeOnLoad: freezeOnLoad, asBody: true);
                     ImGui.CloseCurrentPopup();
@@ -765,23 +765,23 @@ public class FileUIHelpers
 
             ImBrio.SeparatorText($"Export Pose [{capability.Entity.FriendlyName}]");
 
-            if(ImBrio.Button("Export", FontAwesomeIcon.Save, buttonSize, centerTest: true, tooltip: "Export Pose"))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("Export"), FontAwesomeIcon.Save, buttonSize, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Export Pose")))
             {
                 ShowExportPoseModal(capability);
                 ImGui.CloseCurrentPopup();
             }
 
-            if(ImBrio.Button("With Metadata...", FontAwesomeIcon.FileExport, buttonSize, centerTest: true, tooltip: "Export Pose with Metadata"))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("With Metadata..."), FontAwesomeIcon.FileExport, buttonSize, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Export Pose with Metadata")))
             {
                 ShowExportPoseMetadataModal(capability);
                 ImGui.CloseCurrentPopup();
             }
 
             ImBrio.VerticalPadding(1);
-            ImBrio.SeparatorText("Copy");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Copy"));
             ImBrio.VerticalPadding(1);
 
-            if(ImBrio.Button("To Clipboard", FontAwesomeIcon.Copy, buttonSize, centerTest: true, tooltip: "Copy Pose to Clipboard"))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("To Clipboard"), FontAwesomeIcon.Copy, buttonSize, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Copy Pose to Clipboard")))
             {
                 try
                 {
@@ -800,7 +800,7 @@ public class FileUIHelpers
                 ImGui.CloseCurrentPopup();
             }
 
-            if(ImBrio.Button("To Stash", FontAwesomeIcon.Archive, buttonSize, centerTest: true, tooltip: "Copy Pose to Stash"))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("To Stash"), FontAwesomeIcon.Archive, buttonSize, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Copy Pose to Stash")))
             {
                 _stash = capability.ExportPoseAsFileData();
             }

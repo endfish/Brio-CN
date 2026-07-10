@@ -96,7 +96,7 @@ public class PosingTransformWindow : Window
             if(ImBrio.FontIconButton(FontAwesomeIcon.MinusSquare, new Vector2(buttonWidth, 0)))
                 posing.ClearSelection();
         }
-        ImBrio.AttachToolTip("Clear Selection");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Clear Selection"));
 
         // Select Parent
         ImGui.SameLine();
@@ -111,7 +111,7 @@ public class PosingTransformWindow : Window
             if(ImBrio.FontIconButton(FontAwesomeIcon.LevelUpAlt, new Vector2(buttonWidth, 0)))
                 posing.SetBoneSelection(new BonePoseInfoId(parentBone!.Name, parentBone!.PartialId, PoseInfoSlot.Character), false);
         }
-        ImBrio.AttachToolTip("Select Parent");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Select Parent"));
 
         ImGui.SameLine();
         // Mirror mode

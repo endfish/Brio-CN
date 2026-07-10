@@ -112,7 +112,7 @@ public class MainWindow : Window, IDisposable
         if(_gPoseService.IsGPosing == false)
         {
             using(ImRaii.PushColor(ImGuiCol.Text, UIConstants.GizmoRed))
-                ImGui.Text("Open GPose to use Brio!");
+                ImGui.Text(global::Brio.Resources.Localize.Text("Open GPose to use Brio!"));
         }
 
         var rootEntity = _entityManager.RootEntity;
@@ -135,7 +135,7 @@ public class MainWindow : Window, IDisposable
             ImGui.SetCursorPos(pos);
 
             using(ImRaii.Disabled(_gPoseService.IsGPosing == false || selected?.IsLoading == true))
-                if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, "Spawn New..."))
+                if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Spawn New...")))
                 {
                     SpawnMenu.OpenUnifiedSpawnMenu();
                 }
@@ -219,15 +219,15 @@ public class MainWindow : Window, IDisposable
             {
                 Vector2 startPos = ImGui.GetCursorPos();
                 ImGui.SetCursorPos(new(-100, -100));
-                ImBrio.Button("0000", FontAwesomeIcon.Bug, new Vector2(0, 0));
+                ImBrio.Button(global::Brio.Resources.Localize.Text("0000"), FontAwesomeIcon.Bug, new Vector2(0, 0));
                 ImGui.SetCursorPos(startPos);
             }
 
-            if(ImBrio.Button("Project", FontAwesomeIcon.FileAlt, new Vector2(line1Width, 0), centerTest: true))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("Project"), FontAwesomeIcon.FileAlt, new Vector2(line1Width, 0), centerTest: true))
                 ImGui.OpenPopup("DrawProjectPopup");
 
             ImGui.SameLine();
-            if(ImBrio.Button("Library", FontAwesomeIcon.BookBookmark, new Vector2(line1Width, 0), centerTest: true))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("Library"), FontAwesomeIcon.BookBookmark, new Vector2(line1Width, 0), centerTest: true))
                 _libraryWindow.Toggle();
         }
 
@@ -247,7 +247,7 @@ public class MainWindow : Window, IDisposable
 
         //
 
-        //if(ImBrio.Button("Open Vivacity Timeline BETA", FontAwesomeIcon.Timeline, new Vector2(-1, 0), centerTest: true))
+        //if(ImBrio.Button(global::Brio.Resources.Localize.Text("Open Vivacity Timeline BETA"), FontAwesomeIcon.Timeline, new Vector2(-1, 0), centerTest: true))
         //{
 
         //}

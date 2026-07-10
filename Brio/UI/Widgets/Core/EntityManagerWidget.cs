@@ -29,7 +29,7 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
 
             ImBrio.VerticalPadding(7);
 
-            ImBrio.SeparatorText("Transform");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Transform"));
             Capability.DrawMultiTransform();
 
             ImBrio.VerticalPadding(10);
@@ -46,7 +46,7 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
                 {
                     if(ImGui.BeginMenu("Return Children to Root###entitymanager_destroyall_folders_return"))
                     {
-                        if(ImGui.MenuItem("Confirm###entitymanager_destroyall_folders_return_confirm"))
+                        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm###entitymanager_destroyall_folders_return_confirm")))
                             Capability.ReturnAllFolderChildren();
 
                         ImGui.EndMenu();
@@ -54,7 +54,7 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
 
                     if(ImGui.BeginMenu("Destroy All Children###entitymanager_destroyall_folders_destroy"))
                     {
-                        if(ImGui.MenuItem("Confirm###entitymanager_destroyall_folders_destroy_confirm"))
+                        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm###entitymanager_destroyall_folders_destroy_confirm")))
                             Capability.DestroyAllFolderChildren();
 
                         ImGui.EndMenu();
@@ -68,7 +68,7 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
             {
                 if(ImGui.BeginMenu("World Objects###entitymanager_destroyall_worldobjects"))
                 {
-                    if(ImGui.MenuItem("Confirm Destruction###entitymanager_destroyall_worldobjects_confirm"))
+                    if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###entitymanager_destroyall_worldobjects_confirm")))
                         Capability.DestroyAllWorldObjects();
 
                     ImGui.EndMenu();
@@ -85,28 +85,28 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
         {
             bool hasSelection = Capability.Entity.EntityManager.SelectedEntity != null;
 
-            if(ImBrio.FontIconButton("Manager_clone", FontAwesomeIcon.Clone, "Clone Selected", hasSelection))
+            if(ImBrio.FontIconButton("Manager_clone", FontAwesomeIcon.Clone, global::Brio.Resources.Localize.Text("Clone Selected"), hasSelection))
             {
                 Capability.CloneSelected();
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("Manager_selectinhierarchy", FontAwesomeIcon.CheckSquare, "Select All"))
+            if(ImBrio.FontIconButton("Manager_selectinhierarchy", FontAwesomeIcon.CheckSquare, global::Brio.Resources.Localize.Text("Select All")))
             {
                 Capability.SelectAllInHierarchy();
             }
 
             ImBrio.VerticalSeparator(24, 1);
 
-            if(ImBrio.HoldButton("manager_destroyall", "", FontAwesomeIcon.Bomb, 1f, new(40, 0), centerTest: true, tooltip: "[HOLD TO DESTROY ALL]", onlyIcon: true))
+            if(ImBrio.HoldButton("manager_destroyall", global::Brio.Resources.Localize.Text(""), FontAwesomeIcon.Bomb, 1f, new(40, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("[HOLD TO DESTROY ALL]"), onlyIcon: true))
             {
                 Capability.DestroyAllSelected();
             }
 
             ImBrio.VerticalSeparator(24, 1);
 
-            if(ImBrio.FontIconButton("Manager_move", FontAwesomeIcon.FolderTree, "Move to Folder...", hasSelection))
+            if(ImBrio.FontIconButton("Manager_move", FontAwesomeIcon.FolderTree, global::Brio.Resources.Localize.Text("Move to Folder..."), hasSelection))
             {
                 ImGui.OpenPopup("manager_move_to_folder_popup");
             }
@@ -123,14 +123,14 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
 
                     ImGui.Separator();
 
-                    if(ImGui.MenuItem("New Folder...###manager_move_to_new_folder"))
+                    if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("New Folder...###manager_move_to_new_folder")))
                         Capability.MoveSelectedToNewFolder();
                 }
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("Manager_folderoptions", FontAwesomeIcon.EllipsisV, "Folder Options", Capability.HasFolders))
+            if(ImBrio.FontIconButton("Manager_folderoptions", FontAwesomeIcon.EllipsisV, global::Brio.Resources.Localize.Text("Folder Options"), Capability.HasFolders))
             {
                 ImGui.OpenPopup("manager_folder_options_popup");
             }
@@ -139,10 +139,10 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
             {
                 if(popup.Success)
                 {
-                    if(ImGui.MenuItem("Return All Children to Entity Manager###manager_folderoptions_return"))
+                    if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Return All Children to Entity Manager###manager_folderoptions_return")))
                         Capability.ReturnAllFolderChildren();
 
-                    if(ImGui.MenuItem("Destroy All Folders + Children###manager_folderoptions_destroy"))
+                    if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Destroy All Folders + Children###manager_folderoptions_destroy")))
                         Capability.DestroyAllFolderChildren();
                 }
             }

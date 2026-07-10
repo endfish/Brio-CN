@@ -44,11 +44,11 @@ public partial class ImBrio
         if(!Brio.TryGetService(out ActorSpawnService spawnService))
         {
             using var _ = ImRaii.Disabled(true);
-            ImGui.Button("Unable to Spawn");
+            ImGui.Button(global::Brio.Resources.Localize.Text("Unable to Spawn"));
         }
 
 
-        if(ImGui.Button("Spawn As New Actor"))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Spawn As New Actor")))
         {
             if(!spawnService.CreateCharacter(out var character, disableSpawnCompanion: true))
             {

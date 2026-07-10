@@ -56,7 +56,7 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
         if(ImBrio.ButtonSelectorStrip("new_keyframe_mode", new Vector2(50f * ImGuiHelpers.GlobalScale, ImGui.GetFrameHeight()), ref newMode, _modeLetters))
             _timelineService.NewKeyframeMode = (InterpolationMode)newMode;
         ImGui.EndGroup();
-        ImBrio.AttachToolTip("New keyframes are created as Blend (smooth interpolation) or Step (instant, no interpolation).");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("New keyframes are created as Blend (smooth interpolation) or Step (instant, no interpolation)."));
 
         ImGui.SameLine();
         var showInspector = _configurationService.Configuration.Timeline.ShowInspector;
@@ -142,7 +142,7 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
         var hasSelection = selected.Count > 0;
         var canUseKeyframe = state.ContextKeyframe != null || hasSelection;
 
-        if(ImGui.MenuItem("Duplicate Keyframe", string.Empty, false, canUseKeyframe))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Duplicate Keyframe"), string.Empty, false, canUseKeyframe))
         {
             var newSelection = new HashSet<SelectedKeyframe>();
 
@@ -171,7 +171,7 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
 
         using(ImRaii.Disabled(!modifier))
         {
-            if(ImGui.MenuItem("Delete Keyframe", string.Empty, false, canUseKeyframe))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Delete Keyframe"), string.Empty, false, canUseKeyframe))
             {
                 if(hasSelection)
                 {
@@ -193,7 +193,7 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
         using(ImRaii.Disabled(!modifier))
         {
             var hasTrack = state.ContextTrackIndex >= 0 && state.ContextTrackIndex < host.Tracks.Count;
-            if(ImGui.MenuItem("Delete Track", string.Empty, false, hasTrack))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Delete Track"), string.Empty, false, hasTrack))
             {
                 host.RemoveTrack(host.Tracks[state.ContextTrackIndex]);
                 state.SelectedEntry = -1;
@@ -202,14 +202,14 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
             }
         }
         if(!modifier)
-            ImBrio.AttachToolTip("Hold Ctrl to delete.");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Hold Ctrl to delete."));
     }
     private bool DrawInspector(ITimelineHost host, ImSequencerState state)
     {
         var selected = GetSelectedKeyframes(host, state);
         if(selected.Count == 0)
         {
-            ImGui.TextWrapped("Select a Keyframe to edit it.");
+            ImGui.TextWrapped(global::Brio.Resources.Localize.Text("Select a Keyframe to edit it."));
             return false;
         }
 
@@ -219,16 +219,16 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
         ImBrio.SeparatorText(selected.Count == 1 ? $"Keyframe at frame {keyframe.Frame}" : $"{selected.Count} Keyframes selected");
         ImBrio.VerticalSeparator(5);
 
-        ImBrio.SeparatorText("Components");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Components"));
         changed |= DrawComponents(host, selected, keyframe);
 
         if(selected.Count == 1)
         {
-            ImBrio.SeparatorText("Transform");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Transform"));
             changed |= DrawKeyframeTransform(keyframe);
         }
 
-        ImBrio.SeparatorText("Easing");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Easing"));
         changed |= DrawEasingEditor(selected, keyframe);
 
         return changed;

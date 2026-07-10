@@ -48,7 +48,7 @@ public class RenameActorModal : Modal
                 ImGui.SetKeyboardFocusHere();
                 _focusInput = false;
             }
-            ImGui.InputTextWithHint("##renamemodal_popup_name", $"Enter new name for: {_currentActorEntity.FriendlyName}...", ref _currentActorName, 20);
+            ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("##renamemodal_popup_name"), $"Enter new name for: {_currentActorEntity.FriendlyName}...", ref _currentActorName, 20);
 
             ImBrio.VerticalPadding(8);
 
@@ -56,7 +56,7 @@ public class RenameActorModal : Modal
 
             using(ImRaii.Disabled(string.IsNullOrEmpty(_currentActorName)))
             {
-                if(ImGui.Button("Save", new(buttonW, 0)))
+                if(ImGui.Button(global::Brio.Resources.Localize.Text("Save"), new(buttonW, 0)))
                 {
                     if(_currentActorEntity.IsAttached)
                     {
@@ -70,7 +70,7 @@ public class RenameActorModal : Modal
 
             ImGui.SameLine();
 
-            if(ImGui.Button("Reset Name", new(buttonW, 0)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Reset Name"), new(buttonW, 0)))
             {
                 if(_currentActorEntity.IsAttached)
                 {
@@ -82,7 +82,7 @@ public class RenameActorModal : Modal
 
             ImGui.SameLine();
 
-            if(ImGui.Button("Cancel", new(buttonW, 0)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Cancel"), new(buttonW, 0)))
             {
                 Close();
             }

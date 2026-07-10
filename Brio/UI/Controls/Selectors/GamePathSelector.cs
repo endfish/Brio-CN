@@ -63,7 +63,7 @@ public abstract class GamePathSelector(string id) : Selector<GamePathEntry>(id)
 
     protected void DrawMetadataOnlyToggle()
     {
-        if(ImGui.Checkbox("Only items with metadata###metadata_only", ref _metadataOnly))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Only items with metadata###metadata_only"), ref _metadataOnly))
             UpdateList();
     }
 

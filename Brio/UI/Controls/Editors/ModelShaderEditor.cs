@@ -33,7 +33,7 @@ public class ModelShaderEditor()
     {
         var resetTo = ImGui.GetCursorPos();
         bool shaderChange = apply.HasOverride;
-        if(ImBrio.FontIconButtonRight("reset_shaders", FontAwesomeIcon.Undo, 1, "Reset Shaders", shaderChange))
+        if(ImBrio.FontIconButtonRight("reset_shaders", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Shaders"), shaderChange))
         {
             apply.Reset();
             _ = _capability.Redraw();
@@ -48,14 +48,14 @@ public class ModelShaderEditor()
         bool didChange = false;
 
         ImGui.SetNextItemWidth(MaxItemWidth);
-        if(ImGui.SliderFloat("###muscle", ref original.MuscleTone, 0.0f, 2.0f, "%.2f"))
+        if(ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###muscle"), ref original.MuscleTone, 0.0f, 2.0f, "%.2f"))
         {
             apply.MuscleTone = original.MuscleTone;
             didChange |= true;
         }
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
-        ImGui.Text("Muscle");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Muscle"));
 
         return didChange;
     }
@@ -81,7 +81,7 @@ public class ModelShaderEditor()
 
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
-        ImGui.Text("Body");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Body"));
 
         return didChange;
     }
@@ -113,7 +113,7 @@ public class ModelShaderEditor()
 
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
-        ImGui.Text("Other");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Other"));
 
         return didChange;
     }
@@ -139,7 +139,7 @@ public class ModelShaderEditor()
 
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
-        ImGui.Text("Hair");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Hair"));
 
         return didChange;
     }

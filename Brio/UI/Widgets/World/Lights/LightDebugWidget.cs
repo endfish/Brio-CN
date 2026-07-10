@@ -13,20 +13,20 @@ public class LightDebugWidget(LightDebugCapability capability) : Widget<LightDeb
 
     public unsafe override void DrawBody()
     {
-        ImGui.Text("GPose State");
+        ImGui.Text(global::Brio.Resources.Localize.Text("GPose State"));
         ImGui.SameLine();
         if(Capability.LightingService.CurrentGPoseState is not null)
             Capability.DynamisIPC.DrawPointer((nint)Capability.LightingService.CurrentGPoseState);
         else
             ImGui.TextColored(ImGuiColors.DalamudRed, "CurrentGPoseState is NUll!");
 
-        ImGui.Text("BrioLight");
+        ImGui.Text(global::Brio.Resources.Localize.Text("BrioLight"));
         ImGui.SameLine();
         Capability.DynamisIPC.DrawPointer(Capability.GameLight.Address);
 
         ImGui.Separator();
 
-        ImGui.Text("RenderLight");
+        ImGui.Text(global::Brio.Resources.Localize.Text("RenderLight"));
         ImGui.SameLine();
         Capability.DynamisIPC.DrawPointer((nint)Capability.GameLight.GameLight->RenderLight);
     }

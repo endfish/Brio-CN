@@ -64,19 +64,19 @@ public class DebugWidget(DebugCapability capability, IClientState _clientState, 
     private void DrawGPose()
     {
         bool fakeGPose = Capability.FakeGPose;
-        if(ImGui.Checkbox("Fake GPose", ref fakeGPose))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Fake GPose"), ref fakeGPose))
         {
             Capability.FakeGPose = fakeGPose;
         }
 
-        if(ImGui.Button("Enter GPose"))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Enter GPose")))
         {
             Capability.EnterGPose();
         }
 
         ImGui.SameLine();
 
-        if(ImGui.Button("Exit GPose"))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Exit GPose")))
         {
             Capability.ExitGPose();
         }

@@ -30,7 +30,7 @@ public class ExtendedAppearanceEditor
 
         var resetTo = ImGui.GetCursorPos();
         bool extendedChanged = !currentAppearance.ExtendedAppearance.Equals(originalAppearance.ExtendedAppearance);
-        if(ImBrio.FontIconButtonRight("reset_extended", FontAwesomeIcon.Undo, 1, "Reset Extended", extendedChanged))
+        if(ImBrio.FontIconButtonRight("reset_extended", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Extended"), extendedChanged))
         {
             currentAppearance.ExtendedAppearance = originalAppearance.ExtendedAppearance;
             didChange |= true;
@@ -47,14 +47,14 @@ public class ExtendedAppearanceEditor
         float transparency = appearance.ExtendedAppearance.Transparency;
 
         ImGui.SetNextItemWidth(MaxItemWidth);
-        if(ImGui.SliderFloat("###transparency", ref transparency, 0.0f, 1.0f, "%.2f"))
+        if(ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###transparency"), ref transparency, 0.0f, 1.0f, "%.2f"))
         {
             appearance.ExtendedAppearance.Transparency = transparency;
             didChange = true;
         }
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
-        ImGui.Text("Alpha");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Alpha"));
 
         return didChange;
     }
@@ -66,25 +66,25 @@ public class ExtendedAppearanceEditor
         float wetness = appearance.ExtendedAppearance.Wetness;
 
         ImGui.SetNextItemWidth(MaxItemWidth);
-        if(ImGui.SliderFloat("###wetness", ref wetness, 0.0f, 1.0f, "%.2f"))
+        if(ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###wetness"), ref wetness, 0.0f, 1.0f, "%.2f"))
         {
             appearance.ExtendedAppearance.Wetness = wetness;
             didChange = true;
         }
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
-        ImGui.Text("Wet");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Wet"));
 
         wetness = appearance.ExtendedAppearance.WetnessDepth;
         ImGui.SetNextItemWidth(MaxItemWidth);
-        if(ImGui.SliderFloat("###wetnessdepth", ref wetness, 0.0f, 3.0f, "%.2f"))
+        if(ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###wetnessdepth"), ref wetness, 0.0f, 3.0f, "%.2f"))
         {
             appearance.ExtendedAppearance.WetnessDepth = wetness;
             didChange = true;
         }
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
-        ImGui.Text("Wet Depth");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Wet Depth"));
 
         return didChange;
     }
@@ -105,7 +105,7 @@ public class ExtendedAppearanceEditor
             didChange |= DrawTint(ref appearance.ExtendedAppearance.OffHandTint, "offhand", "Off Hand");
             ImGui.SameLine();
             ImGui.SetCursorPosX(LabelStart);
-            ImGui.Text("Tints");
+            ImGui.Text(global::Brio.Resources.Localize.Text("Tints"));
         }
 
         return didChange;
@@ -127,7 +127,7 @@ public class ExtendedAppearanceEditor
             {
                 if(popup.Success)
                 {
-                    if(ImGui.ColorPicker4("###tint", ref tempTint))
+                    if(ImGui.ColorPicker4(global::Brio.Resources.Localize.Text("###tint"), ref tempTint))
                     {
                         tint = tempTint;
                         didChange = true;

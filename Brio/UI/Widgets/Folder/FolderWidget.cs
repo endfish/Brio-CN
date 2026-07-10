@@ -30,14 +30,14 @@ public class FolderWidget(FolderCapability capability) : Widget<FolderCapability
         {
             if(ImGui.BeginMenu("Return Children to Parent###folder_delete_return"))
             {
-                if(ImGui.MenuItem("Confirm###folder_delete_return_confirm"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm###folder_delete_return_confirm")))
                     Capability.DeleteFolderReturnChildren();
                 ImGui.EndMenu();
             }
 
             if(ImGui.BeginMenu("Delete All Children###folder_delete_children"))
             {
-                if(ImGui.MenuItem("Confirm###folder_delete_children_confirm"))
+                if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm###folder_delete_children_confirm")))
                     Capability.DeleteFolderDestroyChildren();
                 ImGui.EndMenu();
             }

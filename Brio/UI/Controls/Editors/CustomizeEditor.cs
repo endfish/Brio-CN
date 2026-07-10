@@ -34,7 +34,7 @@ public class CustomizeEditor()
         {
             if(customizeGroup.Success)
             {
-                ImBrio.SeparatorText("Model");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Model"));
 
                 ImBrio.VerticalPadding(5);
 
@@ -45,7 +45,7 @@ public class CustomizeEditor()
 
                 if(_capability.IsHuman)
                 {
-                    ImBrio.SeparatorText("Race");
+                    ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Race"));
 
                     didChange |= DrawRaceSelector(ref currentAppearance.Customize);
 
@@ -54,7 +54,7 @@ public class CustomizeEditor()
                 }
                 else
                 {
-                    if(ImGui.Button("Make Human"))
+                    if(ImGui.Button(global::Brio.Resources.Localize.Text("Make Human")))
                         _ = _capability.MakeHuman();
                 }
 
@@ -71,7 +71,7 @@ public class CustomizeEditor()
 
         var resetTo = ImGui.GetCursorPos();
         bool customizeChanged = !currentAppearance.Customize.Equals(originalAppearance.Customize) || currentAppearance.ModelCharaId != originalAppearance.ModelCharaId;
-        if(ImBrio.FontIconButtonRight("reset_customize", FontAwesomeIcon.Undo, 1, "Reset Customize", customizeChanged))
+        if(ImBrio.FontIconButtonRight("reset_customize", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Customize"), customizeChanged))
         {
             currentAppearance.ModelCharaId = originalAppearance.ModelCharaId;
             currentAppearance.Customize = originalAppearance.Customize;
@@ -103,7 +103,7 @@ public class CustomizeEditor()
                     break;
 
                 case CustomizeIndex.EyeShape:
-                    ImBrio.SeparatorText("Eyes");
+                    ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Eyes"));
                     didChange |= DrawEyeSelector(ref appearance.Customize);
                     break;
 
@@ -113,7 +113,7 @@ public class CustomizeEditor()
                     break;
 
                 case CustomizeIndex.HairStyle:
-                    ImBrio.SeparatorText("Hair Style");
+                    ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Hair Style"));
                     didChange |= DrawHairSelect(ref appearance.Customize, menu, menu.Title);
                     break;
 
@@ -123,7 +123,7 @@ public class CustomizeEditor()
                     break;
 
                 case CustomizeIndex.LipStyle:
-                    ImBrio.SeparatorText("Mouth");
+                    ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Mouth"));
                     didChange |= DrawMouth(ref appearance.Customize, menu.Title, hasLipColor);
                     break;
 
@@ -135,7 +135,7 @@ public class CustomizeEditor()
                     break;
 
                 case CustomizeIndex.Facepaint:
-                    ImBrio.SeparatorText("Face Paint");
+                    ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Face Paint"));
                     didChange |= DrawFacePaintSelect(ref appearance.Customize, menu, menu.Title);
                     break;
 
@@ -149,7 +149,7 @@ public class CustomizeEditor()
                     {
                         if(colorMenu != null)
                         {
-                            ImBrio.SeparatorText("Features");
+                            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Features"));
                             didChange |= DrawFeatureSelect(ref appearance.Customize, menu, colorMenu);
                             featuresDone = true;
                         }
@@ -328,7 +328,7 @@ public class CustomizeEditor()
 
                 ImGui.SameLine();
 
-                if(ImGui.Checkbox("###hair_highlight_enabled", ref highlightEnabled))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("###hair_highlight_enabled"), ref highlightEnabled))
                 {
                     customize.HighlightsEnabled = highlightEnabled;
                     madeChange |= true;
@@ -373,7 +373,7 @@ public class CustomizeEditor()
         ImGui.SameLine();
 
         var smallIris = customize.EyeShape >= 128;
-        if(ImGui.Checkbox("###small_iris", ref smallIris))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("###small_iris"), ref smallIris))
         {
             customize.HasSmallIris = smallIris;
             madeChange |= true;
@@ -410,7 +410,7 @@ public class CustomizeEditor()
             ImGui.SameLine();
 
             bool lipColorEnabled = customize.LipColorEnabled;
-            if(ImGui.Checkbox("###lip_color_enabled", ref lipColorEnabled))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("###lip_color_enabled"), ref lipColorEnabled))
             {
                 customize.LipColorEnabled = lipColorEnabled;
                 madeChange |= true;
@@ -477,7 +477,7 @@ public class CustomizeEditor()
 
                 ImGui.SameLine();
 
-                if(ImGui.Checkbox("###face_paint_flipped", ref facepaintFlipped))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("###face_paint_flipped"), ref facepaintFlipped))
                 {
                     customize.FacepaintFlipped = facepaintFlipped;
                     madeChange |= true;

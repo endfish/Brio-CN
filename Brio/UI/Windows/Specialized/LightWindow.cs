@@ -65,10 +65,10 @@ public class LightWindow : Window, IDisposable
             }
         }
 
-        ImGui.Text("Select Light to Edit:");
+        ImGui.Text(global::Brio.Resources.Localize.Text("Select Light to Edit:"));
         ImBrio.CenterNextElementWithPadding(15);
         using(ImRaii.Disabled(_lightingService.SpawnedLightEntitiesCount == 0))
-            if(ImGui.BeginCombo("###setlight"u8, $"{_lightingService.SelectedLightEntity?.FriendlyName}"))
+            if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###setlight")u8, $"{_lightingService.SelectedLightEntity?.FriendlyName}"))
             {
                 foreach(var value in _lightingService.SpawnedLightEntities)
                 {
@@ -82,7 +82,7 @@ public class LightWindow : Window, IDisposable
             else
                 WindowName = $"{Brio.Name} - LIGHT###brio_light_window";
 
-        ImBrio.AttachToolTip("Current Light");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Current Light"));
 
         ImBrio.VerticalPadding(5);
 
@@ -98,7 +98,7 @@ public class LightWindow : Window, IDisposable
         //
         // Hedder
 
-        if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, "Spawn New..."))
+        if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Spawn New...")))
         {
             SpawnMenu.OpenUnifiedSpawnMenu();
         }
@@ -114,28 +114,28 @@ public class LightWindow : Window, IDisposable
 
         using(ImRaii.Disabled(_lightingService!.SelectedLightEntity is null))
         {
-            if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, "Clone Light", light?.CanClone ?? false))
+            if(ImBrio.FontIconButton("lifetimewidget_clone", FontAwesomeIcon.Clone, global::Brio.Resources.Localize.Text("Clone Light"), light?.CanClone ?? false))
             {
                 light!.Clone();
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("lifetimewidget_move", FontAwesomeIcon.ArrowUp, "Move to Camera"))
+            if(ImBrio.FontIconButton("lifetimewidget_move", FontAwesomeIcon.ArrowUp, global::Brio.Resources.Localize.Text("Move to Camera")))
             {
                 light!.MoveToCamera();
             }
 
             ImBrio.VerticalSeparator(25);
 
-            if(ImBrio.FontIconButton("lifetimewidget_destroy", FontAwesomeIcon.Trash, "Destroy Light", light?.CanDestroy ?? false))
+            if(ImBrio.FontIconButton("lifetimewidget_destroy", FontAwesomeIcon.Trash, global::Brio.Resources.Localize.Text("Destroy Light"), light?.CanDestroy ?? false))
             {
                 light!.Destroy();
             }
 
             ImBrio.VerticalSeparator(25);
 
-            if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, "Rename Light"))
+            if(ImBrio.FontIconButton("lifetimewidget_rename", FontAwesomeIcon.Signature, global::Brio.Resources.Localize.Text("Rename Light")))
             {
                 ModalManager.Instance.OpenRenameModal(light!.Entity);
             }
@@ -159,20 +159,20 @@ public class LightWindow : Window, IDisposable
         //
         // Body
 
-        if(ImGui.CollapsingHeader("Light Transform"u8, ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Light Transform")u8, ImGuiTreeNodeFlags.DefaultOpen))
         {
             LightEditor.DrawLightTransformHeader(lightGizmo);
             _lightTransformEditor.Draw($"light_transform_{lightGizmo.Entity.Id}", lightGizmo.Light, 0.1f);
         }
 
-        if(ImGui.CollapsingHeader("Light Properties"u8, ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Light Properties")u8, ImGuiTreeNodeFlags.DefaultOpen))
         {
             LightEditor.DrawLightProperties(lightRender);
         }
 
         ImBrio.VerticalPadding(5);
 
-        if(ImGui.CollapsingHeader("Advanced Shadows Settings"u8, ImGuiTreeNodeFlags.None))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Advanced Shadows Settings")u8, ImGuiTreeNodeFlags.None))
         {
             LightEditor.DrawAdvancedShadows(lightRender);
         }

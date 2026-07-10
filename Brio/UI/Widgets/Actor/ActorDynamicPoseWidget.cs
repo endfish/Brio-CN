@@ -42,11 +42,11 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
 
         if(Capability.GameObject.ObjectKind != ObjectKind.Pc)
         {
-            ImGui.TextWrapped("Please select a valid actor to use Dynamic Face Control.");
+            ImGui.TextWrapped(global::Brio.Resources.Localize.Text("Please select a valid actor to use Dynamic Face Control."));
             return;
         }
 
-        if(ImBrio.Button("   Set Expression", FontAwesomeIcon.Grin, new Vector2(ImBrio.GetRemainingWidth() - (28 * ImGuiHelpers.GlobalScale), 24 * ImGuiHelpers.GlobalScale), centerTest: true))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("   Set Expression"), FontAwesomeIcon.Grin, new Vector2(ImBrio.GetRemainingWidth() - (28 * ImGuiHelpers.GlobalScale), 24 * ImGuiHelpers.GlobalScale), centerTest: true))
         {
             _expressionSelector.Select(null, false);
             ImGui.OpenPopup("dfc_expression_popup");
@@ -57,7 +57,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
         bool hasExpression = Capability.Actor.TryGetCapability<ActionTimelineCapability>(out var actionTimeline)
             && actionTimeline.HasSlotSpeedOverride(ActionTimelineSlots.Facial);
 
-        if(ImBrio.FontIconButtonRight("reset_expression", FontAwesomeIcon.Undo, 1, "Reset Expression", hasExpression))
+        if(ImBrio.FontIconButtonRight("reset_expression", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Expression"), hasExpression))
         {
             if(actionTimeline is not null)
             {
@@ -145,7 +145,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
             }
         }
         if(!Capability.IsEnabled)
-            ImBrio.AttachToolTip("Enable Face Control to use this feature.");
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Enable Face Control to use this feature."));
     }
 
     private void HandleExpressionSelectorChanges()
@@ -209,7 +209,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("reset_selected", FontAwesomeIcon.Undo, 1f, "Reset Selected Actor", Capability.IsSelectingActor))
+        if(ImBrio.FontIconButtonRight("reset_selected", FontAwesomeIcon.Undo, 1f, global::Brio.Resources.Localize.Text("Reset Selected Actor"), Capability.IsSelectingActor))
         {
             Capability.SetMode(LookAtTargetMode.None);
 
@@ -293,7 +293,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
 
         using(ImRaii.Disabled(!eyes))
         {
-            if(ImBrio.FontIconButton("###dynamicFaceControlSelector_Eyes_button", FontAwesomeIcon.LocationCrosshairs, "Set to camera value"))
+            if(ImBrio.FontIconButton("###dynamicFaceControlSelector_Eyes_button", FontAwesomeIcon.LocationCrosshairs, global::Brio.Resources.Localize.Text("Set to camera value")))
             {
                 eyesVector3 = cameraVector3;
                 Capability.SetTargetLock(true, LookAtTargetType.Eyes, eyesVector3);
@@ -313,7 +313,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
 
         using(ImRaii.Disabled(!body))
         {
-            if(ImBrio.FontIconButton("###dynamicFaceControlSelector_Body_button", FontAwesomeIcon.LocationCrosshairs, "Set to camera value"))
+            if(ImBrio.FontIconButton("###dynamicFaceControlSelector_Body_button", FontAwesomeIcon.LocationCrosshairs, global::Brio.Resources.Localize.Text("Set to camera value")))
             {
                 bodyVector3 = cameraVector3;
                 Capability.SetTargetLock(true, LookAtTargetType.Body, bodyVector3);
@@ -332,7 +332,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
 
         using(ImRaii.Disabled(!head))
         {
-            if(ImBrio.FontIconButton("###dynamicFaceControlSelector_Head_button", FontAwesomeIcon.LocationCrosshairs, "Set to camera value"))
+            if(ImBrio.FontIconButton("###dynamicFaceControlSelector_Head_button", FontAwesomeIcon.LocationCrosshairs, global::Brio.Resources.Localize.Text("Set to camera value")))
             {
                 headVector3 = cameraVector3;
                 Capability.SetTargetLock(true, LookAtTargetType.Head, headVector3);

@@ -34,45 +34,45 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
             case 1:
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Stars", FontAwesomeIcon.Redo, "Reset All Stars Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Stars"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Stars Properties"),
                     Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Stars)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Stars;
                 }
 
                 ImBrio.CenterNextElementWithPadding(15);
-                var didSkyChange2 = ImGui.SliderFloat("###starcount"u8, ref env->EnvState.Stars.StarCount, 0.0f, 20.0f);
-                ImBrio.AttachToolTip("Star Count");
+                var didSkyChange2 = ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###starcount")u8, ref env->EnvState.Stars.StarCount, 0.0f, 20.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Star Count"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange2 |= ImGui.SliderFloat("###starcountIntensity"u8, ref env->EnvState.Stars.StarIntensity, 0.0f, 2.5f);
-                ImBrio.AttachToolTip("Star Intensity");
+                didSkyChange2 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###starcountIntensity")u8, ref env->EnvState.Stars.StarIntensity, 0.0f, 2.5f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Star Intensity"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Moon Color and Moon Brightness");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Moon Color and Moon Brightness"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange2 |= ImGui.ColorEdit4("###moonColor"u8, ref env->EnvState.Stars.MoonColor);
-                ImBrio.AttachToolTip("Moon Color");
+                didSkyChange2 |= ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("###moonColor")u8, ref env->EnvState.Stars.MoonColor);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Moon Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange2 |= ImGui.SliderFloat("###MoonBrightness"u8, ref env->EnvState.Stars.MoonBrightness, 0.0f, 1.0f);
-                ImBrio.AttachToolTip("Moon Brightness");
+                didSkyChange2 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###MoonBrightness")u8, ref env->EnvState.Stars.MoonBrightness, 0.0f, 1.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Moon Brightness"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Constellation Properties");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Constellation Properties"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange2 |= ImGui.SliderFloat("###constellationCount"u8, ref env->EnvState.Stars.ConstellationCount, 0.0f, 10.0f);
-                ImBrio.AttachToolTip("Constellation Count");
+                didSkyChange2 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###constellationCount")u8, ref env->EnvState.Stars.ConstellationCount, 0.0f, 10.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Constellation Count"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange2 |= ImGui.SliderFloat("###constellationsIntensity"u8, ref env->EnvState.Stars.ConstellationIntensity, 0.0f, 2.5f);
-                ImBrio.AttachToolTip("Constellations Intensity");
+                didSkyChange2 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###constellationsIntensity")u8, ref env->EnvState.Stars.ConstellationIntensity, 0.0f, 2.5f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Constellations Intensity"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange2 |= ImGui.SliderFloat("###galaxyIntensity"u8, ref env->EnvState.Stars.GalaxyIntensity, 0.0f, 10.0f);
-                ImBrio.AttachToolTip("Galaxy Intensity");
+                didSkyChange2 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###galaxyIntensity")u8, ref env->EnvState.Stars.GalaxyIntensity, 0.0f, 10.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Galaxy Intensity"));
 
                 ImBrio.VerticalPadding(3);
 
@@ -83,7 +83,7 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
             case 0:
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Sky", FontAwesomeIcon.Redo, "Reset All Sky Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Sky"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Sky Properties"),
                     Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Sky)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Sky;
@@ -94,7 +94,7 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
                     _skyTextureSelector.Select(new TextureId(env->EnvState.SkyTextureID));
                     ImGui.OpenPopup("sky_texture_selector"u8);
                 }
-                ImBrio.AttachToolTip("Click to open texture selector");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Click to open texture selector"));
 
                 var didSkyChange = false;
 
@@ -120,51 +120,51 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
                 ImBrio.CenterNextElementWithPadding(10);
                 ImBrio.VerticalPadding(5);
                 didSkyChange |= ImGui.InputUInt("###SkyTextureID"u8, ref env->EnvState.SkyTextureID);
-                ImBrio.AttachToolTip("Sky Texture ID");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Sky Texture ID"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange |= ImGui.SliderFloat("###fogSunVisibility"u8, ref env->EnvState.Fog.SunVisibility, 0.0f, 1f);
-                ImBrio.AttachToolTip("Sun Visibility");
+                didSkyChange |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###fogSunVisibility")u8, ref env->EnvState.Fog.SunVisibility, 0.0f, 1f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Sun Visibility"));
 
                 if(didSkyChange)
                     Capability.Environment.EnvironmentOverrideState |= EnvironmentOverrideState.Sky;
 
                 ImBrio.VerticalPadding(5);
 
-                if(ImBrio.SeparatorTextButton("Ambient Lighting", FontAwesomeIcon.Redo, "Reset All Lighting Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Ambient Lighting"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Lighting Properties"),
                     Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.EnvironmentLighting)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.EnvironmentLighting;
                 }
 
                 ImBrio.VerticalPadding(2);
-                ImBrio.SeparatorText("Temperature & Saturation");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Temperature & Saturation"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                var didSkyChange3 = ImGui.SliderFloat("###temperatureColor"u8, ref env->EnvState.EnvironmentLighting.AmbientTemperature, -2.5f, 2.5f);
-                ImBrio.AttachToolTip("Ambient Temperature Color");
+                var didSkyChange3 = ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###temperatureColor")u8, ref env->EnvState.EnvironmentLighting.AmbientTemperature, -2.5f, 2.5f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Ambient Temperature Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange3 |= ImGui.SliderFloat("###saturationColor"u8, ref env->EnvState.EnvironmentLighting.AmbientSaturation, 0.0f, 5.0f);
-                ImBrio.AttachToolTip("Ambient Saturation Color");
+                didSkyChange3 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###saturationColor")u8, ref env->EnvState.EnvironmentLighting.AmbientSaturation, 0.0f, 5.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Ambient Saturation Color"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Ambient Color");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Ambient Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange3 |= ImGui.ColorEdit3("##ambientColor"u8, ref env->EnvState.EnvironmentLighting.AmbientColor);
-                ImBrio.AttachToolTip("Ambient Color");
+                didSkyChange3 |= ImGui.ColorEdit3(global::Brio.Resources.Localize.Text("##ambientColor")u8, ref env->EnvState.EnvironmentLighting.AmbientColor);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Ambient Color"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Sunlight & Moonlight Color");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Sunlight & Moonlight Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange3 |= ImGui.ColorEdit3("###sunlightColor"u8, ref env->EnvState.EnvironmentLighting.SunlightColor);
-                ImBrio.AttachToolTip("Sunlight Color");
+                didSkyChange3 |= ImGui.ColorEdit3(global::Brio.Resources.Localize.Text("###sunlightColor")u8, ref env->EnvState.EnvironmentLighting.SunlightColor);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Sunlight Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange3 |= ImGui.ColorEdit3("###moonlightColor"u8, ref env->EnvState.EnvironmentLighting.MoonlightColor);
-                ImBrio.AttachToolTip("Moonlight Color");
+                didSkyChange3 |= ImGui.ColorEdit3(global::Brio.Resources.Localize.Text("###moonlightColor")u8, ref env->EnvState.EnvironmentLighting.MoonlightColor);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Moonlight Color"));
 
                 ImBrio.VerticalPadding(3);
 
@@ -176,7 +176,7 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
 
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Cloud", FontAwesomeIcon.Redo, "Reset All Cloud Properties",
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Cloud"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Cloud Properties"),
                     Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Clouds)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Clouds;
@@ -187,7 +187,7 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
                     _cloudTextureSelector.Select(new TextureId(env->EnvState.Clouds.CloudTexture));
                     ImGui.OpenPopup("cloud_texture_selector"u8);
                 }
-                ImBrio.AttachToolTip("Click to change Cloud Texture");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Click to change Cloud Texture"));
 
                 var didSkyChange4 = false;
 
@@ -213,14 +213,14 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
                 ImBrio.CenterNextElementWithPadding(10);
                 ImBrio.VerticalPadding(5);
                 didSkyChange4 |= ImGui.InputUInt("###CloudTexture"u8, ref env->EnvState.Clouds.CloudTexture);
-                ImBrio.AttachToolTip("Cloud Texture ID");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Cloud Texture ID"));
 
                 if(ImBrio.BorderedGameTex("##cloudSideTexturePreview", _cloudSideTextureSelector.GetTexturePath(env->EnvState.Clouds.CloudSideTexture)))
                 {
                     _cloudSideTextureSelector.Select(new TextureId(env->EnvState.Clouds.CloudSideTexture));
                     ImGui.OpenPopup("cloud_side_texture_selector"u8);
                 }
-                ImBrio.AttachToolTip("Click to change Cloud Side Texture");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Click to change Cloud Side Texture"));
 
                 using(var popup = ImRaii.Popup("cloud_side_texture_selector"u8))
                 {
@@ -244,28 +244,28 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
                 ImBrio.CenterNextElementWithPadding(10);
                 ImBrio.VerticalPadding(5);
                 didSkyChange4 |= ImGui.InputUInt("###CloudSideTexture"u8, ref env->EnvState.Clouds.CloudSideTexture);
-                ImBrio.AttachToolTip("Cloud Side Texture ID");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Cloud Side Texture ID"));
 
-                ImBrio.SeparatorText("Cloud Color");
-
-                ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange4 |= ImGui.ColorEdit3("###leftCloudColor", ref env->EnvState.Clouds.CloudColor1);
-                ImBrio.AttachToolTip("Cloud Color");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Cloud Color"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange4 |= ImGui.ColorEdit3("###rightcloudColor", ref env->EnvState.Clouds.CloudColor2);
-                ImBrio.AttachToolTip("Cloud Side Color");
+                didSkyChange4 |= ImGui.ColorEdit3(global::Brio.Resources.Localize.Text("###leftCloudColor"), ref env->EnvState.Clouds.CloudColor1);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Cloud Color"));
+
+                ImBrio.CenterNextElementWithPadding(15);
+                didSkyChange4 |= ImGui.ColorEdit3(global::Brio.Resources.Localize.Text("###rightcloudColor"), ref env->EnvState.Clouds.CloudColor2);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Cloud Side Color"));
 
                 ImBrio.VerticalPadding(5);
-                ImBrio.SeparatorText("Cloud Other");
+                ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Cloud Other"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange4 |= ImGui.SliderFloat("###gradientStop", ref env->EnvState.Clouds.ShadowStop, 0.0f, 2.0f);
-                ImBrio.AttachToolTip("Shadow Stop");
+                didSkyChange4 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###gradientStop"), ref env->EnvState.Clouds.ShadowStop, 0.0f, 2.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Shadow Stop"));
 
                 ImBrio.CenterNextElementWithPadding(15);
-                didSkyChange4 |= ImGui.SliderFloat("###cloudHeight", ref env->EnvState.Clouds.CloudHeight, 0.0f, 2.0f);
-                ImBrio.AttachToolTip("Cloud Height");
+                didSkyChange4 |= ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###cloudHeight"), ref env->EnvState.Clouds.CloudHeight, 0.0f, 2.0f);
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Cloud Height"));
 
                 ImBrio.VerticalPadding(3);
 
@@ -277,7 +277,7 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
 
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton("Interior Brightness", FontAwesomeIcon.Redo, "Reset All Sky Properties", Capability.IsInside))
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Interior Brightness"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Sky Properties"), Capability.IsInside))
                 {
                     Capability.ResetIndoorLighting();
                 }
@@ -286,14 +286,14 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
 
                 float currentLight = Capability.IndoorLight;
                 using(ImRaii.Disabled(Capability.IsInside == false))
-                    if(ImGui.SliderFloat("###brightness", ref currentLight, 0.0f, 1.0f))
+                    if(ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###brightness"), ref currentLight, 0.0f, 1.0f))
                     {
                         Capability.IndoorLight = currentLight;
                     }
                 if(Capability.IsInside == false)
-                    ImBrio.AttachToolTip("You must be inside housing to adjust interior brightness.");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("You must be inside housing to adjust interior brightness."));
                 else
-                    ImBrio.AttachToolTip("Adjust the brightness of the interior lighting.");
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Adjust the brightness of the interior lighting."));
 
                 ImBrio.VerticalPadding(3);
 

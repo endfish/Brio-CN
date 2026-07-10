@@ -78,7 +78,7 @@ public class FestivalWidget : Widget<FestivalCapability>
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("festival_add_button", FontAwesomeIcon.Plus, "Add Festival", Capability.CanAdd && _selectedFestival != 0))
+            if(ImBrio.FontIconButton("festival_add_button", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Add Festival"), Capability.CanAdd && _selectedFestival != 0))
             {
                 if(_selectedPhase != 0)
                     Capability.ChangePhase((uint)_selectedFestival, (ushort)_selectedPhase);
@@ -88,7 +88,7 @@ public class FestivalWidget : Widget<FestivalCapability>
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("festival_remove_button", FontAwesomeIcon.Minus, "Remove Festival", _selectedFestival != 0 && Capability.ActiveFestivals.Any(f => f.Id == (uint)_selectedFestival)))
+            if(ImBrio.FontIconButton("festival_remove_button", FontAwesomeIcon.Minus, global::Brio.Resources.Localize.Text("Remove Festival"), _selectedFestival != 0 && Capability.ActiveFestivals.Any(f => f.Id == (uint)_selectedFestival)))
             {
                 Capability.Remove((uint)_selectedFestival);
             }
@@ -96,14 +96,14 @@ public class FestivalWidget : Widget<FestivalCapability>
             ImGui.SameLine();
 
 
-            if(ImBrio.FontIconButton("festival_reset_button", FontAwesomeIcon.Redo, "Reset", Capability.HasOverride))
+            if(ImBrio.FontIconButton("festival_reset_button", FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset"), Capability.HasOverride))
             {
                 Capability.Reset();
             }
 
             ImGui.SameLine();
 
-            if(ImBrio.FontIconButton("festival_search_button", FontAwesomeIcon.Search, "Search", Capability.CanAdd))
+            if(ImBrio.FontIconButton("festival_search_button", FontAwesomeIcon.Search, global::Brio.Resources.Localize.Text("Search"), Capability.CanAdd))
             {
                 _globalFestivalSelector.Select(null, false);
                 ImGui.OpenPopup("festival_search_popup");

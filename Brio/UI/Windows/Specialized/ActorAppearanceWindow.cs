@@ -4,6 +4,7 @@ using Brio.Game.Actor.Appearance;
 using Brio.Game.Actor.Extensions;
 using Brio.Game.GPose;
 using Brio.MCDF.Game.Services;
+using Brio.Resources;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Controls.Stateless;
 using Brio.UI.Entitites;
@@ -98,7 +99,8 @@ public class ActorAppearanceWindow : Window, IDisposable
 
         bool shouldSetAppearance = false;
 
-        ImBrio.ButtonSelectorStrip("appearance_filters_selector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected, ["Equipment", "Customize"]);
+        ImBrio.ButtonSelectorStrip("appearance_filters_selector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected,
+            [Localize.Text("Equipment"), Localize.Text("Customize")]);
 
         if(selected == 1)
         {
@@ -156,7 +158,7 @@ public class ActorAppearanceWindow : Window, IDisposable
     {
         var buttonSize = new Vector2(ImGui.GetContentRegionAvail().X / 3f - (ImGui.GetStyle().FramePadding.X / 2), 0);
 
-        if(ImBrio.Button("Load NPC", FontAwesomeIcon.PersonArrowDownToLine, buttonSize, centerTest: true))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Load NPC"), FontAwesomeIcon.PersonArrowDownToLine, buttonSize, centerTest: true))
         {
             AppearanceEditorCommon.ResetNPCSelector();
             ImGui.OpenPopup("window_load_npc");
@@ -166,18 +168,18 @@ public class ActorAppearanceWindow : Window, IDisposable
 
         using(ImRaii.Disabled(!_capability.IsAppearanceOverridden))
         {
-            if(ImBrio.Button("Revert", FontAwesomeIcon.RedoAlt, buttonSize, centerTest: true))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Text("Revert"), FontAwesomeIcon.RedoAlt, buttonSize, centerTest: true))
                 _ = _capability.ResetAppearance();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.Button("Redraw", FontAwesomeIcon.PaintBrush, buttonSize, centerTest: true))
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("Redraw"), FontAwesomeIcon.PaintBrush, buttonSize, centerTest: true))
             _ = _capability.Redraw();
 
         using(ImRaii.Disabled(!_capability.HasPenumbraIntegration && !_capability.HasCustomizePlusIntegration && !_capability.HasGlamourerIntegration))
         {
-            if(ImBrio.FontIconButton("toggle_adv_bar", isAdvancedMenuOpen ? FontAwesomeIcon.ArrowUp : FontAwesomeIcon.ArrowDown, "Toggle Advanced Menu"))
+            if(ImBrio.FontIconButton("toggle_adv_bar", isAdvancedMenuOpen ? FontAwesomeIcon.ArrowUp : FontAwesomeIcon.ArrowDown, global::Brio.Resources.Localize.Text("Toggle Advanced Menu")))
             {
                 isAdvancedMenuOpen = !isAdvancedMenuOpen;
             }
@@ -189,30 +191,30 @@ public class ActorAppearanceWindow : Window, IDisposable
         {
             using(ImRaii.Disabled(_capability.IsSelf || _capability.IsAnyMCDFLoading))
             {
-                if(ImBrio.FontIconButton("load_mcdf", FontAwesomeIcon.CloudDownloadAlt, "Load MCDF"))
+                if(ImBrio.FontIconButton("load_mcdf", FontAwesomeIcon.CloudDownloadAlt, global::Brio.Resources.Localize.Text("Load MCDF")))
                 {
                     FileUIHelpers.ShowImportMCDFModal(_capability);
                 }
                 ImGui.SameLine();
             }
             if(_capability.IsSelf)
-                ImBrio.AttachToolTip("Can not load a MCDF on your Player Character. Spawn an Actor to load a MCDF.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Can not load a MCDF on your Player Character. Spawn an Actor to load a MCDF."));
             if(_capability.IsAnyMCDFLoading)
-                ImBrio.AttachToolTip("Another MCDF is loading, Please wait for it to finish.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Another MCDF is loading, Please wait for it to finish."));
 
             using(ImRaii.Disabled(_capability.HasMCDF))
             {
-                if(ImBrio.FontIconButton("save_mcdf", FontAwesomeIcon.CloudUploadAlt, "Save MCDF"))
+                if(ImBrio.FontIconButton("save_mcdf", FontAwesomeIcon.CloudUploadAlt, global::Brio.Resources.Localize.Text("Save MCDF")))
                 {
                     FileUIHelpers.ShowExportMCDFModal(_capability);
                 }
                 ImGui.SameLine();
             }
             if(_capability.HasMCDF)
-                ImBrio.AttachToolTip("Can not save a MCDF of a Actor that has a MCDF loaded. Reset this Actor to save a MCDF.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Can not save a MCDF of a Actor that has a MCDF loaded. Reset this Actor to save a MCDF."));
         }
 
-        if(ImBrio.FontIconButtonRight("import", FontAwesomeIcon.FileDownload, 2, "Import Character"))
+        if(ImBrio.FontIconButtonRight("import", FontAwesomeIcon.FileDownload, 2, global::Brio.Resources.Localize.Text("Import Character")))
             FileUIHelpers.ShowImportCharacterModal(_capability, _importOptions);
 
         ImGui.SameLine();
@@ -221,7 +223,7 @@ public class ActorAppearanceWindow : Window, IDisposable
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("export", FontAwesomeIcon.Save, 3, "Save Character File"))
+        if(ImBrio.FontIconButtonRight("export", FontAwesomeIcon.Save, 3, global::Brio.Resources.Localize.Text("Save Character File")))
             FileUIHelpers.ShowExportCharacterModal(_capability);
 
         ImGui.Separator();
@@ -245,7 +247,7 @@ public class ActorAppearanceWindow : Window, IDisposable
 
     private void DrawImportOptions()
     {
-        if(ImBrio.FontIconButtonRight("import_options", FontAwesomeIcon.Cog, 1, "Import Options"))
+        if(ImBrio.FontIconButtonRight("import_options", FontAwesomeIcon.Cog, 1, global::Brio.Resources.Localize.Text("Import Options")))
             ImGui.OpenPopup("import_options_popup_appearance");
 
         using(var popup = ImRaii.Popup("import_options_popup_appearance"))
@@ -253,7 +255,7 @@ public class ActorAppearanceWindow : Window, IDisposable
             if(popup.Success)
             {
                 bool customize = _importOptions.HasFlag(AppearanceImportOptions.Customize);
-                if(ImGui.Checkbox("Customize", ref customize))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Customize"), ref customize))
                 {
                     if(customize)
                         _importOptions |= AppearanceImportOptions.Customize;
@@ -262,7 +264,7 @@ public class ActorAppearanceWindow : Window, IDisposable
                 }
 
                 bool gear = _importOptions.HasFlag(AppearanceImportOptions.Equipment);
-                if(ImGui.Checkbox("Gear", ref gear))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Gear"), ref gear))
                 {
                     if(gear)
                         _importOptions |= AppearanceImportOptions.Equipment;
@@ -271,7 +273,7 @@ public class ActorAppearanceWindow : Window, IDisposable
                 }
 
                 bool weapons = _importOptions.HasFlag(AppearanceImportOptions.Weapon);
-                if(ImGui.Checkbox("Weapons", ref weapons))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Weapons"), ref weapons))
                 {
                     if(gear)
                         _importOptions |= AppearanceImportOptions.Weapon;
@@ -280,7 +282,7 @@ public class ActorAppearanceWindow : Window, IDisposable
                 }
 
                 bool extended = _importOptions.HasFlag(AppearanceImportOptions.ExtendedAppearance);
-                if(ImGui.Checkbox("Extended", ref extended))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Extended"), ref extended))
                 {
                     if(extended)
                         _importOptions |= AppearanceImportOptions.ExtendedAppearance;
@@ -289,7 +291,7 @@ public class ActorAppearanceWindow : Window, IDisposable
                 }
 
                 bool shaders = _importOptions.HasFlag(AppearanceImportOptions.Shaders);
-                if(ImGui.Checkbox("Shaders", ref shaders))
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Shaders"), ref shaders))
                 {
                     if(shaders)
                         _importOptions |= AppearanceImportOptions.Shaders;

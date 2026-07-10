@@ -83,16 +83,16 @@ public class TimelineWindow : Window, IDisposable
 
     private void DrawToolbar()
     {
-        if(ImBrio.FontIconButton("##timeline_add", FontAwesomeIcon.Plus, "Add..."))
+        if(ImBrio.FontIconButton("##timeline_add", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Add...")))
             ImGui.OpenPopup("##timeline_add_popup");
         DrawAddPopup();
 
         ImGui.SameLine();
         ImGui.SetNextItemWidth(120f * ImGuiHelpers.GlobalScale);
         var max = _timelineService.FrameMax;
-        if(ImGui.DragInt("Length", ref max, 1f, _timelineService.FrameMin + 1, 10000))
+        if(ImGui.DragInt(global::Brio.Resources.Localize.Text("Length"), ref max, 1f, _timelineService.FrameMin + 1, 10000))
             _timelineService.FrameMax = Math.Max(_timelineService.FrameMin + 1, max);
-        ImBrio.AttachToolTip("Length in Frames");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Length in Frames"));
 
         var style = ImGui.GetStyle();
         var buttonWidth = 25f * ImGuiHelpers.GlobalScale;
@@ -108,14 +108,14 @@ public class TimelineWindow : Window, IDisposable
         var offset = Math.Max(0f, (ImBrio.GetRemainingWidth() - centerWidth - rightWidth) * 0.5f);
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() + offset);
 
-        if(ImBrio.FontIconButton("##timeline_first_frame", FontAwesomeIcon.FastBackward, "Jump to First Frame"))
+        if(ImBrio.FontIconButton("##timeline_first_frame", FontAwesomeIcon.FastBackward, global::Brio.Resources.Localize.Text("Jump to First Frame")))
         {
             _timelineService.CurrentFrame = _timelineService.FrameMin;
             _timelineService.ApplyCurrentFrame(true);
         }
 
         ImGui.SameLine();
-        if(ImBrio.FontIconButton("##timeline_prev_frame", FontAwesomeIcon.StepBackward, "Go to Previous Frame"))
+        if(ImBrio.FontIconButton("##timeline_prev_frame", FontAwesomeIcon.StepBackward, global::Brio.Resources.Localize.Text("Go to Previous Frame")))
         {
             _timelineService.CurrentFrame = Math.Clamp(_timelineService.CurrentFrame - 1, _timelineService.FrameMin, _timelineService.FrameMax);
             _timelineService.ApplyCurrentFrame(true);
@@ -123,22 +123,22 @@ public class TimelineWindow : Window, IDisposable
 
         ImGui.SameLine();
         var playIcon = _timelineService.IsPlaying ? FontAwesomeIcon.Pause : FontAwesomeIcon.Play;
-        if(ImBrio.FontIconButton("##timeline_play", playIcon, "Play / Pause"))
+        if(ImBrio.FontIconButton("##timeline_play", playIcon, global::Brio.Resources.Localize.Text("Play / Pause")))
             _timelineService.TogglePlay();
 
         ImGui.SameLine();
-        if(ImBrio.FontIconButton("##timeline_stop", FontAwesomeIcon.Stop, "Stop"))
+        if(ImBrio.FontIconButton("##timeline_stop", FontAwesomeIcon.Stop, global::Brio.Resources.Localize.Text("Stop")))
             _timelineService.Stop();
 
         ImGui.SameLine();
-        if(ImBrio.FontIconButton("##timeline_next_frame", FontAwesomeIcon.StepForward, "Go to Next Frame"))
+        if(ImBrio.FontIconButton("##timeline_next_frame", FontAwesomeIcon.StepForward, global::Brio.Resources.Localize.Text("Go to Next Frame")))
         {
             _timelineService.CurrentFrame = Math.Clamp(_timelineService.CurrentFrame + 1, _timelineService.FrameMin, _timelineService.FrameMax);
             _timelineService.ApplyCurrentFrame(true);
         }
 
         ImGui.SameLine();
-        if(ImBrio.FontIconButton("##timeline_last_frame", FontAwesomeIcon.FastForward, "Jump to Last Frame"))
+        if(ImBrio.FontIconButton("##timeline_last_frame", FontAwesomeIcon.FastForward, global::Brio.Resources.Localize.Text("Jump to Last Frame")))
         {
             _timelineService.CurrentFrame = _timelineService.FrameMax;
             _timelineService.ApplyCurrentFrame(true);
@@ -148,7 +148,7 @@ public class TimelineWindow : Window, IDisposable
         ImBrio.RightAlign(rightWidth);
 
         var loop = _configurationService.Configuration.Timeline.Loop;
-        if(ImGui.Checkbox("Loop", ref loop))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Loop"), ref loop))
         {
             _configurationService.Configuration.Timeline.Loop = loop;
             _configurationService.ApplyChange();
@@ -171,10 +171,10 @@ public class TimelineWindow : Window, IDisposable
                 }
             }
         }
-        ImBrio.AttachToolTip("FPS");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("FPS"));
 
         ImGui.SameLine();
-        if(ImBrio.HoldButton("##timeline_reset_all", string.Empty, FontAwesomeIcon.TrashAlt, 1f, new Vector2(resetWidth, 0), tooltip: "[HOLD]\nClears all keyframe data on every open Timeline tab", onlyIcon: true))
+        if(ImBrio.HoldButton("##timeline_reset_all", string.Empty, FontAwesomeIcon.TrashAlt, 1f, new Vector2(resetWidth, 0), tooltip: global::Brio.Resources.Localize.Text("[HOLD]\nClears all keyframe data on every open Timeline tab"), onlyIcon: true))
         {
             foreach(var host in _timelineService.ActiveHosts)
                 host.Tracks.Clear();
@@ -199,7 +199,7 @@ public class TimelineWindow : Window, IDisposable
 
         if(!any)
         {
-            ImGui.TextDisabled("Nothing available to add.");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Nothing available to add."));
         }
     }
 

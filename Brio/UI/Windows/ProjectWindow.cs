@@ -101,7 +101,7 @@ public class ProjectWindow : Window, IDisposable
 
             using(ImRaii.Disabled(selectedItem is null))
             {
-                if(ImBrio.Button("Load", FontAwesomeIcon.FileImport, new(120, 0), centerTest: true, tooltip: "Load Project"))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Text("Load"), FontAwesomeIcon.FileImport, new(120, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Load Project")))
                 {
                     _projectSystem.LoadProject(selectedItem!, destroyAll, useRelativeLightPositions, useRelativeWorldObjectPositions, importOptions);
                 }
@@ -136,7 +136,7 @@ public class ProjectWindow : Window, IDisposable
             }
             using(ImRaii.Disabled(selectedItem is null))
             {
-                if(ImBrio.HoldButton("proj_delete", "Delete", FontAwesomeIcon.Trash, 1.1f, new(120, 0), centerTest: true, tooltip: "[HOLD]\nDelete Project"))
+                if(ImBrio.HoldButton("proj_delete", global::Brio.Resources.Localize.Text("Delete"), FontAwesomeIcon.Trash, 1.1f, new(120, 0), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("[HOLD]\nDelete Project")))
                 {
                     _projectSystem.DeleteProject(selectedItem!);
                     selectedItem = null;

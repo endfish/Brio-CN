@@ -171,7 +171,7 @@ public static class LibrarySourcesEditor
                     return;
 
                 string name = selectedItem.Name ?? string.Empty;
-                if(ImGui.InputText("Name###settings_edit_source_name", ref name, 80))
+                if(ImGui.InputText(global::Brio.Resources.Localize.Text("Name###settings_edit_source_name"), ref name, 80))
                 {
                     selectedItem.Name = name;
                 }
@@ -182,12 +182,12 @@ public static class LibrarySourcesEditor
 
                     string path = fileSource.Path ?? string.Empty;
 
-                    if(ImGui.InputText("Path", ref path, 120))
+                    if(ImGui.InputText(global::Brio.Resources.Localize.Text("Path"), ref path, 120))
                     {
                         fileSource.Path = path;
                     }
 
-                    if(ImGui.Button("Browse for Folder", new(120, 0)))
+                    if(ImGui.Button(global::Brio.Resources.Localize.Text("Browse for Folder"), new(120, 0)))
                     {
                         isItemEditorOpen = false;
                         isFolderDialogOpen = true;
@@ -219,7 +219,7 @@ public static class LibrarySourcesEditor
                         if(string.IsNullOrEmpty(fileSource.Path))
                             ImGui.BeginDisabled();
 
-                        if(ImGui.Button("Save", new(100, 0)))
+                        if(ImGui.Button(global::Brio.Resources.Localize.Text("Save"), new(100, 0)))
                         {
                             config.AddSource(selectedItem);
 
@@ -235,7 +235,7 @@ public static class LibrarySourcesEditor
 
                         ImGui.SameLine();
 
-                        if(ImGui.Button("Cancel", new(100, 0)))
+                        if(ImGui.Button(global::Brio.Resources.Localize.Text("Cancel"), new(100, 0)))
                         {
                             ClosePopUp();
                         }
@@ -244,7 +244,7 @@ public static class LibrarySourcesEditor
                     {
                         ImGui.SetCursorPosX(ImGui.GetCursorPosX() + ImBrio.GetRemainingWidth() - 110);
 
-                        if(ImGui.Button("OK", new(100, 0)))
+                        if(ImGui.Button(global::Brio.Resources.Localize.Text("OK"), new(100, 0)))
                         {
                             HasSourcesChanged = true;
 

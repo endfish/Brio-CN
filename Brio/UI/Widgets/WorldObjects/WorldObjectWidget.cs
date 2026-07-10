@@ -83,7 +83,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             {
                 staticVfxObject.ShouldResume = !staticVfxObject.ShouldResume;
             }
-            ImBrio.AttachToolTip("""
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
                 
                 Some VFX do not move without this enabled! 
                 But it can cause flickering as the VFX is restared with it enabled.
@@ -98,7 +98,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             {
                 staticVfxObject.ShouldStartWithoutSpeed = !staticVfxObject.ShouldStartWithoutSpeed;
             }
-            ImBrio.AttachToolTip("""
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
                 
                 With this enabled the VFX will start without any speed! 
                 You can click the "Update" button to replay the VFX.
@@ -111,7 +111,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
                 staticVfxObject.Expires = DateTime.Now.AddSeconds(staticVfxObject.VfxRefreshIntervalSeconds);
                 staticVfxObject.IsLooping = !staticVfxObject.IsLooping;
             }
-            ImBrio.AttachToolTip("""
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
                 
                 With this enabled the VFX will restart after a given time period!
                 """);
@@ -119,14 +119,14 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
 
         }
 
-        ImBrio.SeparatorText("Transform");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Transform"));
 
         _transformableEditor.Draw($"light_transform_{Capability.Entity.Id}", Capability.BgObjectEntity, 0.1f);
 
         if(Capability.GameBgObject is BrioPropObject propObject)
         {
             ImBrio.VerticalPadding(5);
-            ImBrio.SeparatorText("Prop Properties");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Prop Properties"));
             ImBrio.VerticalPadding(5);
 
             ImBrio.ButtonSelectorStrip("importTypeStrip", new(ImBrio.GetRemainingWidth(), 25), ref _selector, ["Prop", "Weapon"]);
@@ -171,7 +171,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
         if(Capability.GameBgObject is BGOObject bgoObject)
         {
             ImBrio.VerticalPadding(5);
-            ImBrio.SeparatorText("World Object Properties");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("World Object Properties"));
             ImBrio.VerticalPadding(5);
 
             DrawWorldObjectSelector(bgoObject);
@@ -180,7 +180,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
         if(Capability.GameBgObject is StaticVfxObject staticVfx)
         {
             ImBrio.VerticalPadding(5);
-            ImBrio.SeparatorText("VFX Properties");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("VFX Properties"));
             ImBrio.VerticalPadding(5);
 
             if(ImGui.Button($"Update", new Vector2(-1, 24 * ImGuiHelpers.GlobalScale)))
@@ -193,44 +193,44 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             using(ImRaii.Disabled(staticVfx.IsLooping == false))
             {
                 ImGui.AlignTextToFramePadding();
-                ImGui.TextDisabled("Refresh Interval:");
+                ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Refresh Interval:"));
 
                 ImBrio.CenterNextElementWithPadding(5);
                 var refreshInterval = staticVfx.VfxRefreshIntervalSeconds;
-                if(ImGui.DragInt("###vfx_refresh_interval", ref refreshInterval, 0.1f, 0, 60, "%d seconds"))
+                if(ImGui.DragInt(global::Brio.Resources.Localize.Text("###vfx_refresh_interval"), ref refreshInterval, 0.1f, 0, 60, "%d seconds"))
                 {
                     staticVfx.VfxRefreshIntervalSeconds = refreshInterval;
                     staticVfx.Expires = DateTime.Now.AddSeconds(staticVfx.VfxRefreshIntervalSeconds);
                 }
                 if(staticVfx.IsLooping == false)
                 {
-                    ImBrio.AttachToolTip("""
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
                         Must have Looping enabled to use!
 
                         """);
                 }
-                ImBrio.AttachToolTip("The interval in seconds at which the VFX will be refreshed.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("The interval in seconds at which the VFX will be refreshed."));
             }
 
             var speed = staticVfx.Speed;
-            if(ImBrio.SeparatorTextButton("Speed", FontAwesomeIcon.Undo, enabled: speed != 1f, tooltip: "Reset Speed"))
+            if(ImBrio.SeparatorTextButton("Speed", FontAwesomeIcon.Undo, enabled: speed != 1f, tooltip: global::Brio.Resources.Localize.Text("Reset Speed")))
             {
                 staticVfx.SetSpeed(1f);
                 staticVfx.Resume();
             }
 
             ImGui.SetNextItemWidth(-1);
-            if(ImGui.SliderFloat("###vfx_speed", ref speed, 0f, 4f))
+            if(ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###vfx_speed"), ref speed, 0f, 4f))
             {
                 staticVfx.SetSpeed(speed);
             }
 
-            if(ImBrio.SeparatorTextButton("Intensity", FontAwesomeIcon.Undo, enabled: staticVfx.Intensity != Vector3.One, tooltip: "Reset Intensity"))
+            if(ImBrio.SeparatorTextButton("Intensity", FontAwesomeIcon.Undo, enabled: staticVfx.Intensity != Vector3.One, tooltip: global::Brio.Resources.Localize.Text("Reset Intensity")))
                 staticVfx.SetIntensity(Vector3.One);
 
             ImGui.SetNextItemWidth(-1);
             var intensity = staticVfx.Intensity;
-            if(ImGui.SliderFloat3("###vfx_intensity", ref intensity, 0f, 4f))
+            if(ImGui.SliderFloat3(global::Brio.Resources.Localize.Text("###vfx_intensity"), ref intensity, 0f, 4f))
             {
                 staticVfx.SetIntensity(intensity);
             }
@@ -445,7 +445,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
                         {
                             ImBrio.VerticalPadding(3);
 
-                            if(ImBrio.FontIconButton("erase_equipment_popup", FontAwesomeIcon.Eraser, "Remove Equipment"))
+                            if(ImBrio.FontIconButton("erase_equipment_popup", FontAwesomeIcon.Eraser, global::Brio.Resources.Localize.Text("Remove Equipment")))
                             {
                                 if(slot == ActorEquipSlot.MainHand)
                                 {
@@ -556,11 +556,11 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             ImBrio.VerticalPadding(2);
 
             var color = (Vector4)staticVfx.VFX->Color;
-            if(ImBrio.SeparatorTextButton(name, FontAwesomeIcon.Undo, enabled: color != Vector4.One, tooltip: "Reset Color"))
+            if(ImBrio.SeparatorTextButton(name, FontAwesomeIcon.Undo, enabled: color != Vector4.One, tooltip: global::Brio.Resources.Localize.Text("Reset Color")))
                 staticVfx.VFX->Color = Vector4.One;
 
             ImBrio.CenterNextElementWithPadding(5);
-            if(ImGui.ColorEdit4("###Color", ref color, ImGuiColorEditFlags.NoAlpha | ImGuiColorEditFlags.Float))
+            if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("###Color"), ref color, ImGuiColorEditFlags.NoAlpha | ImGuiColorEditFlags.Float))
             {
                 staticVfx.VFX->Color = color;
             }
@@ -637,7 +637,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
         }
 
         var useCustomColor = furniture.IsCustomColor;
-        if(ImGui.Checkbox("Use Custom Color###furniture_use_custom_color", ref useCustomColor))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Use Custom Color###furniture_use_custom_color"), ref useCustomColor))
         {
             if(useCustomColor)
             {
@@ -652,24 +652,24 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
         if(furniture.IsCustomColor)
         {
             var customColor = furniture.CustomColor;
-            if(ImGui.ColorEdit4("###furniture_custom_color", ref customColor, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoLabel | ImGuiColorEditFlags.NoAlpha))
+            if(ImGui.ColorEdit4(global::Brio.Resources.Localize.Text("###furniture_custom_color"), ref customColor, ImGuiColorEditFlags.NoInputs | ImGuiColorEditFlags.NoLabel | ImGuiColorEditFlags.NoAlpha))
             {
                 furniture.SetCustomColor(customColor);
             }
 
             ImGui.SameLine();
-            ImGui.Text("Custom Color");
+            ImGui.Text(global::Brio.Resources.Localize.Text("Custom Color"));
         }
 
-        ImBrio.SeparatorText("Transparency");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Transparency"));
 
         ImBrio.CenterNextElementWithPadding(5);
         var transparency = 1f - furniture.Transparency;
-        if(ImGui.SliderFloat("###furniture_transparency", ref transparency, 1f, 0f, "%.2f"))
+        if(ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###furniture_transparency"), ref transparency, 1f, 0f, "%.2f"))
         {
             furniture.SetTransparency(1f - transparency);
         }
-        ImBrio.AttachToolTip("Transparency");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Transparency"));
     }
 
     private static bool DrawFurnitureIcon(string key, FurnitureObject furniture, uint iconId, string name, float iconSize)

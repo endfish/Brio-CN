@@ -13,7 +13,7 @@ public class BoneIKEditor
 
         var ik = poseInfo.DefaultIK;
 
-        if(ImGui.Checkbox("Enabled", ref ik.Enabled))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enabled"), ref ik.Enabled))
         {
             didChange |= true;
         }
@@ -21,7 +21,7 @@ public class BoneIKEditor
         using(ImRaii.Disabled(!ik.Enabled))
         {
 
-            if(ImGui.Checkbox("Enforce Constraints", ref ik.EnforceConstraints))
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enforce Constraints"), ref ik.EnforceConstraints))
             {
                 didChange |= true;
             }
@@ -32,7 +32,7 @@ public class BoneIKEditor
             {
                 if(combo.Success)
                 {
-                    if(ImGui.Selectable("CCD"))
+                    if(ImGui.Selectable(global::Brio.Resources.Localize.Text("CCD")))
                     {
                         ik.SolverOptions = BoneIKInfo.CalculateDefault(poseInfo.Name, false).SolverOptions;
                         didChange |= true;
@@ -40,7 +40,7 @@ public class BoneIKEditor
 
                     if(BoneIKInfo.CanUseJoint(poseInfo.Name))
                     {
-                        if(ImGui.Selectable("Two Joint"))
+                        if(ImGui.Selectable(global::Brio.Resources.Localize.Text("Two Joint")))
                         {
                             ik.SolverOptions = BoneIKInfo.CalculateDefault(poseInfo.Name, true).SolverOptions;
                             didChange |= true;
@@ -52,13 +52,13 @@ public class BoneIKEditor
             ik.SolverOptions.Switch(
                 ccd =>
                 {
-                    if(ImGui.SliderInt("Depth", ref ccd.Depth, 1, 20))
+                    if(ImGui.SliderInt(global::Brio.Resources.Localize.Text("Depth"), ref ccd.Depth, 1, 20))
                     {
                         ik.SolverOptions = ccd;
                         didChange |= true;
                     }
 
-                    if(ImGui.SliderInt("Iterations", ref ccd.Iterations, 1, 20))
+                    if(ImGui.SliderInt(global::Brio.Resources.Localize.Text("Iterations"), ref ccd.Iterations, 1, 20))
                     {
                         ik.SolverOptions = ccd;
                         didChange |= true;

@@ -43,17 +43,17 @@ public class CompanionSelector(string id) : Selector<CompanionRowUnion>(id)
 
     protected override void DrawOptions()
     {
-        if(ImGui.Checkbox("Minions", ref _showCompanions))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Minions"), ref _showCompanions))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImGui.Checkbox("Mounts", ref _showMounts))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Mounts"), ref _showMounts))
             UpdateList();
 
         ImGui.SameLine();
 
-        if(ImGui.Checkbox("Ornaments", ref _showOrnaments))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Ornaments"), ref _showOrnaments))
             UpdateList();
     }
 
