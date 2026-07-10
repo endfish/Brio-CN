@@ -348,7 +348,8 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
         bool[] items = [_showEmotes, _showActions, _showRaw, _showMods];
 
-        var changed = ImBrio.ToggleSelecterStrip("actiontimeline_filters_selector", Vector2.Zero, ref items, ["Emotes", "Actions", "Timelines", "Mod"]);
+        var changed = ImBrio.ToggleSelecterStrip("actiontimeline_filters_selector", Vector2.Zero, ref items,
+            [Localize.Text("Emotes"), Localize.Text("Actions"), Localize.Text("Timelines"), Localize.Text("Mod")]);
 
         if(changed)
         {

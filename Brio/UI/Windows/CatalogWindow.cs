@@ -678,7 +678,7 @@ public class CatalogWindow : Window, IDisposable
 
         ImGui.SameLine();
         if(ImBrio.ToggelFontIconButton("model_live_preview", FontAwesomeIcon.Eye, new Vector2(24, 5), _modelLivePreviewEnabled,
-            tooltip: "Live Preview (single-click previews, double-click spawns)"))
+            tooltip: Localize.Text("Live Preview (single-click previews, double-click spawns)")))
         {
             _modelLivePreviewEnabled = !_modelLivePreviewEnabled;
             if(!_modelLivePreviewEnabled)
@@ -688,7 +688,7 @@ public class CatalogWindow : Window, IDisposable
         ImGui.SameLine();
         using(ImRaii.Disabled(_modelLivePreview is not { IsValid: true }))
         {
-            if(ImBrio.FontIconButton("model_live_preview_clear", FontAwesomeIcon.Ban, "Clear Live Preview"))
+            if(ImBrio.FontIconButton("model_live_preview_clear", FontAwesomeIcon.Ban, Localize.Text("Clear Live Preview")))
                 ClearModelLivePreview();
         }
 

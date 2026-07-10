@@ -1,3 +1,4 @@
+using Brio.Resources;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin;
 using Lumina.Excel.Sheets;
@@ -40,7 +41,7 @@ public sealed class PenumbraModActionService
 
     private IReadOnlyList<PenumbraModAction> _cachedActions = [];
     private string _cacheSignature = string.Empty;
-    private string _statusMessage = "Penumbra mod actions have not been scanned yet.";
+    private string _statusMessage = Localize.Text("Penumbra mod actions have not been scanned yet.");
     private DateTime _nextRefreshAtUtc = DateTime.MinValue;
     private ushort _cachedObjectIndex = ushort.MaxValue;
 
@@ -77,20 +78,20 @@ public sealed class PenumbraModActionService
         {
             if(!_penumbraService.AllowIntegration || !_penumbraService.IsAvailable)
             {
-                SetCache([], "Penumbra integration is unavailable or disabled.");
+                SetCache([], Localize.Text("Penumbra integration is unavailable or disabled."));
                 return;
             }
 
             if(!_getEnabledState.Invoke())
             {
-                SetCache([], "Penumbra is currently disabled.");
+                SetCache([], Localize.Text("Penumbra is currently disabled."));
                 return;
             }
 
             var (objectValid, _, collection) = _getCollectionForObject.Invoke(actor.ObjectIndex);
             if(!objectValid)
             {
-                SetCache([], "The actor's Penumbra collection could not be resolved.");
+                SetCache([], Localize.Text("The actor's Penumbra collection could not be resolved."));
                 return;
             }
 
@@ -99,15 +100,15 @@ public sealed class PenumbraModActionService
             var variantResources = GetVariantResources(actor.ObjectIndex);
             var actions = BuildActions(changedItems, modLookup, variantResources);
             var status = actions.Count == 0
-                ? $"No active mod actions were found in {collection.Name}."
-                : $"{actions.Count} active mod actions from {collection.Name}.";
+                ? Localize.Format("No active mod actions were found in {0}.", collection.Name)
+                : Localize.Format("{0} active mod actions from {1}.", actions.Count, collection.Name);
 
             SetCache(actions, status);
         }
         catch(Exception ex)
         {
             Brio.Log.Warning(ex, "Failed to scan Penumbra mod actions");
-            SetCache([], "Failed to scan Penumbra mod actions.");
+            SetCache([], Localize.Text("Failed to scan Penumbra mod actions."));
         }
     }
 

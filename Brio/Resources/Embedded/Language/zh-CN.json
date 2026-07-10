@@ -850,6 +850,19 @@
     "S": "S",
     "VFX": "VFX",
     "e.g. bgcommon/hou/indoor/general/0001/asset/fun_b0_m0001.sgb": "例如：bgcommon/hou/indoor/general/0001/asset/fun_b0_m0001.sgb",
-    "provide for an easer way to support more character sizes without": "可以更轻松地兼容更多角色体型，而无需"
+    "provide for an easer way to support more character sizes without": "可以更轻松地兼容更多角色体型，而无需",
+    "Actions": "技能",
+    "Clear Live Preview": "清除实时预览",
+    "Emotes": "情感动作",
+    "Failed to scan Penumbra mod actions.": "扫描 Penumbra 模组动作失败。",
+    "Live Preview (single-click previews, double-click spawns)": "实时预览（单击预览，双击生成）",
+    "Mod": "模组",
+    "No active mod actions were found in {0}.": "未在 {0} 中找到已启用的模组动作。",
+    "Penumbra integration is unavailable or disabled.": "Penumbra 集成不可用或已被禁用。",
+    "Penumbra is currently disabled.": "Penumbra 当前处于禁用状态。",
+    "Penumbra mod actions have not been scanned yet.": "尚未扫描 Penumbra 模组动作。",
+    "The actor's Penumbra collection could not be resolved.": "无法确定该角色使用的 Penumbra 集合。",
+    "Timelines": "时间轴",
+    "{0} active mod actions from {1}.": "从 {1} 中找到 {0} 个已启用的模组动作。"
   }
 }

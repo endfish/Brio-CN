@@ -41,3 +41,14 @@ Chinese localization branch.
 - `zh-CN` contains the Brio 0.8 UI localization pass, including the catalog,
   world-object categories, settings, actor/camera/light controls, posing,
   environment controls, timelines, scene tools, and metadata tools.
+- `feature/catalog-live-preview` adds a single reusable world-model preview to
+  the catalog. Single-click replaces the preview; double-click keeps the normal
+  permanent spawn behavior.
+- `feature/mod-action-tab` adds a Penumbra-backed `Mod` filter to the animation
+  selector. It resolves the selected actor's effective collection and includes
+  the known sit, ground-sit, and doze pose variants.
+- `zh-CN` merges both feature branches and localizes their visible UI text.
+- Runtime validation still needs a Dalamud/FFXIV test environment. In
+  particular, verify preview cleanup on catalog close and GPose exit, then test
+  generic emote mods and pose-variant mods on actors using different Penumbra
+  collections.
