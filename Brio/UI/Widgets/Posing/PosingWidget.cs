@@ -15,23 +15,24 @@ namespace Brio.UI.Widgets.Posing;
 
 public class PosingWidget(PosingCapability capability) : Widget<PosingCapability>(capability)
 {
-    public override string HeaderName => global::Brio.Resources.Localize.Get("ui.actor.posing", "Posing");
+    public override string HeaderName => "Posing";
 
-    public override WidgetFlags Flags => Capability.Actor.IsProp ? (WidgetFlags.DefaultOpen | WidgetFlags.DrawBody) : (WidgetFlags.DrawBody | WidgetFlags.HasAdvanced | WidgetFlags.DefaultOpen);
+    public override WidgetFlags Flags => (WidgetFlags.DrawBody | WidgetFlags.HasAdvanced | WidgetFlags.DefaultOpen);
 
     private readonly PosingTransformEditor _posingTransformEditor = new();
-
-    private readonly BoneSearchControl _boneSearchEditor = new();
 
 
     public override void DrawBody()
     {
         DrawButtons();
 
-        using var child1 = ImRaii.Child($"###appearance_child", new Vector2(0, 165 * ImGuiHelpers.GlobalScale), true, ImGuiWindowFlags.AlwaysAutoResize);
-        if(child1.Success)
+        using(ImRaii.PushStyle(ImGuiStyleVar.ChildRounding, 8f))
+        using(var child1 = ImRaii.Child($"###appearance_child", new Vector2(0, 165 * ImGuiHelpers.GlobalScale), true, ImGuiWindowFlags.AlwaysAutoResize))
         {
-            DrawTransform();
+            if(child1.Success)
+            {
+                DrawTransform();
+            }
         }
     }
 
@@ -43,71 +44,60 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
         }
 
         var overlayOpen = Capability.OverlayOpen;
-        if(ImBrio.FontIconButton("overlay", overlayOpen ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye, overlayOpen ? global::Brio.Resources.Localize.Get("ui.actor.closeOverlay", "Close Overlay") : global::Brio.Resources.Localize.Get("ui.actor.openOverlay", "Open Overlay")))
+        if(ImBrio.FontIconButton("overlay", overlayOpen ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye, overlayOpen ? "Close Overlay" : "Open Overlay"))
         {
             Capability.OverlayOpen = !overlayOpen;
         }
 
-        ImGui.SameLine();
+        ImBrio.VerticalSeparator(24, 1);
 
-        if(Capability.Actor.IsProp == false)
+        if(ImBrio.FontIconButton("import", FontAwesomeIcon.FileDownload, "Import Pose"))
         {
-            if(ImBrio.FontIconButton("import", FontAwesomeIcon.FileDownload, global::Brio.Resources.Localize.Get("ui.actor.importPose", "Import Pose")))
-            {
-                ImGui.OpenPopup("DrawImportPoseMenuPopup");
-            }
-
-            FileUIHelpers.DrawImportPoseMenuPopup("postingWidget", Capability);
-
-            ImGui.SameLine();
-
-            if(ImBrio.FontIconButton("export", FontAwesomeIcon.Save, global::Brio.Resources.Localize.Get("ui.actor.savePose", "Save Pose")))
-                FileUIHelpers.ShowExportPoseModal(Capability);
-
-            ImGui.SameLine();
-
-            if(ImBrio.FontIconButton("bone_search", FontAwesomeIcon.Search, global::Brio.Resources.Localize.Get("ui.actor.boneSearch", "Bone Search")))
-            {
-                ImGui.OpenPopup("widget_bone_search_popup");
-            }
+            ImGui.OpenPopup("DrawImportPoseMenuPopup");
         }
 
+        FileUIHelpers.DrawImportPoseMenuPopup("postingWidget", Capability);
+
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Backward, global::Brio.Resources.Localize.Get("ui.actor.undo", "Undo"), Capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
+        if(ImBrio.FontIconButton("export", FontAwesomeIcon.Save, "Save Pose"))
+            ImGui.OpenPopup("DrawExportPoseMenuPopup");
+
+        FileUIHelpers.DrawExportPoseMenuPopup(Capability);
+
+        ImBrio.VerticalSeparator(24, 1);
+
+        if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, "Undo", Capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
         {
             Capability.Undo();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Forward, global::Brio.Resources.Localize.Get("ui.actor.redo", "Redo"), Capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
+        if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, "Redo", Capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
         {
             Capability.Redo();
         }
 
-        ImGui.SameLine();
+        ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("flipButton", FontAwesomeIcon.Repeat, global::Brio.Resources.Localize.Get("ui.actor.mirrorPose", "Mirror Pose")))
+        if(ImBrio.FontIconButton("flipButton", FontAwesomeIcon.Repeat, "Mirror Pose"))
         {
             Capability.MirrorPose();
         }
 
         ImGui.SameLine();
 
-        if(Capability.Actor.IsProp == false)
+        if(ImBrio.ToggelFontIconButton("freezeActor", FontAwesomeIcon.Snowflake, new Vector2(0), timelineCapability.SpeedMultiplier == 0, tooltip: timelineCapability.SpeedMultiplierOverride == 0 ? "Un-Freeze Character" : "Freeze Character") || InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Freeze))
         {
-            if(ImBrio.ToggelFontIconButton("freezeActor", FontAwesomeIcon.Snowflake, new Vector2(0), timelineCapability.SpeedMultiplier == 0, hoverText: timelineCapability.SpeedMultiplierOverride == 0 ? global::Brio.Resources.Localize.Get("ui.actor.unfreezeCharacter", "Un-Freeze Character") : global::Brio.Resources.Localize.Get("ui.actor.freezeCharacter", "Freeze Character")) || InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Freeze))
-            {
-                if(timelineCapability.SpeedMultiplierOverride == 0)
-                    timelineCapability.ResetOverallSpeedOverride();
-                else
-                    timelineCapability.SetOverallSpeedOverride(0f);
-            }
-            ImGui.SameLine();
+            if(timelineCapability.SpeedMultiplierOverride == 0)
+                timelineCapability.ResetOverallSpeedOverride();
+            else
+                timelineCapability.SetOverallSpeedOverride(0f);
         }
+        ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Get("ui.actor.resetPose", "Reset Pose"), Capability.HasOverride()))
+        if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, "Reset Pose", Capability.HasOverride()))
         {
             ImGui.OpenPopup("widget_reset_pose_popup");
         }
@@ -117,14 +107,6 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
             if(popup.Success)
             {
                 DrawResetMenu();
-            }
-        }
-
-        using(var popup = ImRaii.Popup("widget_bone_search_popup", ImGuiWindowFlags.AlwaysAutoResize))
-        {
-            if(popup.Success)
-            {
-                _boneSearchEditor.Draw("widget_bone_search", Capability);
             }
         }
     }
@@ -143,7 +125,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
         {
             {
                 var buttonSize = new Vector2(155 * ImGuiHelpers.GlobalScale, 0);
-                if(ImBrio.DrawIconButton(FontAwesomeIcon.Undo, global::Brio.Resources.Localize.Get("ui.actor.resetPose", "Reset Pose"), buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Undo, "Reset Pose", buttonSize))
                 {
                     Capability.Reset(false, false);
                     ImGui.CloseCurrentPopup();
@@ -151,7 +133,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
                 using(ImRaii.Disabled(!Capability.HasOverride(Capability.SkeletonPosing.FilterNonFaceBones)))
                 {
-                    if(ImBrio.DrawIconButton(FontAwesomeIcon.ChildReaching, global::Brio.Resources.Localize.Get("ui.actor.resetBody", "Reset Body"), buttonSize))
+                    if(ImBrio.IconButtonWithText(FontAwesomeIcon.ChildReaching, "Reset Body", buttonSize))
                     {
                         Capability.Snapshot(false, reconcile: false);
                         Capability.SkeletonPosing.PoseInfo.Clear(Capability.SkeletonPosing.FilterNonFaceBones);
@@ -161,7 +143,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
                 using(ImRaii.Disabled(!Capability.HasOverride(Capability.SkeletonPosing.FilterFaceBones)))
                 {
-                    if(ImBrio.DrawIconButton(FontAwesomeIcon.Smile, global::Brio.Resources.Localize.Get("ui.actor.resetFace", "Reset Face"), buttonSize))
+                    if(ImBrio.IconButtonWithText(FontAwesomeIcon.Smile, "Reset Face", buttonSize))
                     {
                         Capability.SkeletonPosing.PoseInfo.Clear(Capability.SkeletonPosing.FilterFaceBones);
                         ImGui.CloseCurrentPopup();
