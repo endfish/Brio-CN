@@ -68,19 +68,25 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static bool IconButtonWithText(FontAwesomeIcon icon, string text, Vector2 size)
     {
-        var cursorPos = ImGui.GetCursorPos();
+        text = global::Brio.Resources.Localize.Text(text);
         bool clicked = ImGui.Button($"##{text}", size);
-
-        ImGui.SetCursorPos(cursorPos + new Vector2(5 * ImGuiHelpers.GlobalScale, ImGui.GetStyle().FramePadding.Y));
+        var buttonMin = ImGui.GetItemRectMin();
+        var buttonSize = ImGui.GetItemRectSize();
+        var drawList = ImGui.GetWindowDrawList();
+        var color = ImGui.GetColorU32(ImGuiCol.Text);
+        var padding = 5 * ImGuiHelpers.GlobalScale;
+        Vector2 iconSize;
 
         using(ImRaii.PushFont(UiBuilder.IconFont))
         {
-            ImGui.Text(icon.ToIconString());
+            var iconText = icon.ToIconString();
+            iconSize = ImGui.CalcTextSize(iconText);
+            drawList.AddText(buttonMin + new Vector2(padding, (buttonSize.Y - iconSize.Y) * 0.5f), color, iconText);
         }
 
-        ImGui.SameLine();
-        ImGui.SetCursorPosY(cursorPos.Y + ImGui.GetStyle().FramePadding.Y);
-        ImGui.Text(text);
+        var textSize = ImGui.CalcTextSize(text);
+        var textPosition = buttonMin + new Vector2(padding + iconSize.X + ImGui.GetStyle().ItemInnerSpacing.X, (buttonSize.Y - textSize.Y) * 0.5f);
+        drawList.AddText(textPosition, color, text);
 
         return clicked;
     }
@@ -127,7 +133,7 @@ public static partial class ImBrio
             ImGui.PopStyleColor();
 
         if(tooltip != null)
-            AttachToolTip(tooltip);
+            AttachToolTip(global::Brio.Resources.Localize.Text(tooltip));
 
         if(!enabled)
             ImGui.EndDisabled();
@@ -176,7 +182,7 @@ public static partial class ImBrio
             ImGui.PopStyleColor();
 
         if(tooltip is not null)
-            AttachToolTip(tooltip);
+            AttachToolTip(global::Brio.Resources.Localize.Text(tooltip));
 
         if(enabled is false)
             ImGui.EndDisabled();
@@ -193,6 +199,8 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static bool Button(string label, FontAwesomeIcon icon, Vector2 size, string tooltip = "", bool centerTest = false)
     {
+        label = global::Brio.Resources.Localize.Text(label);
+        tooltip = global::Brio.Resources.Localize.Text(tooltip);
         bool clicked;
 
         // for consistency, hard-code this
@@ -254,6 +262,8 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static bool ToggelButton(string lable, Vector2 size, bool isToggled, uint toggledColor = 0, string hoverText = "")
     {
+        lable = global::Brio.Resources.Localize.Text(lable);
+        hoverText = global::Brio.Resources.Localize.Text(hoverText);
         if(toggledColor == 0) toggledColor = ThemeManager.CurrentTheme.Accent.AccentColor;
 
         if(isToggled)
@@ -300,7 +310,7 @@ public static partial class ImBrio
         if(string.IsNullOrEmpty(tooltip) == false)
         {
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip(tooltip);
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text(tooltip));
         }
 
         return clicked;
@@ -354,7 +364,7 @@ public static partial class ImBrio
             ImGui.PopStyleColor();
 
         if(tooltip is not null)
-            AttachToolTip(tooltip);
+            AttachToolTip(global::Brio.Resources.Localize.Text(tooltip));
 
         if(enabled is false)
             ImGui.EndDisabled();
@@ -494,6 +504,8 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static bool SeparatorTextButton(string label, FontAwesomeIcon icon, string? tooltip = null, bool enabled = true, bool toggled = false)
     {
+        label = global::Brio.Resources.Localize.Text(label);
+        tooltip = tooltip is null ? null : global::Brio.Resources.Localize.Text(tooltip);
         var style = ImGui.GetStyle();
         float availWidth = ImGui.GetContentRegionAvail().X;
         if(availWidth <= 0) return false;

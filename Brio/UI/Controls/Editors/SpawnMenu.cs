@@ -93,7 +93,7 @@ public class SpawnMenu
                     _actorSpawnService.CreateCharacter(out _, SpawnFlags.WithCompanionSlot, false);
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, global::Brio.Resources.Localize.Text("Actor from World..."), buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, global::Brio.Resources.Localize.Get("ui.actor.spawnFromWorld", "Actor from World..."), buttonSize))
                 {
                     ImGui.OpenPopup("FromWorldPopup");
                 }
@@ -133,6 +133,12 @@ public class SpawnMenu
                 if(ImBrio.IconButtonWithText(FontAwesomeIcon.Couch, global::Brio.Resources.Localize.Text("Open Object Catalog"), buttonSize))
                 {
                     UIManager.Instance.ToggleCatalogWindow();
+                    ImGui.CloseCurrentPopup();
+                }
+
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Eye, global::Brio.Resources.Localize.Text("World Model Preview"), buttonSize))
+                {
+                    UIManager.Instance.OpenModelPreviewBrowser();
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -189,7 +195,7 @@ public class SpawnMenu
                     _lightingService.SpawnLight(LightType.FlatLight);
                 }
 
-                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, global::Brio.Resources.Localize.Text("Light from World..."), buttonSize))
+                if(ImBrio.IconButtonWithText(FontAwesomeIcon.Globe, global::Brio.Resources.Localize.Get("ui.environment.lightFromWorld", "Light from World..."), buttonSize))
                 {
                     ImGui.OpenPopup("FromWorldLightPopup");
                 }
@@ -214,7 +220,7 @@ public class SpawnMenu
                         }
                         else
                         {
-                            if(ImGui.MenuItem($"Add All ({worldLights.Count})###containerwidgetpopup_addAllWorldLights"))
+                            if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Add All ({0})###containerwidgetpopup_addAllWorldLights", worldLights.Count)))
                             {
                                 if(worldLights.Count == 0)
                                     return;
@@ -234,7 +240,7 @@ public class SpawnMenu
                             ImGui.Separator();
                             foreach(var (light, distance) in worldLights)
                             {
-                                if(ImGui.MenuItem($"Light: {distance:F1}y##worldlight_{light}"))
+                                if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Light: {0:F1}y##worldlight_{1}", distance, light)))
                                 {
                                     _lightingService.AddWorldLight((BrioLight*)light);
                                 }
