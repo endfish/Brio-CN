@@ -1,25 +1,25 @@
 {
-  "Author": "Minmoose, Asgard and Contributors",
+  "Author": "Minmoose, Asgard 与贡献者；汉化：Endfish",
   "Name": "Brio-CN",
   "InternalName": "Brio-CN",
-  "AssemblyVersion": "0.0.0.1",
-  "Description": "Brio is suite of tools that gives you advanced control to edit and pose actors during GPose.\n- Advanced actor posing \n\t- While animating\n\t- While animating\n\t- Overlay and graphical posing modes\n- Creation of up to 239 G-Pose actors\n- Creation of custom lights\n- Supports integration with Penumbra & Glamourer\n- Offline import and export of MCDF files onto G-Pose actors\n- Play XAT .xcp camera files\n- Play/Blend animations of GPose actors\n- Control Time/Weather in both the Overworld and GPose\n- Change the active festivals and apply up to 4 at once\n- Add/Remove Status Effects of GPose actors",
+  "AssemblyVersion": "1.0.0.0",
+  "Description": "Brio 的简体中文本地化版本，为 GPose 提供角色生成、骨骼姿势编辑、动作播放、灯光、镜头、时间、天气与场景控制等高级功能。\n\n本分支还包含常用姿势快捷入口、Penumbra 动作 Mod 识别，以及可导航的世界模型实时预览。",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/endfish/Brio-CN",
   "Tags": [
     "gpose",
     "brio",
     "posing",
-    "animation"
+    "animation",
+    "中文"
   ],
-  "DownloadCount": 1936717,
   "DalamudApiLevel": 15,
   "LoadRequiredState": 0,
   "LoadSync": false,
   "CanUnloadAsync": false,
   "LoadPriority": 0,
-  "IconUrl": "https://raw.githubusercontent.com/Etheirys/Brio/main/Resources/Images/BrioIcon.png",
-  "Punchline": "Enhanced GPosing! A utility for improving the G-Pose experience in FFXIV.",
-  "Changelog": "", 
+  "IconUrl": "https://raw.githubusercontent.com/endfish/Brio-CN/zh-CN/Resources/Images/BrioIcon.png",
+  "Punchline": "面向 GPose 的高级角色、姿势、动作与场景工具（简体中文版）。",
+  "Changelog": "Brio-CN 首次公开发布：完整简体中文界面、常用姿势快捷入口、Penumbra 动作 Mod 识别与世界模型实时预览。",
   "AcceptsFeedback": true
 }
