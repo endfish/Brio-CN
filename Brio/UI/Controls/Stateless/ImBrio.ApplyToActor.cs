@@ -27,14 +27,14 @@ public partial class ImBrio
         }
         else
         {
-            if(ImGui.Button($"Apply To {selectedActor.FriendlyName}"))
+            if(ImGui.Button(global::Brio.Resources.Localize.Format("Apply To {0}", selectedActor.FriendlyName)))
             {
                 callback?.Invoke(selectedActor);
             }
 
 
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Hold Ctrl to spawn as a new actor");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Hold Ctrl to spawn as a new actor"));
         }
 
     }

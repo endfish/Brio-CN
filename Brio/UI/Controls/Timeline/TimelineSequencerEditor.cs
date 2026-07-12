@@ -416,7 +416,8 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
             changed = true;
 
         var preset = MatchPreset(representative.P1, representative.P2);
-        if(ImGui.Combo("Preset", ref preset, _presetNames, _presetNames.Length) && preset < _presetP1.Length)
+        var localizedPresetNames = _presetNames.Select(global::Brio.Resources.Localize.Text).ToArray();
+        if(ImGui.Combo(global::Brio.Resources.Localize.Text("Preset"), ref preset, localizedPresetNames, localizedPresetNames.Length) && preset < _presetP1.Length)
         {
             foreach(var kf in selected)
             {

@@ -29,7 +29,7 @@ public static partial class ImBrio
         }
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip(isFavorite ? "Remove Favorite" : "Add Favorite");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text(isFavorite ? "Remove Favorite" : "Add Favorite"));
 
         return clicked;
     }

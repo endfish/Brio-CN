@@ -1,11 +1,12 @@
 ﻿using Dalamud.Interface;
 using System;
+using Brio.Resources;
 
 namespace Brio.Entities.Core;
 
 public class WorldEntity : Entity
 {
-    public override string FriendlyName => "World";
+    public override string FriendlyName => Localize.Get("ui.entities.world", "World");
     public override FontAwesomeIcon Icon => FontAwesomeIcon.EarthOceania;
     public override bool IsAttached => true;
 

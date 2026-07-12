@@ -51,7 +51,8 @@ public class CameraLifetimeWidget(CameraLifetimeCapability capability) : Widget<
 
             var isLocked = Capability.Entity.IsLocked;
             var lockIcon = isLocked ? FontAwesomeIcon.Lock : FontAwesomeIcon.Unlock;
-            if(ImBrio.ToggelFontIconButton("CameraLifetime_lock", lockIcon, new Vector2(25, 0), isLocked, tooltip: isLocked ? "Locked" : "Unlocked"))
+            if(ImBrio.ToggelFontIconButton("CameraLifetime_lock", lockIcon, new Vector2(25, 0), isLocked,
+                tooltip: global::Brio.Resources.Localize.Text(isLocked ? "Locked" : "Unlocked")))
             {
                 Capability.Entity.IsLocked = !Capability.Entity.IsLocked;
             }
@@ -65,7 +66,7 @@ public class CameraLifetimeWidget(CameraLifetimeCapability capability) : Widget<
 
         using(ImRaii.Disabled(Capability.CameraEntity.IsDefaultCamera))
         {
-            if(ImGui.MenuItem($"Rename {Capability.CameraEntity.FriendlyName}###CameraLifetime_rename"))
+            if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Rename {0}###CameraLifetime_rename", Capability.CameraEntity.FriendlyName)))
             {
                 ImGui.CloseCurrentPopup();
 
@@ -93,7 +94,7 @@ public class CameraLifetimeWidget(CameraLifetimeCapability capability) : Widget<
         {
             ImGui.Separator();
 
-            if(ImGui.BeginMenu("Destroy###CameraLifetime_destroy"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy###CameraLifetime_destroy")))
             {
                 if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###CameraLifetime_destroy_confirm")))
                 {

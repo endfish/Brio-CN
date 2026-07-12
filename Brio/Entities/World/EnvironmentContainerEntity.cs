@@ -1,5 +1,6 @@
 ﻿using Brio.Capabilities.World;
 using Brio.Entities.Core;
+using Brio.Resources;
 using Dalamud.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -8,7 +9,7 @@ namespace Brio.Entities.World;
 
 public class EnvironmentContainerEntity(IServiceProvider provider) : Entity("environment", provider)
 {
-    public override string FriendlyName => "Environment";
+    public override string FriendlyName => Localize.Get("ui.entities.environment", "Environment");
     public override FontAwesomeIcon Icon => FontAwesomeIcon.CloudMoon;
 
     public override int ContextButtonCount => 0;

@@ -129,13 +129,13 @@ public class MainWindow : Window, IDisposable
             var pos = ImGui.GetCursorPos();
 
             if(ImBrio.FontIconButtonRight("undock_entity_section", isUndocked ? FontAwesomeIcon.Compress : FontAwesomeIcon.WindowRestore, 1,
-                tooltip: isUndocked ? "Redock Entity Widgets" : "Undock Entity Widgets into it's own Window"))
+                tooltip: global::Brio.Resources.Localize.Text(isUndocked ? "Redock Entity Widgets" : "Undock Entity Widgets into its own Window")))
                 _entitySectionWindow.IsOpen = !_entitySectionWindow.IsOpen;
 
             ImGui.SetCursorPos(pos);
 
             using(ImRaii.Disabled(_gPoseService.IsGPosing == false || selected?.IsLoading == true))
-                if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Spawn New...")))
+                if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Get("ui.actor.spawnNew", "Spawn New...")))
                 {
                     SpawnMenu.OpenUnifiedSpawnMenu();
                 }
@@ -236,14 +236,14 @@ public class MainWindow : Window, IDisposable
             _infoWindow.Toggle();
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Information & Changelog");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Information & Changelog"));
 
         ImGui.SameLine();
         if(ImBrio.FontIconButton(FontAwesomeIcon.Cog, new(buttonWidths, 0)))
             _settingsWindow.Toggle();
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Settings");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Settings"));
 
         //
 

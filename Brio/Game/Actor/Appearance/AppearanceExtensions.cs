@@ -18,20 +18,21 @@ public static class AppearanceExtensions
 
     public static string ToDisplayName(this Races race)
     {
-        switch(race)
+        var englishName = race switch
         {
-            case Races.Miqote: return "Miqo'te";
-            case Races.AuRa: return "Au Ra";
-        }
+            Races.Miqote => "Miqo'te",
+            Races.AuRa => "Au Ra",
+            _ => race.ToString(),
+        };
 
-        return race.ToString();
+        return global::Brio.Resources.Localize.Get($"text.{race}", englishName);
     }
 
     public static Races GetRace(this Tribes tribe) => (Races)(((byte)tribe + 1) / 2);
 
     public static string ToDisplayName(this Tribes tribe)
     {
-        return tribe.ToString();
+        return global::Brio.Resources.Localize.Get($"text.{tribe}", tribe.ToString());
     }
 
     public static Genders[] GetAllowedGenders(this Races race)
@@ -62,7 +63,7 @@ public static class AppearanceExtensions
 
     public static string ToDisplayName(this Genders gender)
     {
-        return gender.ToString();
+        return global::Brio.Resources.Localize.Get($"text.{gender}", gender.ToString());
     }
 
     public static ActorEquipSlot GetEquipSlots(this EquipSlotCategory category)

@@ -72,7 +72,7 @@ public class LightWindow : Window, IDisposable
             {
                 foreach(var value in _lightingService.SpawnedLightEntities)
                 {
-                    if(ImGui.Selectable($"Select Light: [ {value.FriendlyName} ]"))
+                    if(ImGui.Selectable(global::Brio.Resources.Localize.Format("Select Light: [ {0} ]", value.FriendlyName)))
                     {
                         _lightingService.SelectedLightEntity = value;
                     }
@@ -98,7 +98,7 @@ public class LightWindow : Window, IDisposable
         //
         // Hedder
 
-        if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Spawn New...")))
+        if(ImBrio.FontIconButton("lifetimewidget_spawnnew", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Get("ui.environment.newLight", "Spawn New...")))
         {
             SpawnMenu.OpenUnifiedSpawnMenu();
         }

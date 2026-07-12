@@ -452,7 +452,7 @@ public static class CameraEditor
                 var entity = capability._entityManager.SelectedEntity;
                 if(entity is ActorEntity actor)
                 {
-                    capability.VirtualCamera.SelectedActorName = $"Selected: [ {actor.FriendlyName} ]";
+                    capability.VirtualCamera.SelectedActorName = global::Brio.Resources.Localize.Format("Selected: [ {0} ]", actor.FriendlyName);
                     camera.TargetOffset = (actor.GameObject.GetDrawObject<DrawObject>()->Object.Position - ((GameObject*)actor.GameObject.Address)->Position);
                     capability.Snapshot();
                 }
@@ -463,7 +463,7 @@ public static class CameraEditor
         float btnWidth = ImGui.GetFrameHeight();
 
         ImGui.SetNextItemWidth(-float.Epsilon);
-        if(ImGui.BeginCombo($"###CameraContainerActorsWidget_{capability.Entity.Id}_list", capability.VirtualCamera.SelectedActorName))
+        if(ImGui.BeginCombo($"###CameraContainerActorsWidget_{capability.Entity.Id}_list", global::Brio.Resources.Localize.Text(capability.VirtualCamera.SelectedActorName)))
         {
             foreach(var value in capability._entityManager.TryGetAllTransformableActors())
             {
@@ -554,8 +554,8 @@ public static class CameraEditor
 
             ImGui.Separator();
 
-            ImGui.InputFloat3("Camera Scale", ref _cutsceneManager.CameraSettings.Scale);
-            ImGui.InputFloat3("Camera Offset", ref _cutsceneManager.CameraSettings.Offset);
+            ImGui.InputFloat3(global::Brio.Resources.Localize.Text("Camera Scale"), ref _cutsceneManager.CameraSettings.Scale);
+            ImGui.InputFloat3(global::Brio.Resources.Localize.Text("Camera Offset"), ref _cutsceneManager.CameraSettings.Offset);
 
             ImGui.Separator();
 
@@ -565,7 +565,7 @@ public static class CameraEditor
 
             ImGui.Checkbox(global::Brio.Resources.Localize.Text("###delay_Start"), ref _cutsceneManager.DelayStart);
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Start Delay");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Start Delay"));
 
             ImGui.SameLine();
             ImGui.SetNextItemWidth(MaxItemWidth);
@@ -587,7 +587,7 @@ public static class CameraEditor
             {
                 ImGui.Checkbox(global::Brio.Resources.Localize.Text("###animation_delay_Start"), ref _cutsceneManager.DelayAnimationStart);
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Animation Start Delay");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Animation Start Delay"));
 
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(MaxItemWidth);

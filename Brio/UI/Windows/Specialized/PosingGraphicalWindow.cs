@@ -233,7 +233,7 @@ public class PosingGraphicalWindow : Window, IDisposable
             ImGui.OpenPopup("graphic_bone_search_popup");
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Bone Search");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Bone Search"));
 
         using(var popup = ImRaii.Popup("graphic_bone_search_popup"))
         {
@@ -252,7 +252,7 @@ public class PosingGraphicalWindow : Window, IDisposable
         }
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Undo");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Undo"));
 
         ImGui.SameLine();
 
@@ -263,7 +263,7 @@ public class PosingGraphicalWindow : Window, IDisposable
         }
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Redo");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Redo"));
 
         ImBrio.VerticalSeparator(24);
 
@@ -274,7 +274,7 @@ public class PosingGraphicalWindow : Window, IDisposable
         }
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Reset Pose");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Reset Pose"));
 
         ImBrio.VerticalSeparator(24);
 
@@ -302,7 +302,7 @@ public class PosingGraphicalWindow : Window, IDisposable
             ImGui.OpenPopup("graphic_options_popup");
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Options");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Options"));
 
         using(var popup = ImRaii.Popup("graphic_options_popup"))
         {

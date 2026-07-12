@@ -44,6 +44,8 @@ public static partial class ImBrio
 
     private static (bool changed, bool active) SliderBase(string label, ref float value, float min, float max, string format, ImGuiSliderFlags flags, float step, bool isAngle = false, string toolTip = "")
     {
+        var localizedLabel = global::Brio.Resources.Localize.Text(label);
+        toolTip = global::Brio.Resources.Localize.Text(toolTip);
         bool changed = false;
         bool active = false;
         float buttonWidth = ImGui.GetCursorPosX();
@@ -118,7 +120,7 @@ public static partial class ImBrio
         if(hasLabel)
         {
             ImGui.SameLine();
-            ImGui.Text(label);
+            ImGui.Text(localizedLabel);
         }
 
         ImGui.PopID();

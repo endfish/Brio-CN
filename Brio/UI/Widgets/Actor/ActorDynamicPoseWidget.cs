@@ -79,7 +79,8 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
             }
         }
 
-        if(ImBrio.SeparatorTextButton("Dynamic Face Control", FontAwesomeIcon.PowerOff, tooltip: Capability.IsEnabled ? "Disable Face Control" : "Enable Face Control", toggled: Capability.IsEnabled))
+        if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Dynamic Face Control"), FontAwesomeIcon.PowerOff,
+            tooltip: global::Brio.Resources.Localize.Text(Capability.IsEnabled ? "Disable Face Control" : "Enable Face Control"), toggled: Capability.IsEnabled))
         {
             Capability.IsEnabled = !Capability.IsEnabled;
 
@@ -101,7 +102,8 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
         {
             ImBrio.VerticalPadding(5);
 
-            if(ImBrio.ButtonSelectorStrip("DynamicFaceControlSelector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected, ["Camera", "Position", "Actor"]))
+            if(ImBrio.ButtonSelectorStrip("DynamicFaceControlSelector", new Vector2(ImBrio.GetRemainingWidth(), ImBrio.GetLineHeight()), ref selected,
+                [global::Brio.Resources.Localize.Text("Camera"), global::Brio.Resources.Localize.Text("Position"), global::Brio.Resources.Localize.Text("Actor")]))
             {
                 Reset();
 
@@ -187,7 +189,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
     public void DrawActor()
     {
         ImBrio.CenterNextElementWithPadding(75);
-        if(ImGui.BeginCombo($"###actorsWidget_{Capability.Entity.Id}_list", Capability.SelectedActorName))
+        if(ImGui.BeginCombo($"###actorsWidget_{Capability.Entity.Id}_list", global::Brio.Resources.Localize.Text(Capability.SelectedActorName)))
         {
             foreach(var value in Capability.EntityManager.TryGetAllActors())
             {
@@ -229,11 +231,11 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
             df3h = ImBrio.DragFloat3Implementation($"###dynamicFaceControlSelector_drag3", ref cameraVector3, 1);
 
         var size = ImBrio.GetRemainingWidth() / 3;
-        (bool eyetoggle, bool eyelock) = ImBrio.ToggleLock("Eyes", size, ref eyes, ref eyesLock, disableOnLock: true);
+        (bool eyetoggle, bool eyelock) = ImBrio.ToggleLock(global::Brio.Resources.Localize.Text("Eyes"), size, ref eyes, ref eyesLock, disableOnLock: true);
         ImGui.SameLine();
-        (bool bodytoggle, bool bodylock) = ImBrio.ToggleLock("Body", size, ref body, ref bodyLock, disableOnLock: true);
+        (bool bodytoggle, bool bodylock) = ImBrio.ToggleLock(global::Brio.Resources.Localize.Text("Body"), size, ref body, ref bodyLock, disableOnLock: true);
         ImGui.SameLine();
-        (bool headtoggle, bool headlock) = ImBrio.ToggleLock("Head", size, ref head, ref headLock, disableOnLock: true);
+        (bool headtoggle, bool headlock) = ImBrio.ToggleLock(global::Brio.Resources.Localize.Text("Head"), size, ref head, ref headLock, disableOnLock: true);
 
         if(eyetoggle || bodytoggle || headtoggle)
         {
@@ -283,7 +285,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
         bool bodytoggle = false;
         bool headtoggle = false;
 
-        if(ImBrio.ToggelButton($"Eyes###toggleButton_Eyes", new Vector2(53, 25), eyes))
+        if(ImBrio.ToggelButton(global::Brio.Resources.Localize.Text("Eyes###toggleButton_Eyes"), new Vector2(53, 25), eyes))
         {
             eyetoggle = true;
             eyes = !eyes;
@@ -303,7 +305,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
             eyesVectorDrag = ImBrio.DragFloat3Implementation($"###dynamicFaceControlSelector_Eyes_drag3", ref eyesVector3, 1);
         }
 
-        if(ImBrio.ToggelButton($"Body###toggleButton_Body", new Vector2(53, 25), body))
+        if(ImBrio.ToggelButton(global::Brio.Resources.Localize.Text("Body###toggleButton_Body"), new Vector2(53, 25), body))
         {
             bodytoggle = true;
             body = !body;
@@ -323,7 +325,7 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
             bodyVectorDrag = ImBrio.DragFloat3Implementation($"###dynamicFaceControlSelector_Body_drag3", ref bodyVector3, 1);
         }
 
-        if(ImBrio.ToggelButton($"Head###toggleButton_Head", new Vector2(53, 25), head))
+        if(ImBrio.ToggelButton(global::Brio.Resources.Localize.Text("Head###toggleButton_Head"), new Vector2(53, 25), head))
         {
             headtoggle = true;
             head = !head;

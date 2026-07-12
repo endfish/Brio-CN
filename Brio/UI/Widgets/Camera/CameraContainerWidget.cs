@@ -21,7 +21,7 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
                 Capability.OpenCameraWindow();
             }
 
-            if(ImGui.BeginMenu("New...###containerwidgetpopup_new"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("New...###containerwidgetpopup_new")))
             {
                 ImGui.Separator();
 
@@ -37,9 +37,9 @@ public class CameraContainerWidget(CameraContainerCapability capability) : Widge
                 ImGui.EndMenu();
             }
 
-            if(ImGui.BeginMenu("Destroy All...###containerwidgetpopup_destroy"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy All...###containerwidgetpopup_destroy")))
             {
-                if(ImGui.BeginMenu("Cameras###containerwidgetpopup_destroyallCameras"))
+                if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Cameras###containerwidgetpopup_destroyallCameras")))
                 {
                     if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###containerwidgetpopup_destroyall_confirmCameras")))
                     {

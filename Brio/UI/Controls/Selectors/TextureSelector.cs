@@ -55,7 +55,7 @@ public class TextureSelector : Selector<TextureId>
 
         ImGui.SameLine();
         ImGui.SetCursorPosY(ImGui.GetCursorPosY() + (IconSize.Y / 2) - (ImGui.GetTextLineHeight() / 2));
-        ImGui.Text($"ID: {textureId.Id}");
+        ImGui.Text(global::Brio.Resources.Localize.Format("ID: {0}", textureId.Id));
     }
 
     public string GetTexturePath(uint id)

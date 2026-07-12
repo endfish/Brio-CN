@@ -60,7 +60,7 @@ public class CameraWindow : Window, IDisposable
                 list.Add(_virtualCameraService.GetDefaultCamera()!);
                 foreach(var value in list)
                 {
-                    if(ImGui.Selectable($"Camera: [ {value.FriendlyName} ] [ {value.CameraType.ToString().ToUpper()} ]"))
+                    if(ImGui.Selectable(global::Brio.Resources.Localize.Format("Camera: [ {0} ] [ {1} ]", value.FriendlyName, value.CameraType.ToString().ToUpper())))
                     {
                         _virtualCameraService.SelectedCameraEntity = value;
                     }

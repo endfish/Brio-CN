@@ -6,6 +6,7 @@ using Brio.Entities.Core;
 using Brio.Game.Camera;
 using Brio.Game.GPose;
 using Brio.Game.Input;
+using Brio.Resources;
 using Brio.UI;
 using Brio.UI.Controls.Stateless;
 using Brio.UI.Theming;
@@ -36,10 +37,10 @@ public class CameraEntity(IServiceProvider provider, int cameraID, CameraType ca
             {
                 if(CameraID == 0)
                 {
-                    return $"Default Camera";
+                    return Localize.Text("Default Camera");
                 }
 
-                return $"Camera {CameraID.ToName()}";
+                return Localize.Format("Camera {0}", CameraID.ToName());
             }
 
             return $"{RawName} ({CameraID})";
@@ -103,7 +104,7 @@ public class CameraEntity(IServiceProvider provider, int cameraID, CameraType ca
 
             if(VirtualCamera.IsFreeCamera)
             {
-                string toolTip1 = "Toggle as Camera Movement";
+                string toolTip1 = Localize.Text("Toggle as Camera Movement");
                 using(ImRaii.PushColor(ImGuiCol.Button, 0))
                 {
                     if(ImBrio.ToggelFontIconButtonRight($"###{Id}_camera_movement", FontAwesomeIcon.Walking, 3f, VirtualCamera.FreeCamValues.IsMovementEnabled, tooltip: toolTip1))
@@ -118,7 +119,7 @@ public class CameraEntity(IServiceProvider provider, int cameraID, CameraType ca
             var lockIcon = IsLocked ? FontAwesomeIcon.Lock : FontAwesomeIcon.Unlock;
             using(ImRaii.PushColor(ImGuiCol.Button, 0))
             {
-                if(ImBrio.ToggelFontIconButtonRight($"###{Id}_camera_Lock", lockIcon, 2f, IsLocked, tooltip: IsLocked ? "Locked" : "Unlocked"))
+                if(ImBrio.ToggelFontIconButtonRight($"###{Id}_camera_Lock", lockIcon, 2f, IsLocked, tooltip: Localize.Text(IsLocked ? "Locked" : "Unlocked")))
                 {
                     IsLocked = !IsLocked;
                 }
@@ -126,7 +127,7 @@ public class CameraEntity(IServiceProvider provider, int cameraID, CameraType ca
 
             ImGui.SameLine();
 
-            string toolTip = "Set as Active Camera";
+            string toolTip = Localize.Text("Set as Active Camera");
             using(ImRaii.PushColor(ImGuiCol.Text, ThemeManager.CurrentTheme.Accent.AccentColor, VirtualCamera.IsActiveCamera))
             {
                 if(ImBrio.FontIconButtonRight($"###{Id}_camera_contextButton", FontAwesomeIcon.LocationCrosshairs, 1f, toolTip, bordered: false))

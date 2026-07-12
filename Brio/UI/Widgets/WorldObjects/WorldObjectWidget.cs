@@ -39,21 +39,22 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
         // Hedder Buttons
 
         var overlayOpen = Capability.OverlayOpen;
-        if(ImBrio.FontIconButton($"overlay_{Capability.Entity.Id}", overlayOpen ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye, overlayOpen ? "Close Overlay" : "Open Overlay"))
+        if(ImBrio.FontIconButton($"overlay_{Capability.Entity.Id}", overlayOpen ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye,
+            global::Brio.Resources.Localize.Text(overlayOpen ? "Close Overlay" : "Open Overlay")))
         {
             Capability.OverlayOpen = !overlayOpen;
         }
 
         ImBrio.VerticalSeparator(24);
 
-        if(ImBrio.FontIconButton($"undo_{Capability.Entity.Id}", FontAwesomeIcon.Reply, "Undo", Capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
+        if(ImBrio.FontIconButton($"undo_{Capability.Entity.Id}", FontAwesomeIcon.Reply, global::Brio.Resources.Localize.Text("Undo"), Capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
         {
             Capability.Undo();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton($"redo_{Capability.Entity.Id}", FontAwesomeIcon.Share, "Redo", Capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
+        if(ImBrio.FontIconButton($"redo_{Capability.Entity.Id}", FontAwesomeIcon.Share, global::Brio.Resources.Localize.Text("Redo"), Capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
         {
             Capability.Redo();
         }
@@ -63,7 +64,8 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             ImBrio.VerticalSeparator(24);
 
             var speed = staticVfxObject.Speed;
-            if(ImBrio.ToggelFontIconButton($"vfx_play_pause_{Capability.Entity.Id}", speed == 0 ? FontAwesomeIcon.Play : FontAwesomeIcon.Pause, Vector2.Zero, speed == 0, tooltip: speed == 0 ? "Resume" : "Pause"))
+            if(ImBrio.ToggelFontIconButton($"vfx_play_pause_{Capability.Entity.Id}", speed == 0 ? FontAwesomeIcon.Play : FontAwesomeIcon.Pause, Vector2.Zero, speed == 0,
+                tooltip: global::Brio.Resources.Localize.Text(speed == 0 ? "Resume" : "Pause")))
             {
                 if(speed == 0)
                 {
@@ -183,7 +185,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("VFX Properties"));
             ImBrio.VerticalPadding(5);
 
-            if(ImGui.Button($"Update", new Vector2(-1, 24 * ImGuiHelpers.GlobalScale)))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Update"), new Vector2(-1, 24 * ImGuiHelpers.GlobalScale)))
             {
                 staticVfx.Resume();
             }
@@ -213,7 +215,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             }
 
             var speed = staticVfx.Speed;
-            if(ImBrio.SeparatorTextButton("Speed", FontAwesomeIcon.Undo, enabled: speed != 1f, tooltip: global::Brio.Resources.Localize.Text("Reset Speed")))
+            if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Speed"), FontAwesomeIcon.Undo, enabled: speed != 1f, tooltip: global::Brio.Resources.Localize.Text("Reset Speed")))
             {
                 staticVfx.SetSpeed(1f);
                 staticVfx.Resume();
@@ -225,7 +227,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
                 staticVfx.SetSpeed(speed);
             }
 
-            if(ImBrio.SeparatorTextButton("Intensity", FontAwesomeIcon.Undo, enabled: staticVfx.Intensity != Vector3.One, tooltip: global::Brio.Resources.Localize.Text("Reset Intensity")))
+            if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Intensity"), FontAwesomeIcon.Undo, enabled: staticVfx.Intensity != Vector3.One, tooltip: global::Brio.Resources.Localize.Text("Reset Intensity")))
                 staticVfx.SetIntensity(Vector3.One);
 
             ImGui.SetNextItemWidth(-1);
@@ -591,7 +593,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
 
     private static void DrawFurnitureControls(FurnitureObject furniture)
     {
-        if(ImBrio.SeparatorTextButton("Furniture Properties", FontAwesomeIcon.Undo, enabled: furniture.IsCustomColor || furniture.StainID != 0 || furniture.Transparency != 0f))
+        if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Furniture Properties"), FontAwesomeIcon.Undo, enabled: furniture.IsCustomColor || furniture.StainID != 0 || furniture.Transparency != 0f))
         {
             if(furniture.IsCustomColor || furniture.StainID != 0)
                 furniture.ClearColor();

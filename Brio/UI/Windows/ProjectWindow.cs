@@ -161,7 +161,7 @@ public class ProjectWindow : Window, IDisposable
         ImGui.Text(project.Name ?? "No Name Source");
 
         if(project.Created.HasValue)
-            ImGui.Text($"Created: {project.Created.Value:g}");
+            ImGui.Text(global::Brio.Resources.Localize.Format("Created: {0:g}", project.Created.Value));
 
         ImGui.Text(project.Description ?? "No Description");
 

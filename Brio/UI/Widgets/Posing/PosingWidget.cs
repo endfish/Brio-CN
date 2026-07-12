@@ -44,7 +44,8 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
         }
 
         var overlayOpen = Capability.OverlayOpen;
-        if(ImBrio.FontIconButton("overlay", overlayOpen ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye, overlayOpen ? "Close Overlay" : "Open Overlay"))
+        if(ImBrio.FontIconButton("overlay", overlayOpen ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye,
+            global::Brio.Resources.Localize.Text(overlayOpen ? "Close Overlay" : "Open Overlay")))
         {
             Capability.OverlayOpen = !overlayOpen;
         }
@@ -88,7 +89,8 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
         ImGui.SameLine();
 
-        if(ImBrio.ToggelFontIconButton("freezeActor", FontAwesomeIcon.Snowflake, new Vector2(0), timelineCapability.SpeedMultiplier == 0, tooltip: timelineCapability.SpeedMultiplierOverride == 0 ? "Un-Freeze Character" : "Freeze Character") || InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Freeze))
+        if(ImBrio.ToggelFontIconButton("freezeActor", FontAwesomeIcon.Snowflake, new Vector2(0), timelineCapability.SpeedMultiplier == 0,
+            tooltip: global::Brio.Resources.Localize.Text(timelineCapability.SpeedMultiplierOverride == 0 ? "Un-Freeze Character" : "Freeze Character")) || InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Freeze))
         {
             if(timelineCapability.SpeedMultiplierOverride == 0)
                 timelineCapability.ResetOverallSpeedOverride();

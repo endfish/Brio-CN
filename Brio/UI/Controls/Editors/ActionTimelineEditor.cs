@@ -130,7 +130,8 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
     private void DrawHeder()
     {
-        if(ImBrio.ToggelButton("Freeze Physics", new Vector2(110, 25), _physicsService.IsFreezeEnabled, hoverText: _physicsService.IsFreezeEnabled ? "Un-Freeze Physics" : "Freeze Physics"))
+        if(ImBrio.ToggelButton(global::Brio.Resources.Localize.Text("Freeze Physics"), new Vector2(110, 25), _physicsService.IsFreezeEnabled,
+            hoverText: global::Brio.Resources.Localize.Text(_physicsService.IsFreezeEnabled ? "Un-Freeze Physics" : "Freeze Physics")))
         {
             _physicsService.FreezeToggle();
         }
@@ -233,7 +234,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
     private void DrawBaseOverride()
     {
-        const string baseLabel = "Base";
+        var baseLabel = global::Brio.Resources.Localize.Text("Base Animation");
         ImGui.SetNextItemWidth(MaxItemWidth - ImGui.CalcTextSize("XXXX").X);
         ImGui.InputInt($"###base_animation", ref _capability.SlotedBaseAnimation, 0, 0);
         if(ImBrio.IsItemConfirmed())
@@ -244,7 +245,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
         ImGui.SameLine();
         ImGui.Checkbox(global::Brio.Resources.Localize.Text("###base_interrupt"), ref _capability.DoBaseInterrupt);
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Interrupt");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Interrupt"));
 
         ImGui.SameLine();
         ImGui.SetCursorPosX(LabelStart);
@@ -279,7 +280,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
             {
                 ImGui.Checkbox(global::Brio.Resources.Localize.Text("Start Animation On Select"), ref _startAnimationOnSelect);
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Start Animation On Select");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Start Animation On Select"));
 
                 _globalTimelineSelector.Draw();
             }
@@ -288,7 +289,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
     private void DrawBlend()
     {
-        const string blendLabel = "Blend";
+        var blendLabel = global::Brio.Resources.Localize.Text("Blend Animation");
 
         ImGui.SetNextItemWidth(MaxItemWidth);
         ImGui.InputInt($"###blend_animation", ref _capability.SlotedBlendAnimation, 0, 0);
@@ -339,7 +340,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
         {
             if(combo.Success)
             {
-                if(ImGui.Selectable($"None", lipsOverride == 0))
+                if(ImGui.Selectable(global::Brio.Resources.Localize.Text("None"), lipsOverride == 0))
                 {
                     _capability.LipsOverride = 0;
                 }
@@ -498,7 +499,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
             float existingSpeed = _capability.GetSlotSpeed(slot);
             float newSpeed = existingSpeed;
-            const string speedLabel = "Slot Speed";
+            var speedLabel = global::Brio.Resources.Localize.Text("Slot Speed");
             ImGui.SetNextItemWidth(ImGui.CalcTextSize($"XXXXXXXXXXXXXXXXXi").X);
             if(ImGui.SliderFloat($"{speedLabel}", ref newSpeed, 0f, 5f))
                 _capability.SetSlotSpeedOverride(slot, newSpeed);
@@ -522,7 +523,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
         float existingSpeed = _capability.SpeedMultiplier;
         float newSpeed = existingSpeed;
 
-        const string speedLabel = "Speed";
+        var speedLabel = global::Brio.Resources.Localize.Text("Speed");
         ImGui.SetNextItemWidth(drawAdvanced ? MaxItemWidth - ImGui.CalcTextSize("XXXX").X : MaxItemWidth);
         if(ImGui.SliderFloat($"###speed_slider", ref newSpeed, _delimitSpeed ? -5f : 0f, _delimitSpeed ? 10f : 5f))
             _capability.SetOverallSpeedOverride(newSpeed);
@@ -536,7 +537,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
                     _capability.ResetOverallSpeedOverride();
                 }
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Delimit Speed");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Delimit Speed"));
         }
 
         ImGui.SameLine();
@@ -607,8 +608,8 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
             ImGui.Separator();
             ImBrio.VerticalPadding(2);
 
-            ImGui.InputFloat3("Camera Scale", ref _cutsceneManager.CameraSettings.Scale);
-            ImGui.InputFloat3("Camera Offset", ref _cutsceneManager.CameraSettings.Offset);
+            ImGui.InputFloat3(global::Brio.Resources.Localize.Text("Camera Scale"), ref _cutsceneManager.CameraSettings.Scale);
+            ImGui.InputFloat3(global::Brio.Resources.Localize.Text("Camera Offset"), ref _cutsceneManager.CameraSettings.Offset);
 
             ImGui.Separator();
             ImBrio.VerticalPadding(2);
@@ -622,7 +623,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
             ImGui.Checkbox(global::Brio.Resources.Localize.Text("###delay_Start"), ref _cutsceneManager.DelayStart);
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Start Delay");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Start Delay"));
 
             ImGui.SameLine();
             ImGui.SetNextItemWidth(MaxItemWidth);
@@ -645,7 +646,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
             {
                 ImGui.Checkbox(global::Brio.Resources.Localize.Text("###animation_delay_Start"), ref _cutsceneManager.DelayAnimationStart);
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Animation Start Delay");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Animation Start Delay"));
 
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(MaxItemWidth);

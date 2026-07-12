@@ -153,7 +153,7 @@ public class SettingsWindow : Window
         if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Library"), ImGuiTreeNodeFlags.DefaultOpen))
         {
             bool useLibraryWhenImporting = _configurationService.Configuration.UseLibraryWhenImporting;
-            const string label1 = "Use the Library when importing a file";
+            var label1 = Localize.Text("Use the Library when importing a file");
             ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label1).X - 15);
             if(ImGui.Checkbox(label1, ref useLibraryWhenImporting))
             {
@@ -162,7 +162,7 @@ public class SettingsWindow : Window
             }
 
             bool returnToLastLocation = _configurationService.Configuration.Library.ReturnLibraryToLastLocation;
-            const string label2 = "Open Library to the last Location I was previously";
+            var label2 = Localize.Text("Open Library to the last Location I was previously");
             ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label2).X - 15);
             if(ImGui.Checkbox(label2, ref returnToLastLocation))
             {
@@ -171,7 +171,7 @@ public class SettingsWindow : Window
             }
 
             bool useFilenameAsActorName = _configurationService.Configuration.Library.UseFilenameAsActorName;
-            const string label3 = "Use the Character Filename as the Actor Name";
+            var label3 = Localize.Text("Use the Character Filename as the Actor Name");
             ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label3).X - 15);
             if(ImGui.Checkbox(label3, ref useFilenameAsActorName))
             {
@@ -189,15 +189,15 @@ public class SettingsWindow : Window
     private void DrawOpenBrioSetting()
     {
         var selectedBrioOpenBehavior = _configurationService.Configuration.Interface.OpenBrioBehavior;
-        const string label = "Open Brio";
+        var label = Localize.Text("Open Brio");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label).X - 20);
-        using(var combo = ImRaii.Combo(label, selectedBrioOpenBehavior.ToString()))
+        using(var combo = ImRaii.Combo(label, Localize.Text(selectedBrioOpenBehavior.ToString())))
         {
             if(combo.Success)
             {
                 foreach(var openBrioBehavior in Enum.GetValues<OpenBrioBehavior>())
                 {
-                    if(ImGui.Selectable($"{openBrioBehavior}", openBrioBehavior == selectedBrioOpenBehavior))
+                    if(ImGui.Selectable($"{Localize.Text(openBrioBehavior.ToString())}##open_brio_{openBrioBehavior}", openBrioBehavior == selectedBrioOpenBehavior))
                     {
                         _configurationService.Configuration.Interface.OpenBrioBehavior = openBrioBehavior;
                         _configurationService.ApplyChange();
@@ -250,7 +250,7 @@ public class SettingsWindow : Window
         ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Brio's Theme"));
 
         var currentThemeName = _configurationService.Configuration.Appearance.Theme;
-        const string themeLabel = "Theme";
+        var themeLabel = Localize.Text("Theme");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(themeLabel).X - 15);
         using(var combo = ImRaii.Combo(themeLabel, currentThemeName))
         {
@@ -316,7 +316,7 @@ public class SettingsWindow : Window
                     _penumbraService.CheckStatus(true);
                 }
 
-                ImGui.Text($"Penumbra Status: {penumbraStatus}");
+                ImGui.Text(Localize.Format("{0} Status: {1}", "Penumbra", Localize.Text(penumbraStatus.ToString())));
                 ImGui.SameLine();
                 if(ImBrio.FontIconButton("refresh_penumbra", FontAwesomeIcon.Sync, global::Brio.Resources.Localize.Text("Refresh Penumbra Status")))
                 {
@@ -335,7 +335,7 @@ public class SettingsWindow : Window
             var glamourerStatus = _glamourerService.CheckStatus();
             using(ImRaii.Disabled(!enableGlamourer))
             {
-                ImGui.Text($"Glamourer Status: {glamourerStatus}");
+                ImGui.Text(Localize.Format("{0} Status: {1}", "Glamourer", Localize.Text(glamourerStatus.ToString())));
                 ImGui.SameLine();
                 if(ImBrio.FontIconButton("refresh_glamourer", FontAwesomeIcon.Sync, global::Brio.Resources.Localize.Text("Refresh Glamourer Status")))
                 {
@@ -354,7 +354,7 @@ public class SettingsWindow : Window
             var customizePlusStatus = _customizePlusService.CheckStatus();
             using(ImRaii.Disabled(!enableCustomizePlus))
             {
-                ImGui.Text($"Customize+ Status: {customizePlusStatus}");
+                ImGui.Text(Localize.Format("{0} Status: {1}", "Customize+", Localize.Text(customizePlusStatus.ToString())));
                 ImGui.SameLine();
                 if(ImBrio.FontIconButton("refresh_Customize", FontAwesomeIcon.Sync, global::Brio.Resources.Localize.Text("Refresh Customize+ Status")))
                 {
@@ -415,7 +415,7 @@ public class SettingsWindow : Window
                 _configurationService.Configuration.IPC.EnableBrioIPC = enableBrioIpc;
                 _configurationService.ApplyChange();
             }
-            ImGui.Text($"Brio IPC Status: {(enableBrioIpc ? "Active" : "Inactive")}");
+            ImGui.Text(Localize.Format("Brio IPC Status: {0}", Localize.Text(enableBrioIpc ? "Active" : "Inactive")));
 
             bool enableWebApi = _configurationService.Configuration.IPC.AllowWebAPI;
             if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Brio API"), ref enableWebApi))
@@ -424,7 +424,7 @@ public class SettingsWindow : Window
                 _configurationService.ApplyChange();
             }
 
-            ImGui.Text($"Brio API Status: {(_webService.IsRunning ? "Active" : "Inactive")}");
+            ImGui.Text(Localize.Format("Brio API Status: {0}", Localize.Text(_webService.IsRunning ? "Active" : "Inactive")));
         }
     }
 
@@ -447,15 +447,15 @@ public class SettingsWindow : Window
             }
 
             var allowNPCHackBehavior = _configurationService.Configuration.Appearance.ApplyNPCHack;
-            const string label = "Allow NPC Appearance on Players";
+            var label = Localize.Text("Allow NPC Appearance on Players");
             ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label).X - 15);
-            using(var combo = ImRaii.Combo(label, allowNPCHackBehavior.ToString()))
+            using(var combo = ImRaii.Combo(label, Localize.Text(allowNPCHackBehavior.ToString())))
             {
                 if(combo.Success)
                 {
                     foreach(var npcHack in Enum.GetValues<ApplyNPCHack>())
                     {
-                        if(ImGui.Selectable($"{npcHack}", npcHack == allowNPCHackBehavior))
+                        if(ImGui.Selectable($"{Localize.Text(npcHack.ToString())}##npc_hack_{npcHack}", npcHack == allowNPCHackBehavior))
                         {
                             _configurationService.Configuration.Appearance.ApplyNPCHack = npcHack;
                             _configurationService.ApplyChange();
@@ -806,7 +806,7 @@ public class SettingsWindow : Window
             {
                 ImGui.TextDisabled(friendlyName);
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Custom bone (not in catalog)");
+                    ImGui.SetTooltip(Localize.Text("Custom bone (not in catalog)"));
             }
 
             ImGui.TableNextColumn();
@@ -819,7 +819,7 @@ public class SettingsWindow : Window
             }
 
             ImGui.TableNextColumn();
-            if(ImBrio.FontIconButton("###delButton", FontAwesomeIcon.Trash, $"Remove offset for '{bone.Key}'"))
+            if(ImBrio.FontIconButton("###delButton", FontAwesomeIcon.Trash, Localize.Format("Remove offset for '{0}'", bone.Key)))
                 toRemove = bone.Key;
         }
 
@@ -850,7 +850,7 @@ public class SettingsWindow : Window
     }
     private void DrawBonePickerCombo(IDictionary<string, Vector3> boneOffsets)
     {
-        var preview = string.IsNullOrEmpty(_newBoneOffsetName) ? "Pick a bone" : _newBoneOffsetName;
+        var preview = string.IsNullOrEmpty(_newBoneOffsetName) ? Localize.Text("Pick a bone") : _newBoneOffsetName;
         using var combo = ImRaii.Combo("##bonepicker", preview, ImGuiComboFlags.HeightLargest);
         if(!combo.Success)
             return;
@@ -895,7 +895,7 @@ public class SettingsWindow : Window
                     var friendlyName = Localize.Get($"bones.{b}", b);
                     using(ImRaii.Disabled(used))
                     {
-                        if(ImGui.Selectable($"{friendlyName}{(used ? "  (added)" : "")}"))
+                        if(ImGui.Selectable($"{friendlyName}{(used ? Localize.Text("  (added)") : "")}"))
                             _newBoneOffsetName = b;
                     }
                 }
@@ -931,7 +931,7 @@ public class SettingsWindow : Window
     private void DrawOffsetSection()
     {
         var defaultTransformMovementSpeed = _configurationService.Configuration.Interface.DefaultTransformMovementSpeed;
-        const string label1 = "Transform Movement Speed";
+        var label1 = Localize.Text("Transform Movement Speed");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label1).X - 15);
         if(ImGui.DragFloat(label1, ref defaultTransformMovementSpeed, 0.001f, 0.001f, 10f))
         {
@@ -940,7 +940,7 @@ public class SettingsWindow : Window
         }
 
         var defaultBoneTransformMovementSpeed = _configurationService.Configuration.Interface.DefaultBoneTransformMovementSpeed;
-        const string label2 = "Bone Transform Movement Speed";
+        var label2 = Localize.Text("Bone Transform Movement Speed");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label2).X - 15);
         if(ImGui.DragFloat(label2, ref defaultBoneTransformMovementSpeed, 0.001f, 0.001f, 10f))
         {
@@ -949,7 +949,7 @@ public class SettingsWindow : Window
         }
 
         var defaultFreeCamMovementSpeed = _configurationService.Configuration.Interface.DefaultFreeCameraMovementSpeed;
-        const string label3 = "Free Camera Movement Speed";
+        var label3 = Localize.Text("Free Camera Movement Speed");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label3).X - 15);
         if(ImGui.DragFloat(label3, ref defaultFreeCamMovementSpeed, 0.001f, 0.005f, 0.3f))
         {
@@ -958,7 +958,7 @@ public class SettingsWindow : Window
         }
 
         var defaultFreeCamMouseSensitivity = _configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity;
-        const string label4 = "Free Camera Mouse Sensitivity";
+        var label4 = Localize.Text("Free Camera Mouse Sensitivity");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label4).X - 15);
         if(ImGui.DragFloat(label4, ref defaultFreeCamMouseSensitivity, 0.001f, 0.001f, 0.2f))
         {

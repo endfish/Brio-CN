@@ -28,7 +28,7 @@ public class BoneIKEditor
 
 
             string solverType = ik.SolverOptions.Match(_ => "CCD", _ => "Two Joint");
-            using(var combo = ImRaii.Combo("Solver", solverType))
+            using(var combo = ImRaii.Combo(global::Brio.Resources.Localize.Text("Solver"), global::Brio.Resources.Localize.Text(solverType)))
             {
                 if(combo.Success)
                 {

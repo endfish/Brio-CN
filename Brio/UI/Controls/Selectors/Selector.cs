@@ -86,7 +86,7 @@ public abstract class Selector<T> where T : class
                 if(_shouldFocusSearch)
                     ImGui.SetKeyboardFocusHere();
 
-                if(ImGui.InputTextWithHint($"###search", "Search", ref _search, 256))
+                if(ImGui.InputTextWithHint($"###search", global::Brio.Resources.Localize.Text("Search"), ref _search, 256))
                 {
                     // Only update if search actually changed
                     if(_search != _lastSearch)

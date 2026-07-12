@@ -37,7 +37,8 @@ public class TimeWeatherWidget(TimeWeatherCapability weatherCapability) : Widget
 
         var dateTime = new DateTime().AddMinutes(minuteOfDay);
 
-        if(ImBrio.SeparatorTextButton("Time of Day", isTimeFrozen ? FontAwesomeIcon.Unlock : FontAwesomeIcon.Lock, isTimeFrozen ? "Unlock Time" : "Lock Time"))
+        if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Time of Day"), isTimeFrozen ? FontAwesomeIcon.Unlock : FontAwesomeIcon.Lock,
+            global::Brio.Resources.Localize.Text(isTimeFrozen ? "Unlock Time" : "Lock Time")))
         {
             isTimeFrozen = !isTimeFrozen;
         }
@@ -79,7 +80,8 @@ public class TimeWeatherWidget(TimeWeatherCapability weatherCapability) : Widget
         );
 
         ImBrio.VerticalPadding(5);
-        if(ImBrio.SeparatorTextButton($"Current Weather - {weatherName}", isWeatherOverrideEnabledLocked ? FontAwesomeIcon.Unlock : FontAwesomeIcon.Lock, isWeatherOverrideEnabledLocked ? "Unlock Weather" : "Lock Weather"))
+        if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Format("Current Weather - {0}", weatherName), isWeatherOverrideEnabledLocked ? FontAwesomeIcon.Unlock : FontAwesomeIcon.Lock,
+            global::Brio.Resources.Localize.Text(isWeatherOverrideEnabledLocked ? "Unlock Weather" : "Lock Weather")))
         {
             isWeatherOverrideEnabledLocked = !isWeatherOverrideEnabledLocked;
         }

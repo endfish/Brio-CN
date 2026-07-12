@@ -42,7 +42,7 @@ public class LightLifetimeWidget(LightLifetimeCapability lightLifetimeCapability
 
     public override void DrawPopup()
     {
-        if(ImGui.MenuItem($"Rename {Capability.Entity.FriendlyName}###lightlifetime_rename"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Rename {0}###lightlifetime_rename", Capability.Entity.FriendlyName)))
         {
             ImGui.CloseCurrentPopup();
 
@@ -77,7 +77,7 @@ public class LightLifetimeWidget(LightLifetimeCapability lightLifetimeCapability
         {
             ImGui.Separator();
 
-            if(ImGui.BeginMenu("Destroy###lightlifetime_destroy"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy###lightlifetime_destroy")))
             {
                 if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###lightlifetime_destroy_confirm")))
                 {

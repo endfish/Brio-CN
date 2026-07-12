@@ -17,9 +17,9 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
     {
         using(ImRaii.Disabled(Capability.IsAllowed == false))
         {
-            if(ImGui.BeginMenu("Add from World...###containerwidgetpopup_add"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Add from World...###containerwidgetpopup_add")))
             {
-                if(ImGui.BeginMenu("World Light...###containerwidgetpopup_addWorldLight"))
+                if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("World Light...###containerwidgetpopup_addWorldLight")))
                 {
                     var worldLights = Capability.GetWorldLights().OrderBy(x => x.distance).ToList();
                     if(worldLights.Count == 0)
@@ -28,14 +28,14 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
                     }
                     else
                     {
-                        if(ImGui.MenuItem($"Add All ({worldLights.Count})###containerwidgetpopup_addAllWorldLights"))
+                        if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Add All ({0})###containerwidgetpopup_addAllWorldLights", worldLights.Count)))
                         {
                             Capability.AddAllWorldLights();
                         }
                         ImGui.Separator();
                         foreach(var (light, distance) in worldLights)
                         {
-                            if(ImGui.MenuItem($"Light: {distance:F1}y##worldlight_{light}"))
+                            if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Light: {0:F1}y##worldlight_{1}", distance, light)))
                             {
                                 Capability.AddWorldLight(light);
                             }
@@ -51,7 +51,7 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
                 Capability.OpenLightWindow();
             }
 
-            if(ImGui.BeginMenu("New...###containerwidgetpopup_new"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("New...###containerwidgetpopup_new")))
             {
                 ImGui.Separator();
 
@@ -70,9 +70,9 @@ public class LightContainerWidget(LightContainerCapability capability) : Widget<
                 ImGui.EndMenu();
             }
 
-            if(ImGui.BeginMenu("Destroy All...###containerwidgetpopup_destroy"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy All...###containerwidgetpopup_destroy")))
             {
-                if(ImGui.BeginMenu("Lights###containerwidgetpopup_destroyLights"))
+                if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Lights###containerwidgetpopup_destroyLights")))
                 {
                     if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction##containerwidgetpopup_destroyallLights")))
                     {

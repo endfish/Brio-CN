@@ -182,7 +182,11 @@ public class PosingOverlayToolbarWindow : Window
                 posing?.Actor.IsOverlayVisible = !posing.Actor.IsOverlayVisible;
             }
         }
-        ImBrio.AttachToolTip(posing is null ? "(This Entity has no Bones)" : posing?.Actor.IsOverlayVisible ?? false ? "Hide Actor's bones in overlay" : "Always show Actor's bones in overlay");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text(posing is null
+            ? "(This Entity has no Bones)"
+            : posing?.Actor.IsOverlayVisible ?? false
+                ? "Hide Actor's bones in overlay"
+                : "Always show Actor's bones in overlay"));
 
         ImGui.SameLine();
 
@@ -476,7 +480,7 @@ public class PosingOverlayToolbarWindow : Window
                 }
             }
         }
-        ImBrio.AttachToolTip($"Reset Transform {_entityManager.SelectedEntity?.FriendlyName}");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Format("Reset Transform {0}", _entityManager.SelectedEntity?.FriendlyName));
 
         //using(ImRaii.PushFont(UiBuilder.IconFont))
         //{
@@ -695,7 +699,7 @@ public class PosingOverlayToolbarWindow : Window
             }
         }
 
-        ImBrio.AttachToolTip($"{(allFrozen ? "Un-" : "")}Freeze Selected");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text(allFrozen ? "Un-Freeze Selected" : "Freeze Selected"));
     }
 
     private static bool TryGetSelectedVfx(Entity entity, [MaybeNullWhen(false)] out StaticVfxObject vfx)

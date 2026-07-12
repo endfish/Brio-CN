@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>net10.0-windows</TargetFramework>
+		<AssemblyName>Brio-CN</AssemblyName>
+		<RootNamespace>Brio</RootNamespace>
 		<Platforms>x64</Platforms>
 		<Nullable>enable</Nullable>
 		<LangVersion>preview</LangVersion>
@@ -40,7 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Brio.json">
+		<None Update="Brio-CN.json">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

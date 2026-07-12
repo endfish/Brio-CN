@@ -14,7 +14,7 @@ public class ReferenceImageWidget(ReferenceImageCapability capability) : Widget<
     {
         var entity = Capability.ReferenceImageEntity;
 
-        if(ImGui.MenuItem($"Rename {entity.FriendlyName}###image_rename"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Rename {0}###image_rename", entity.FriendlyName)))
         {
             ImGui.CloseCurrentPopup();
 
@@ -31,7 +31,7 @@ public class ReferenceImageWidget(ReferenceImageCapability capability) : Widget<
 
         ImGui.Separator();
 
-        if(ImGui.BeginMenu("Destroy##image_destroy"))
+        if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy##image_destroy")))
         {
             if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###image_destroy_confirm")))
                 Capability.Destroy();

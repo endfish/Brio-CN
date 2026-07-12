@@ -82,7 +82,7 @@ public static class LibrarySourcesEditor
                 }
 
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Remove the selected source");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Remove the selected source"));
             }
 
             ImGui.SameLine();
@@ -103,7 +103,7 @@ public static class LibrarySourcesEditor
                 }
 
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Toggle the selected source on or off");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Toggle the selected source on or off"));
             }
 
             ImGui.SameLine();
@@ -120,7 +120,7 @@ public static class LibrarySourcesEditor
                 }
 
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Edit the selected source");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Edit the selected source"));
 
             }
         }
@@ -146,7 +146,7 @@ public static class LibrarySourcesEditor
             }
 
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Add a new source");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Add a new source"));
         }
 
         if(isEditing && selectedItem is not null)
@@ -309,7 +309,7 @@ public static class LibrarySourcesEditor
 
                 if(ImGui.IsItemHovered())
                 {
-                    ImGui.SetTooltip("This directory does not exist");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("This directory does not exist"));
                 }
             }
 

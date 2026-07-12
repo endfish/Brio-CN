@@ -30,11 +30,11 @@ public static class AppearanceEditorCommon
 
     private static readonly NpcSelector _globalNpcSelector = new("global_npc_selector");
 
-    private const string _collectionLabel = "Collection";
-    private const string _collectionLabelDesign = "Design";
-    private const string _collectionLabelProfile = "Profile";
+    private static string CollectionLabel => global::Brio.Resources.Localize.Text("Collection");
+    private static string DesignLabel => global::Brio.Resources.Localize.Text("Design");
+    private static string ProfileLabel => global::Brio.Resources.Localize.Text("Profile");
 
-    private static float _lableWidth => ImGui.CalcTextSize(_collectionLabel).X - (44 * ImGuiHelpers.GlobalScale) + 110;
+    private static float _lableWidth => ImGui.CalcTextSize(CollectionLabel).X - (44 * ImGuiHelpers.GlobalScale) + 110;
 
     //
 
@@ -64,7 +64,10 @@ public static class AppearanceEditorCommon
 
         ImGui.SetNextItemWidth(_lableWidth * ImGuiHelpers.GlobalScale);
 
-        using(var combo = ImRaii.Combo(_collectionLabel, currentCollection))
+        var currentCollectionLabel = currentCollection == "Default"
+            ? global::Brio.Resources.Localize.Text("Default")
+            : currentCollection;
+        using(var combo = ImRaii.Combo(CollectionLabel, currentCollectionLabel))
         {
             if(combo.Success)
             {
@@ -74,7 +77,7 @@ public static class AppearanceEditorCommon
                     _collections = capability.PenumbraService.GetCollections();
                 }
 
-                if(ImGui.InputTextWithHint($"###search", "Search", ref _search, 256))
+                if(ImGui.InputTextWithHint($"###search", global::Brio.Resources.Localize.Text("Search"), ref _search, 256))
                 {
                     _collections = capability.PenumbraService.GetCollections();
 
@@ -125,7 +128,7 @@ public static class AppearanceEditorCommon
         ImGui.SetNextItemWidth(_lableWidth * ImGuiHelpers.GlobalScale);
 
         using(ImRaii.Disabled(capability.HasMCDF))
-        using(var combo = ImRaii.Combo(_collectionLabelDesign, "Apply Design"))
+        using(var combo = ImRaii.Combo(DesignLabel, global::Brio.Resources.Localize.Text("Apply Design")))
         {
             if(combo.Success)
             {
@@ -135,7 +138,7 @@ public static class AppearanceEditorCommon
                     _collections = capability.GlamourerService.GetDesignList();
                 }
 
-                if(ImGui.InputTextWithHint($"###search", "Search", ref _search, 256))
+                if(ImGui.InputTextWithHint($"###search", global::Brio.Resources.Localize.Text("Search"), ref _search, 256))
                 {
                     _collections = capability.GlamourerService.GetDesignList();
 
@@ -202,7 +205,7 @@ public static class AppearanceEditorCommon
         }
 
         using(ImRaii.Disabled(capability.HasMCDF))
-        using(var combo = ImRaii.Combo(_collectionLabelProfile, capability.SelectedDesign.name!))
+        using(var combo = ImRaii.Combo(ProfileLabel, capability.SelectedDesign.name!))
         {
             if(combo.Success)
             {
@@ -217,7 +220,7 @@ public static class AppearanceEditorCommon
                         capability.SetSelectedProfile();
                 }
 
-                if(ImGui.InputTextWithHint($"###search", "Search", ref _search, 256))
+                if(ImGui.InputTextWithHint($"###search", global::Brio.Resources.Localize.Text("Search"), ref _search, 256))
                 {
                     _profiles = [.. capability.CustomizePlusService.GetProfiles()];
                     _profiles.Add(new IPCProfileDataTuple { Name = "None", UniqueId = Guid.Empty });

@@ -104,7 +104,7 @@ public class FileUIHelpers
             if(projectSystem.CurrentProject is null)
                 ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("No project loaded to save to"));
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Save this Scene in the currently loaded Project");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Save this Scene in the currently loaded Project"));
 
             if(ImBrio.IconButtonWithText(FontAwesomeIcon.FileCirclePlus, global::Brio.Resources.Localize.Text("Save as new..."), buttonSize))
             {
@@ -112,14 +112,14 @@ public class FileUIHelpers
                 ImGui.CloseCurrentPopup();
             }
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Save this Scene as a new Project");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Save this Scene as a new Project"));
 
             if(ImBrio.IconButtonWithText(FontAwesomeIcon.FileImport, global::Brio.Resources.Localize.Text("Load Scene"), buttonSize))
             {
                 projectWindow.IsOpen = true;
             }
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Load on to this Scene");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Load on to this Scene"));
 
             ImGui.Spacing();
             ImGui.Separator();
@@ -129,7 +129,7 @@ public class FileUIHelpers
                 UIManager.Instance.ToggleAutoSaveWindow();
             }
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Load an Auto-Saves on this scene");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Load an Auto-Saves on this scene"));
 
             ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Export"));
 
@@ -143,7 +143,7 @@ public class FileUIHelpers
                     ImGui.CloseCurrentPopup();
                 }
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Export this Scene to a file");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Export this Scene to a file"));
 
                 if(ImBrio.IconButtonWithText(FontAwesomeIcon.Download, global::Brio.Resources.Localize.Text("Import Scene"), buttonSize))
                 {
@@ -151,7 +151,7 @@ public class FileUIHelpers
                     ImGui.CloseCurrentPopup();
                 }
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Import a Scene from a file");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Import a Scene from a file"));
             }
             ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Importing/Exporting disabled until 0.8.1"));
         }
@@ -252,7 +252,7 @@ public class FileUIHelpers
             }
 
             if(state.Selected is not null && state.Selected.EntryCount > 1)
-                ImGui.Checkbox($"Group into a new folder", ref state.GroupInFolder);
+                ImGui.Checkbox(global::Brio.Resources.Localize.Text("Group into a new folder"), ref state.GroupInFolder);
 
             var size = new Vector2(buttonSize.X / 2, 0);
             using(ImRaii.Disabled(state.Selected is null))

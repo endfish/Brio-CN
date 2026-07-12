@@ -24,7 +24,7 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
 
     public override void DrawPopup()
     {
-        if(ImGui.BeginMenu("New...###containerwidgetpopup_new"))
+        if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("New...###containerwidgetpopup_new")))
         {
             if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Actor###containerwidgetpopup_spawnbasic")))
             {
@@ -71,9 +71,9 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
             ImGui.EndMenu();
         }
 
-        if(ImGui.BeginMenu("Add from World...###containerwidgetpopup_add"))
+        if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Add from World...###containerwidgetpopup_add")))
         {
-            if(ImGui.BeginMenu("Actor...###containerwidgetpopup_addActor"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Actor...###containerwidgetpopup_addActor")))
             {
                 var playerPosition = Capability.ObjectMonitorService.ObjectTable.LocalPlayer?.Position ?? Vector3.Zero; // I hate this
                 var overworldActors = Capability.ObjectMonitorService.GetOverworldActors().OrderBy(actor => Vector3.DistanceSquared(playerPosition, actor.Position));
@@ -101,9 +101,9 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
             ImGui.EndMenu();
         }
 
-        if(ImGui.BeginMenu("Destroy All...###containerwidgetpopup_destroy"))
+        if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy All...###containerwidgetpopup_destroy")))
         {
-            if(ImGui.BeginMenu("Actors###containerwidgetpopup_destroyActors"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Actors###containerwidgetpopup_destroyActors")))
             {
                 if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction##containerwidgetpopup_destroyallActors")))
                 {

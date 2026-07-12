@@ -7,6 +7,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
+using Lumina.Excel.Sheets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -186,7 +187,7 @@ public class CustomizeEditor()
 
         float width = MaxItemWidth / 2f;
 
-        var racePreview = Enum.GetName(customize.Race) ?? "Unknown";
+        var racePreview = GetRaceDisplayName(customize.Race, customize.Gender);
         ImGui.SetNextItemWidth(width);
         using(var raceDrop = ImRaii.Combo("###race_combo", racePreview))
         {
@@ -195,10 +196,10 @@ public class CustomizeEditor()
                 var races = Enum.GetNames<Races>();
                 foreach(var raceName in races)
                 {
-                    if(ImGui.Selectable(raceName, raceName == racePreview))
+                    var race = Enum.Parse<Races>(raceName);
+                    if(ImGui.Selectable(GetRaceDisplayName(race, customize.Gender), race == customize.Race))
                     {
-                        var newRace = Enum.Parse<Races>(raceName);
-                        customize.Race = newRace;
+                        customize.Race = race;
                         madeChange |= true;
                     }
                 }
@@ -208,7 +209,7 @@ public class CustomizeEditor()
         ImGui.SameLine();
 
         var existingTribe = customize.Tribe;
-        var tribePreview = Enum.GetName(existingTribe) ?? "Unknown";
+        var tribePreview = GetTribeDisplayName(existingTribe, customize.Gender);
         ImGui.SetNextItemWidth(width);
         using(var tribeDrop = ImRaii.Combo("###tribe_combo", tribePreview))
         {
@@ -217,7 +218,7 @@ public class CustomizeEditor()
                 var tribes = customize.Race.GetValidTribes();
                 foreach(var tribe in tribes)
                 {
-                    if(ImGui.Selectable(tribe.ToString(), tribe == existingTribe))
+                    if(ImGui.Selectable(GetTribeDisplayName(tribe, customize.Gender), tribe == existingTribe))
                     {
                         customize.Tribe = tribe;
                         madeChange |= true;
@@ -227,7 +228,7 @@ public class CustomizeEditor()
         }
 
         var existingGender = customize.Gender;
-        var genderPreview = Enum.GetName(existingGender) ?? "Unknown";
+        var genderPreview = Localize.Text(existingGender.ToString());
         ImGui.SetNextItemWidth(width);
         using(var genderDrop = ImRaii.Combo("###gender_combo", genderPreview))
         {
@@ -236,7 +237,7 @@ public class CustomizeEditor()
                 var genders = customize.Race.GetAllowedGenders();
                 foreach(var gender in genders)
                 {
-                    if(ImGui.Selectable(gender.ToString(), gender == existingGender))
+                    if(ImGui.Selectable(Localize.Text(gender.ToString()), gender == existingGender))
                     {
                         customize.Gender = gender;
                         madeChange |= true;
@@ -248,7 +249,7 @@ public class CustomizeEditor()
         ImGui.SameLine();
 
         var existingType = customize.BodyType;
-        var typePreview = Enum.GetName(existingType) ?? "Unknown";
+        var typePreview = Localize.Text(existingType.ToString());
         ImGui.SetNextItemWidth(width);
         using(var typeDrop = ImRaii.Combo("###type_combo", typePreview))
         {
@@ -257,7 +258,7 @@ public class CustomizeEditor()
                 var types = customize.Tribe.GetAllowedBodyTypes(existingGender);
                 foreach(var bodyType in types)
                 {
-                    if(ImGui.Selectable(bodyType.ToString(), bodyType == existingType))
+                    if(ImGui.Selectable(Localize.Text(bodyType.ToString()), bodyType == existingType))
                     {
                         customize.BodyType = bodyType;
                         madeChange |= true;
@@ -267,6 +268,36 @@ public class CustomizeEditor()
         }
 
         return madeChange;
+    }
+
+    private static string GetRaceDisplayName(Races race, Genders gender)
+    {
+        var language = Localize.CurrentLanguage == "zh-CN"
+            ? Dalamud.Game.ClientLanguage.ChineseSimplified
+            : (Dalamud.Game.ClientLanguage?)null;
+        if(GameDataProvider.Instance.GetExcelSheet<Race>(language).TryGetRow((uint)race, out var row))
+        {
+            var name = (gender == Genders.Feminine ? row.Feminine : row.Masculine).ToString();
+            if(!string.IsNullOrWhiteSpace(name))
+                return name;
+        }
+
+        return Localize.Text(race.ToString());
+    }
+
+    private static string GetTribeDisplayName(Tribes tribe, Genders gender)
+    {
+        var language = Localize.CurrentLanguage == "zh-CN"
+            ? Dalamud.Game.ClientLanguage.ChineseSimplified
+            : (Dalamud.Game.ClientLanguage?)null;
+        if(GameDataProvider.Instance.GetExcelSheet<Tribe>(language).TryGetRow((uint)tribe, out var row))
+        {
+            var name = (gender == Genders.Feminine ? row.Feminine : row.Masculine).ToString();
+            if(!string.IsNullOrWhiteSpace(name))
+                return name;
+        }
+
+        return Localize.Text(tribe.ToString());
     }
 
     private bool DrawHairSelect(ref ActorCustomize customize, BrioCharaMakeType.Menu menu, string title)
@@ -334,7 +365,7 @@ public class CustomizeEditor()
                     madeChange |= true;
                 }
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Enable Hair Highlights");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Enable Hair Highlights"));
 
             }
         }
@@ -360,7 +391,7 @@ public class CustomizeEditor()
             madeChange |= true;
         }
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Eye Shape");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Eye Shape"));
 
         ImGui.SameLine();
 
@@ -379,7 +410,7 @@ public class CustomizeEditor()
             madeChange |= true;
         }
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Small Iris");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Small Iris"));
 
         return madeChange;
     }
@@ -417,7 +448,7 @@ public class CustomizeEditor()
             }
 
             if(ImGui.IsItemHovered())
-                ImGui.SetTooltip("Enable Lip Color");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Enable Lip Color"));
 
             ImGui.SameLine();
 
@@ -483,7 +514,7 @@ public class CustomizeEditor()
                     madeChange |= true;
                 }
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Flipped");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Flipped"));
             }
         }
 

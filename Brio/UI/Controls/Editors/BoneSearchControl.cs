@@ -32,7 +32,7 @@ public class BoneSearchControl
                     if(rootSelected)
                         flags |= ImGuiTreeNodeFlags.Selected;
 
-                    using(var node = ImRaii.TreeNode("Model", flags))
+                    using(var node = ImRaii.TreeNode(global::Brio.Resources.Localize.Text("Model"), flags))
                     {
                         if(node.Success)
                         {
@@ -41,7 +41,7 @@ public class BoneSearchControl
 
                             if(posing.SkeletonPosing.CharacterSkeleton != null)
                             {
-                                using(var skeleton = ImRaii.TreeNode("Character", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
+                                using(var skeleton = ImRaii.TreeNode(global::Brio.Resources.Localize.Text("Character"), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
                                 {
                                     if(skeleton.Success)
                                     {
@@ -52,7 +52,7 @@ public class BoneSearchControl
 
                             if(posing.SkeletonPosing.MainHandSkeleton != null)
                             {
-                                using(var skeleton = ImRaii.TreeNode("Main Hand", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
+                                using(var skeleton = ImRaii.TreeNode(global::Brio.Resources.Localize.Text("Main Hand"), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
                                 {
                                     if(skeleton.Success)
                                     {
@@ -63,7 +63,7 @@ public class BoneSearchControl
 
                             if(posing.SkeletonPosing.OffHandSkeleton != null)
                             {
-                                using(var skeleton = ImRaii.TreeNode("Off Hand", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
+                                using(var skeleton = ImRaii.TreeNode(global::Brio.Resources.Localize.Text("Off Hand"), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
                                 {
                                     if(skeleton.Success)
                                     {
@@ -74,7 +74,7 @@ public class BoneSearchControl
 
                             if(posing.SkeletonPosing.PropSkeleton != null)
                             {
-                                using(var skeleton = ImRaii.TreeNode("Prop", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
+                                using(var skeleton = ImRaii.TreeNode(global::Brio.Resources.Localize.Text("Prop"), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
                                 {
                                     if(skeleton.Success)
                                     {
@@ -85,7 +85,7 @@ public class BoneSearchControl
 
                             if(posing.SkeletonPosing.OrnamentSkeleton != null)
                             {
-                                using(var skeleton = ImRaii.TreeNode("Ornament", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
+                                using(var skeleton = ImRaii.TreeNode(global::Brio.Resources.Localize.Text("Ornament"), ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.OpenOnDoubleClick))
                                 {
                                     if(skeleton.Success)
                                     {

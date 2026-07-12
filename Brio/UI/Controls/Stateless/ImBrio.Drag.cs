@@ -21,6 +21,7 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static (bool anyActive, bool didChange) DragFloat3(string label, ref Vector3 value, float step = 1.0f, FontAwesomeIcon icon = FontAwesomeIcon.None, string tooltip = "", bool enableExpanded = false)
     {
+        tooltip = global::Brio.Resources.Localize.Text(tooltip);
         bool isExpanded = expanded.Contains(label);
 
         if(icon == FontAwesomeIcon.None)
@@ -65,21 +66,21 @@ public static partial class ImBrio
             ImGui.PushStyleColor(ImGuiCol.Border, UIConstants.GizmoRed);
 
             float x = value.X;
-            (var pdidChange, var panyActive) = DragFloat($"###{label}_x", ref x, step, $"{tooltip} X", UIConstants.GizmoRed);
+            (var pdidChange, var panyActive) = DragFloat($"###{label}_x", ref x, step, global::Brio.Resources.Localize.Format("X {0}", tooltip), UIConstants.GizmoRed);
             value.X = x;
 
             ImGui.PopStyleColor();
             ImGui.PushStyleColor(ImGuiCol.Border, UIConstants.GizmoGreen);
 
             float y = value.Y;
-            (var rdidChange, var ranyActive) = DragFloat($"###{label}_y", ref y, step, $"{tooltip} Y", UIConstants.GizmoGreen);
+            (var rdidChange, var ranyActive) = DragFloat($"###{label}_y", ref y, step, global::Brio.Resources.Localize.Format("Y {0}", tooltip), UIConstants.GizmoGreen);
             value.Y = y;
 
             ImGui.PopStyleColor();
             ImGui.PushStyleColor(ImGuiCol.Border, UIConstants.GizmoBlue);
 
             float z = value.Z;
-            (var sdidChange, var sanyActive) = DragFloat($"###{label}_z", ref z, step, $"{tooltip} Z", UIConstants.GizmoBlue);
+            (var sdidChange, var sanyActive) = DragFloat($"###{label}_z", ref z, step, global::Brio.Resources.Localize.Format("Z {0}", tooltip), UIConstants.GizmoBlue);
             value.Z = z;
 
             changed |= pdidChange |= rdidChange |= sdidChange;
@@ -94,6 +95,7 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static (bool anyActive, bool didChange) DragFloat3Implementation(string label, ref Vector3 value, float step, Vector2 size = default, string? toolTip = null)
     {
+        var localizedTooltip = global::Brio.Resources.Localize.Text(toolTip ?? string.Empty);
         if(size == Vector2.Zero)
         {
             size = new Vector2(GetRemainingWidth() + ImGui.GetStyle().ItemSpacing.X, 0);
@@ -121,7 +123,7 @@ public static partial class ImBrio
 
         if(ImGui.IsItemHovered())
         {
-            AttachToolTip($" X {toolTip ?? ""}");
+            AttachToolTip(global::Brio.Resources.Localize.Format("X {0}", localizedTooltip));
             if(!ConfigurationService.Instance.Configuration.InputManager.DisableScrollWheelOnInputs)
             {
                 float mouseWheel = ImGui.GetIO().MouseWheel / 10;
@@ -142,7 +144,7 @@ public static partial class ImBrio
 
         if(ImGui.IsItemHovered())
         {
-            AttachToolTip($" Y {toolTip ?? ""}");
+            AttachToolTip(global::Brio.Resources.Localize.Format("Y {0}", localizedTooltip));
             if(!ConfigurationService.Instance.Configuration.InputManager.DisableScrollWheelOnInputs)
             {
                 float mouseWheel = ImGui.GetIO().MouseWheel / 10;
@@ -163,7 +165,7 @@ public static partial class ImBrio
 
         if(ImGui.IsItemHovered())
         {
-            AttachToolTip($" Z {toolTip ?? ""}");
+            AttachToolTip(global::Brio.Resources.Localize.Format("Z {0}", localizedTooltip));
             if(!ConfigurationService.Instance.Configuration.InputManager.DisableScrollWheelOnInputs)
             {
                 float mouseWheel = ImGui.GetIO().MouseWheel / 10;
@@ -182,6 +184,7 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static (bool anyActive, bool didChange) DragFloat(string label, ref float value, float step = 0.1f, string tooltip = "", uint color = UIConstants.SlightGrey)
     {
+        tooltip = global::Brio.Resources.Localize.Text(tooltip);
         bool changed = false;
         bool active = false;
 
@@ -199,7 +202,7 @@ public static partial class ImBrio
             changed |= true;
         }
 
-        AttachToolTip($"Decrease {tooltip}");
+        AttachToolTip(global::Brio.Resources.Localize.Format("Decrease {0}", tooltip));
 
         ImGui.SameLine();
 
@@ -219,7 +222,7 @@ public static partial class ImBrio
 
         if(ImGui.IsItemHovered())
         {
-            ImGui.SetTooltip($"{tooltip}");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text(tooltip));
             if(!ConfigurationService.Instance.Configuration.InputManager.DisableScrollWheelOnInputs)
             {
                 float mouseWheel = ImGui.GetIO().MouseWheel / 10;
@@ -239,7 +242,7 @@ public static partial class ImBrio
             changed = true;
         }
 
-        AttachToolTip($"Increase {tooltip}");
+        AttachToolTip(global::Brio.Resources.Localize.Format("Increase {0}", tooltip));
 
         if(hasLabel)
         {
@@ -253,6 +256,7 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static (bool anyActive, bool didChange) DragFloat2V3(string label, ref Vector3 value, float min, float max, bool degrees = false, float step = 1.0f, Vector2 size = default, string tooltip = "")
     {
+        tooltip = global::Brio.Resources.Localize.Text(tooltip);
         if(size == Vector2.Zero)
         {
             size = new Vector2(GetRemainingWidth() + ImGui.GetStyle().ItemSpacing.X, 0);
@@ -284,7 +288,7 @@ public static partial class ImBrio
 
         if(ImGui.IsItemHovered())
         {
-            AttachToolTip($" X {tooltip}");
+            AttachToolTip(global::Brio.Resources.Localize.Format("X {0}", tooltip));
             if(!ConfigurationService.Instance.Configuration.InputManager.DisableScrollWheelOnInputs)
             {
                 float mouseWheel = ImGui.GetIO().MouseWheel / 10;
@@ -305,7 +309,7 @@ public static partial class ImBrio
 
         if(ImGui.IsItemHovered())
         {
-            AttachToolTip($" Y {tooltip}");
+            AttachToolTip(global::Brio.Resources.Localize.Format("Y {0}", tooltip));
             if(!ConfigurationService.Instance.Configuration.InputManager.DisableScrollWheelOnInputs)
             {
                 float mouseWheel = ImGui.GetIO().MouseWheel / 10;

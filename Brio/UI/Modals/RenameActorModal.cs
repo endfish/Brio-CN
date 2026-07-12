@@ -48,7 +48,8 @@ public class RenameActorModal : Modal
                 ImGui.SetKeyboardFocusHere();
                 _focusInput = false;
             }
-            ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("##renamemodal_popup_name"), $"Enter new name for: {_currentActorEntity.FriendlyName}...", ref _currentActorName, 20);
+            ImGui.InputTextWithHint(global::Brio.Resources.Localize.Text("##renamemodal_popup_name"),
+                global::Brio.Resources.Localize.Format("Enter new name for: {0}...", _currentActorEntity.FriendlyName), ref _currentActorName, 20);
 
             ImBrio.VerticalPadding(8);
 

@@ -79,7 +79,7 @@ public class GearEditor()
                     didChange |= true;
                 }
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Replace main weapon with a prop.");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Replace main weapon with a prop."));
 
                 ImGui.Spacing();
 
@@ -113,7 +113,7 @@ public class GearEditor()
                 }
 
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Replaces the off-hand weapon with a prop.");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Replaces the off-hand weapon with a prop."));
 
                 ImGui.Spacing();
 
@@ -175,7 +175,7 @@ public class GearEditor()
 
         using(ImRaii.PushId(slot.ToString()))
         {
-            ImGui.Text($"{slot}: {model?.Name ?? "Unknown"}");
+            ImGui.Text(global::Brio.Resources.Localize.Format("{0}: {1}", global::Brio.Resources.Localize.Text(slot.ToString()), model?.Name ?? global::Brio.Resources.Localize.Text("Unknown")));
 
             if(ImBrio.BorderedGameIcon("##icon", model?.Icon ?? 0, fallback, size: IconSize))
             {
@@ -355,7 +355,7 @@ public class GearEditor()
 
         using(ImRaii.PushId(slot.ToString()))
         {
-            ImGui.Text($"{slot}: {model?.Name ?? "Unknown"}");
+            ImGui.Text(global::Brio.Resources.Localize.Format("{0}: {1}", global::Brio.Resources.Localize.Text(slot.ToString()), model?.Name ?? global::Brio.Resources.Localize.Text("Unknown")));
 
             if(ImBrio.BorderedGameIcon("##icon", model?.Icon ?? 0, fallback, size: IconSize))
             {
@@ -521,7 +521,7 @@ public class GearEditor()
 
         using(ImRaii.PushId(slot.ToString()))
         {
-            ImGui.Text($"{slot}: {model?.Name ?? "Unknown"}");
+            ImGui.Text(global::Brio.Resources.Localize.Format("{0}: {1}", global::Brio.Resources.Localize.Text(slot.ToString()), model?.Name ?? global::Brio.Resources.Localize.Text("Unknown")));
 
             if(ImBrio.BorderedGameIcon("##icon", model?.Icon ?? 0, fallback, size: IconSize))
             {
@@ -603,7 +603,7 @@ public class GearEditor()
 
         using(ImRaii.PushId("facewear"))
         {
-            ImGui.Text($"Glasses: {facewearName}");
+            ImGui.Text(global::Brio.Resources.Localize.Format("Glasses: {0}", facewearName));
 
             if(ImBrio.BorderedGameIcon("##icon", facewearIcon, "Images.Facewear.png", size: faceIconSize))
             {

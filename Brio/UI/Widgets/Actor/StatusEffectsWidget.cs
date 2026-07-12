@@ -85,7 +85,7 @@ public class StatusEffectsWidget(StatusEffectCapability capability) : Widget<Sta
 
         ImGui.Checkbox(global::Brio.Resources.Localize.Text("###status_vfx_filter"), ref _VFXLockEnabled);
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Hide Status Effects that have no VFX.");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Hide Status Effects that have no VFX."));
 
         ImGui.SameLine();
 

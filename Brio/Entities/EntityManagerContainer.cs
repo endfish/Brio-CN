@@ -7,6 +7,7 @@ using Brio.Entities.Camera;
 using Brio.Entities.Core;
 using Brio.Entities.World;
 using Brio.Game.Input;
+using Brio.Resources;
 using Brio.UI;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Controls.Stateless;
@@ -28,7 +29,7 @@ public class EntityManagerContainer(IServiceProvider provider) : Entity("worldOb
     private int _spawnCounter = 0;
     private readonly Dictionary<EntityId, int> _spawnOrder = [];
 
-    public override string FriendlyName => "Entities";
+    public override string FriendlyName => Localize.Text("Entities");
     public override FontAwesomeIcon Icon => FontAwesomeIcon.GroupArrowsRotate;
     public override int ContextButtonCount => 2;
     public override EntityFlags Flags => EntityFlags.HasContextButton;
@@ -37,7 +38,7 @@ public class EntityManagerContainer(IServiceProvider provider) : Entity("worldOb
     {
         using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor))
         {
-            var toolTip1 = UIManager.IsOverlayWindowOpen ? "Hide Overlay" : "Show Overlay";
+            var toolTip1 = Localize.Text(UIManager.IsOverlayWindowOpen ? "Hide Overlay" : "Show Overlay");
             using(ImRaii.PushColor(ImGuiCol.Button, 0))
                 if(ImBrio.ToggelFontIconButtonRight($"###{Id}_overlay", FontAwesomeIcon.LayerGroup, 2f, UIManager.IsOverlayWindowOpen, tooltip: toolTip1))
                 {
@@ -46,7 +47,7 @@ public class EntityManagerContainer(IServiceProvider provider) : Entity("worldOb
 
             ImGui.SameLine();
 
-            string toolTip = $"Spawn New...";
+            string toolTip = Localize.Get("ui.actor.spawnNew", "Spawn New...");
 
             if(ImBrio.FontIconButtonRight($"###{Id}_cameras_contextButton", FontAwesomeIcon.Plus, 1f, toolTip, bordered: false))
             {

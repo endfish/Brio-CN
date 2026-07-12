@@ -314,7 +314,7 @@ public class PosingTransformEditor
             propagate = propBool ? propagate | TransformComponents.Position : propagate & ~TransformComponents.Position;
         }
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Propagate Positions");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Propagate Positions"));
 
         ImGui.SameLine();
         propBool = propagate.HasFlag(TransformComponents.Rotation);
@@ -324,7 +324,7 @@ public class PosingTransformEditor
             propagate = propBool ? propagate | TransformComponents.Rotation : propagate & ~TransformComponents.Rotation;
         }
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Propagate Rotations");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Propagate Rotations"));
 
         ImGui.SameLine();
 
@@ -335,7 +335,7 @@ public class PosingTransformEditor
             propagate = propBool ? propagate | TransformComponents.Scale : propagate & ~TransformComponents.Scale;
         }
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip("Propagate Scales");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Propagate Scales"));
 
         return didChange;
     }

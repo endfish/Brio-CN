@@ -1,4 +1,5 @@
 using Brio.Entities.Core;
+using Brio.Resources;
 using Brio.UI;
 using Dalamud.Interface;
 using System;
@@ -9,7 +10,7 @@ public class TimelineEntity(IServiceProvider provider) : Entity(FixedId, provide
 {
     public const string FixedId = "timeline_entity";
 
-    public override string FriendlyName => "Vivacity Timeline";
+    public override string FriendlyName => Localize.Text("Vivacity Timeline");
     public override FontAwesomeIcon Icon => FontAwesomeIcon.Timeline;
 
     public override EntityFlags Flags => EntityFlags.DisableSelection;

@@ -11,6 +11,7 @@ public static partial class ImBrio
     // Patent pending ToggleLock! (this is a 5AM joke, I need sleep)
     public static (bool, bool) ToggleLock(string label, float size, ref bool selected, ref bool locked, bool canSelect = true, bool disableOnLock = false)
     {
+        label = global::Brio.Resources.Localize.Text(label);
         bool clicked = false;
         bool lockClick = false;
 
@@ -32,7 +33,8 @@ public static partial class ImBrio
                     ImGui.SameLine();
 
                     using(ImRaii.Disabled(!selected))
-                        if(FontIconButton($"###{label}_lockButton", locked ? FontAwesomeIcon.Lock : FontAwesomeIcon.Unlock, locked ? "Unlock" : "Lock", bordered: false))
+                        if(FontIconButton($"###{label}_lockButton", locked ? FontAwesomeIcon.Lock : FontAwesomeIcon.Unlock,
+                            global::Brio.Resources.Localize.Text(locked ? "Unlock" : "Lock"), bordered: false))
                         {
                             lockClick = true;
                             locked = !locked;
@@ -87,12 +89,15 @@ public static partial class ImBrio
                         {
                             if(i > 0) ImGui.SameLine();
 
-                            changed |= ToggleStripButton($"{options[i]}##{id}_{i}", new(buttonWidth, size.Y), ref selected[i], false);
+                            var option = global::Brio.Resources.Localize.Text(options[i]);
+                            changed |= ToggleStripButton($"{option}##{id}_{i}", new(buttonWidth, size.Y), ref selected[i], false);
 
                             if(toolTip is not null)
                             {
                                 var tooltip = selected[i] ? "Disable" : "Enable";
-                                AttachToolTip($"{tooltip} {options[i]} {toolTip}");
+                                var localizedState = global::Brio.Resources.Localize.Text(tooltip);
+                                var localizedTooltip = global::Brio.Resources.Localize.Text(toolTip);
+                                AttachToolTip($"{localizedState} {option} {localizedTooltip}");
                             }
                         }
                     }
@@ -124,7 +129,8 @@ public static partial class ImBrio
                                 ImGui.SameLine();
 
                             bool val = i == selected;
-                            ToggleStripButton($"{options[i]}##{id}", new(buttonWidth, size.Y), ref val, false);
+                            var option = global::Brio.Resources.Localize.Text(options[i]);
+                            ToggleStripButton($"{option}##{id}", new(buttonWidth, size.Y), ref val, false);
 
                             if(val && i != selected)
                             {

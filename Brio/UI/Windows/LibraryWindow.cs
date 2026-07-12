@@ -348,7 +348,7 @@ public class LibraryWindow : Window, IDisposable
                     DoBrowse();
 
                 if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Browse for a file");
+                    ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Browse for a file"));
             }
 
             ImGui.SameLine();
@@ -692,7 +692,7 @@ public class LibraryWindow : Window, IDisposable
 
                         if(ImGui.IsItemHovered())
                         {
-                            ImGui.SetTooltip("Scan all library sources and refresh the view");
+                            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Scan all library sources and refresh the view"));
                         }
                     }
                 }
@@ -1079,7 +1079,7 @@ public class LibraryWindow : Window, IDisposable
         }
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip($"Icon Size: {size}px");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Format("Icon Size: {0}px", size));
 
         ImGui.SameLine();
 
@@ -1089,7 +1089,7 @@ public class LibraryWindow : Window, IDisposable
         }
         else
         {
-            ImGui.TextDisabled($"found {_currentEntries?.Count().ToString("N0")} items in {_lastRefreshTimeMs}ms");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Format("found {0} items in {1}ms", _currentEntries?.Count().ToString("N0"), _lastRefreshTimeMs));
         }
     }
 

@@ -43,7 +43,7 @@ public class ActorLifetimeWidget(ActorLifetimeCapability capability) : Widget<Ac
 
     public override void DrawPopup()
     {
-        if(ImGui.MenuItem($"Rename {Capability.Actor.FriendlyName}###actorlifetime_rename"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Format("Rename {0}###actorlifetime_rename", Capability.Actor.FriendlyName)))
         {
             ImGui.CloseCurrentPopup();
 
@@ -79,7 +79,7 @@ public class ActorLifetimeWidget(ActorLifetimeCapability capability) : Widget<Ac
         {
             ImGui.Separator();
 
-            if(ImGui.BeginMenu("Destroy###actorlifetime_destroy"))
+            if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy###actorlifetime_destroy")))
             {
                 if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###actorlifetime_destroy_confirm")))
                 {

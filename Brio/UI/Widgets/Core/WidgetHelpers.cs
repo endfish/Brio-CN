@@ -1,5 +1,6 @@
 ﻿using Brio.Capabilities.Core;
 using Brio.UI.Controls.Core;
+using Brio.Resources;
 using Brio.UI.Controls.Stateless;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -72,7 +73,7 @@ public class WidgetHelpers
 
             if(buttonHovered)
             {
-                ImBrio.AttachToolTip($"Advanced {widget.HeaderName}");
+                ImBrio.AttachToolTip(Localize.Format("Advanced {0}", Localize.Text(widget.HeaderName)));
             }
 
             if(buttonClicked)
@@ -121,7 +122,7 @@ public class WidgetHelpers
                             .Push(ImGuiCol.HeaderHovered, UIConstants.Transparent)
                             .Push(ImGuiCol.HeaderActive, UIConstants.Transparent);
 
-        return ImGui.CollapsingHeader(widget.HeaderName, treeFlags);
+        return ImGui.CollapsingHeader(Localize.Text(widget.HeaderName), treeFlags);
     }
 
     public static void DrawQuickIcons(IEnumerable<Capability> capabilities)

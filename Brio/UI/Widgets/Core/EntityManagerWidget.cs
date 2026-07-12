@@ -38,13 +38,13 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
 
     public override void DrawPopup()
     {
-        if(ImGui.BeginMenu("Destroy All...###containerwidgetpopup_destroy"))
+        if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy All...###containerwidgetpopup_destroy")))
         {
             using(ImRaii.Disabled(Capability.HasFolders == false))
             {
-                if(ImGui.BeginMenu("Folders###entitymanager_destroyall_folders"))
+                if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Folders###entitymanager_destroyall_folders")))
                 {
-                    if(ImGui.BeginMenu("Return Children to Root###entitymanager_destroyall_folders_return"))
+                    if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Return Children to Root###entitymanager_destroyall_folders_return")))
                     {
                         if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm###entitymanager_destroyall_folders_return_confirm")))
                             Capability.ReturnAllFolderChildren();
@@ -52,7 +52,7 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
                         ImGui.EndMenu();
                     }
 
-                    if(ImGui.BeginMenu("Destroy All Children###entitymanager_destroyall_folders_destroy"))
+                    if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("Destroy All Children###entitymanager_destroyall_folders_destroy")))
                     {
                         if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm###entitymanager_destroyall_folders_destroy_confirm")))
                             Capability.DestroyAllFolderChildren();
@@ -66,7 +66,7 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
 
             using(ImRaii.Disabled(Capability.HasWorldObjects == false))
             {
-                if(ImGui.BeginMenu("World Objects###entitymanager_destroyall_worldobjects"))
+                if(ImGui.BeginMenu(global::Brio.Resources.Localize.Text("World Objects###entitymanager_destroyall_worldobjects")))
                 {
                     if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Confirm Destruction###entitymanager_destroyall_worldobjects_confirm")))
                         Capability.DestroyAllWorldObjects();
