@@ -479,7 +479,7 @@ public class FileUIHelpers
             ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Freeze the actor on import"));
 
             ImGui.Checkbox(global::Brio.Resources.Localize.Text("Smart Import"), ref smartDefaults);
-            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("""
 
                 Smart Import will adapt the loading process based on the pose being imported.
 
@@ -487,7 +487,7 @@ public class FileUIHelpers
                 - If the pose has a Model-ID, it will automatically transform the model to match.
                 - If the pose is taged as Expression/Body only, it will automatically disable the other option.
                 - If trying to load the pose as an expression, will automatically determine if the pose was made after Dawntrail and adapt the import process accordingly.
-                """);
+                """));
 
             ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Import Type"));
 

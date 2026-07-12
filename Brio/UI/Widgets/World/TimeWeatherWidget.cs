@@ -43,19 +43,19 @@ public class TimeWeatherWidget(TimeWeatherCapability weatherCapability) : Widget
         }
 
         ImBrio.CenterNextElementWithPadding(15);
-        var realTime = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##time_real")u8, ref minuteOfDay, 0, DayTime - 1, dateTime.ToShortTimeString(), ImGuiSliderFlags.NoInput);
+        var realTime = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##time_real"), ref minuteOfDay, 0, DayTime - 1, dateTime.ToShortTimeString(), ImGuiSliderFlags.NoInput);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Time of Day"));
 
         var time = false;
         var dragday = false;
         using(ImRaii.ItemWidth((ImBrio.GetRemainingWidth() / 2) - ImGui.GetStyle().ItemInnerSpacing.X))
         {
-            time = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##time_set")u8, ref minuteOfDay, 0, DayTime - 1, "%.0f"u8);
+            time = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##time_set"), ref minuteOfDay, 0, DayTime - 1, "%.0f"u8);
             ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Time of Day (In Minutes)"));
 
             ImGui.SameLine();
 
-            dragday = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##day_set")u8, ref dayOfMonth, 1, 31);
+            dragday = ImGui.SliderInt(global::Brio.Resources.Localize.Text("##day_set"), ref dayOfMonth, 1, 31);
             ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Day of Month"));
         }
 

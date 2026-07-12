@@ -167,7 +167,7 @@ public class DynamisService : BrioIPC
             {
                 using var disabled = ImRaii.Enabled();
                 using var tt = ImRaii.Tooltip();
-                ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Click to copy to clipboard.")u8);
+                ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("Click to copy to clipboard."));
             }
         }
     }

@@ -83,14 +83,14 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             {
                 staticVfxObject.ShouldResume = !staticVfxObject.ShouldResume;
             }
-            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("""
                 
                 Some VFX do not move without this enabled! 
                 But it can cause flickering as the VFX is restared with it enabled.
 
                 If you disable this, the VFX MAY not move when you update the position.
                 If this happens, you can click the "Update" button to fix it.
-                """);
+                """));
 
             ImGui.SameLine();
 
@@ -98,11 +98,11 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             {
                 staticVfxObject.ShouldStartWithoutSpeed = !staticVfxObject.ShouldStartWithoutSpeed;
             }
-            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("""
                 
                 With this enabled the VFX will start without any speed! 
                 You can click the "Update" button to replay the VFX.
-                """);
+                """));
 
             ImGui.SameLine();
 
@@ -111,10 +111,10 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
                 staticVfxObject.Expires = DateTime.Now.AddSeconds(staticVfxObject.VfxRefreshIntervalSeconds);
                 staticVfxObject.IsLooping = !staticVfxObject.IsLooping;
             }
-            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("""
                 
                 With this enabled the VFX will restart after a given time period!
-                """);
+                """));
 
 
         }
@@ -204,10 +204,10 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
                 }
                 if(staticVfx.IsLooping == false)
                 {
-                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("")"
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("""
                         Must have Looping enabled to use!
 
-                        """);
+                        """));
                 }
                 ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("The interval in seconds at which the VFX will be refreshed."));
             }

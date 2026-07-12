@@ -33,7 +33,7 @@ public class LightTransformWidget(LightTransformCapability lightGizmoCapability)
 
         LightEditor.DrawLightProperties(lightRenderingCapability);
 
-        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Advanced Settings")u8, ImGuiTreeNodeFlags.None))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Advanced Settings"), ImGuiTreeNodeFlags.None))
         {
             LightEditor.DrawAdvancedShadows(lightRenderingCapability);
         }

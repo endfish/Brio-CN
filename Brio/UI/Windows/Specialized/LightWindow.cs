@@ -68,7 +68,7 @@ public class LightWindow : Window, IDisposable
         ImGui.Text(global::Brio.Resources.Localize.Text("Select Light to Edit:"));
         ImBrio.CenterNextElementWithPadding(15);
         using(ImRaii.Disabled(_lightingService.SpawnedLightEntitiesCount == 0))
-            if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###setlight")u8, $"{_lightingService.SelectedLightEntity?.FriendlyName}"))
+            if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###setlight"), $"{_lightingService.SelectedLightEntity?.FriendlyName}"))
             {
                 foreach(var value in _lightingService.SpawnedLightEntities)
                 {
@@ -159,20 +159,20 @@ public class LightWindow : Window, IDisposable
         //
         // Body
 
-        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Light Transform")u8, ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Light Transform"), ImGuiTreeNodeFlags.DefaultOpen))
         {
             LightEditor.DrawLightTransformHeader(lightGizmo);
             _lightTransformEditor.Draw($"light_transform_{lightGizmo.Entity.Id}", lightGizmo.Light, 0.1f);
         }
 
-        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Light Properties")u8, ImGuiTreeNodeFlags.DefaultOpen))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Light Properties"), ImGuiTreeNodeFlags.DefaultOpen))
         {
             LightEditor.DrawLightProperties(lightRender);
         }
 
         ImBrio.VerticalPadding(5);
 
-        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Advanced Shadows Settings")u8, ImGuiTreeNodeFlags.None))
+        if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Advanced Shadows Settings"), ImGuiTreeNodeFlags.None))
         {
             LightEditor.DrawAdvancedShadows(lightRender);
         }

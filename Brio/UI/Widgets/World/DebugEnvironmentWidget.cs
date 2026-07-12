@@ -28,52 +28,52 @@ public class DebugEnvironmentWidget(DebugEnvironmentCapability capability) : Wid
 
         ImBrio.VerticalPadding(5);
 
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###11")u8, ref env->EnvState.EnvironmentLighting.Unknown1, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###11"), ref env->EnvState.EnvironmentLighting.Unknown1, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("EnvironmentLighting.Unknown1"));
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###21")u8, ref env->EnvState.EnvironmentLighting.Unknown2, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###21"), ref env->EnvState.EnvironmentLighting.Unknown2, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("EnvironmentLighting.Unknown2"));
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###31")u8, ref env->EnvState.EnvironmentLighting.LightDistance, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###31"), ref env->EnvState.EnvironmentLighting.LightDistance, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("EnvironmentLighting.LightDistance"));
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###41")u8, ref env->EnvState.EnvironmentLighting.Unknown4, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###41"), ref env->EnvState.EnvironmentLighting.Unknown4, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("EnvironmentLighting.Unknown4"));
 
         ImBrio.VerticalPadding(3);
 
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###13")u8, ref env->EnvState.Rain.Unknown1, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###13"), ref env->EnvState.Rain.Unknown1, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain.Unknown1"));
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###23")u8, ref env->EnvState.Rain.Unknown2, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###23"), ref env->EnvState.Rain.Unknown2, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain.Unknown2"));
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###33")u8, ref env->EnvState.Rain.Unknown3, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###33"), ref env->EnvState.Rain.Unknown3, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Rain.LightDistance"));
 
         ImBrio.VerticalPadding(3);
 
-        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###14")u8, ref env->EnvState.Particles.Unknown1, 0.0f, 100f);
+        ImGui.SliderFloat(global::Brio.Resources.Localize.Text("###14"), ref env->EnvState.Particles.Unknown1, 0.0f, 100f);
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Particles.Unknown1"));
 
         ImBrio.VerticalPadding(5);
 
-        ImGui.Text(global::Brio.Resources.Localize.Text("EnvManager:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("EnvManager:"));
         Capability.DynamisIPC.DrawPointer(&env);
 
-        ImGui.Text(global::Brio.Resources.Localize.Text("EnvState:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("EnvState:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState);
 
         ImBrio.VerticalPadding(5);
 
-        ImGui.Text(global::Brio.Resources.Localize.Text("EnvironmentLighting:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("EnvironmentLighting:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState.EnvironmentLighting);
-        ImGui.Text(global::Brio.Resources.Localize.Text("Stars:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Stars:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState.Stars);
-        ImGui.Text(global::Brio.Resources.Localize.Text("Fog:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Fog:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState.Fog);
-        ImGui.Text(global::Brio.Resources.Localize.Text("Clouds:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Clouds:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState.Clouds);
-        ImGui.Text(global::Brio.Resources.Localize.Text("Rain:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Rain:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState.Rain);
-        ImGui.Text(global::Brio.Resources.Localize.Text("Particles:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Particles:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState.Particles);
-        ImGui.Text(global::Brio.Resources.Localize.Text("Wind:")u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Wind:"));
         Capability.DynamisIPC.DrawPointer(&env->EnvState.Wind);
     }
 }
