@@ -36,7 +36,7 @@ public struct ObjectPath
             {
                 IsValid = false;
                 PathKind = ObjectPathKind.NotAvailable;
-                Brio.NotifyInfo("This object is not available on the free trial version of the game.");
+                Brio.NotifyInfo(global::Brio.Resources.Localize.Text("This object is not available on the free trial version of the game."));
             }
             else
             {

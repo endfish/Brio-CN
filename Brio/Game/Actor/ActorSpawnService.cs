@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 using CharacterCopyFlags = FFXIVClientStructs.FFXIV.Client.Game.Character.CharacterSetupContainer.CopyFlags;
 using ClientObjectManager = FFXIVClientStructs.FFXIV.Client.Game.Object.ClientObjectManager;
@@ -153,14 +154,14 @@ public class ActorSpawnService : MediatorSubscriberBase
             }
 
             // Start drawing
-            _actorRedrawService.DrawWhenReady(outCharacter);
+            _ = DrawAndRegisterWithGlamourer(outCharacter);
 
             if(disableSpawnCompanion == false && hasCompanion)
             {
                 // We need to wait for the companion to be ready before we can draw it.
                 var companion = _objectTable.CreateObjectReference((nint)(targetNative->CompanionObject));
                 if(companion != null)
-                    _actorRedrawService.DrawWhenReady(companion);
+                    _ = _actorRedrawService.DrawWhenReady(companion);
             }
 
             Mediator.Publish(new ActorSpawnedMessage(outCharacter));
@@ -169,6 +170,20 @@ public class ActorSpawnService : MediatorSubscriberBase
         }
 
         return false;
+    }
+
+    private async Task DrawAndRegisterWithGlamourer(IGameObject actor)
+    {
+        try
+        {
+            await _actorRedrawService.DrawWhenReady(actor);
+            await _actorRedrawService.WaitForDrawing(actor);
+            _glamourerService.EnsureActorState(actor);
+        }
+        catch(Exception ex)
+        {
+            Brio.Log.Debug(ex, $"Could not finish registering spawned gameobject {actor.ObjectIndex} with Glamourer");
+        }
     }
 
     public void ClearAll()
@@ -272,7 +287,13 @@ public class ActorSpawnService : MediatorSubscriberBase
         var companionNative = &character.Native()->CompanionObject->Character.GameObject;
         _framework.RunUntilSatisfied(
             () => character.CalculateCompanionInfo(out var info) && info.Kind == container.Kind && info.Id == container.Id && companionNative->IsReadyToDraw(),
-            (_) => companionNative->EnableDraw(),
+            (ready) =>
+            {
+                companionNative->EnableDraw();
+                var companion = _objectTable.CreateObjectReference((nint)character.Native()->CompanionObject);
+                if(companion != null)
+                    _ = _actorRedrawService.DrawWhenReady(companion);
+            },
             1000,
             dontStartFor: 1
         );

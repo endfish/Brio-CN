@@ -65,6 +65,7 @@ public class GlamourerService : BrioIPC
 
     private readonly GetDesignList _glamourerGetDesignList;
     private readonly ApplyDesign _glamourerApplyDesign;
+    private readonly OpenEquipmentBarIndex _glamourerEnsureActorState;
 
     //
 
@@ -97,6 +98,7 @@ public class GlamourerService : BrioIPC
 
         _glamourerGetDesignList = new GetDesignList(_pluginInterface);
         _glamourerApplyDesign = new ApplyDesign(_pluginInterface);
+        _glamourerEnsureActorState = new OpenEquipmentBarIndex(_pluginInterface);
 
         OnConfigurationChanged();
 
@@ -140,6 +142,39 @@ public class GlamourerService : BrioIPC
         }
 
         return customization;
+    }
+
+    /// <summary>
+    /// Ensures Glamourer has created state for an actor without opening its main window.
+    /// Glamourer's state read IPC only returns existing state, while the plugin UI API
+    /// creates state for valid actors as part of selecting them.
+    /// </summary>
+    public bool EnsureActorState(IGameObject? character)
+    {
+        if(IsAvailable == false || character is null || character.Address == nint.Zero)
+            return false;
+
+        var (status, _) = _glamourerGetState.Invoke(character.ObjectIndex);
+        if(status is GlamourerApiEc.Success)
+            return true;
+
+        try
+        {
+            // Closing the equipment bar has no visible main-window side effect, but its
+            // actor-index path asks Glamourer to create/select the actor state.
+            _glamourerEnsureActorState.Invoke(false, character.ObjectIndex);
+            (status, _) = _glamourerGetState.Invoke(character.ObjectIndex);
+        }
+        catch(Exception ex)
+        {
+            Brio.Log.Debug(ex, $"Failed to register gameobject {character.ObjectIndex} with Glamourer");
+            return false;
+        }
+
+        if(status is not GlamourerApiEc.Success)
+            Brio.Log.Info($"Glamourer could not register gameobject {character.ObjectIndex}: {status}");
+
+        return status is GlamourerApiEc.Success;
     }
 
     public bool CopyTo(IGameObject? character, IGameObject? targetCharacter)
@@ -187,6 +222,9 @@ public class GlamourerService : BrioIPC
 
         var success = _glamourerRevertCharacter.Invoke(character!.ObjectIndex, LockCode);
 
+        if(success is GlamourerApiEc.ActorNotFound && EnsureActorState(character))
+            success = _glamourerRevertCharacter.Invoke(character.ObjectIndex, LockCode);
+
         if(success is not GlamourerApiEc.Success)
         {
             Brio.Log.Info($"Glamourer UnlockAndRevertCharacter was not Successful: {success}");
@@ -205,6 +243,9 @@ public class GlamourerService : BrioIPC
 
         var success = _glamourerRevertCharacter.Invoke(character!.ObjectIndex);
 
+        if(success is GlamourerApiEc.ActorNotFound && EnsureActorState(character))
+            success = _glamourerRevertCharacter.Invoke(character.ObjectIndex);
+
         if(success == Glamourer.Api.Enums.GlamourerApiEc.InvalidKey)
         {
             Brio.Log.Info("Glamourer character was locked..");
@@ -221,6 +262,8 @@ public class GlamourerService : BrioIPC
                 Brio.Log.Debug("Glamourer revert complete");
             }, delayTicks: 5);
         }
+
+        Brio.Log.Info($"Glamourer RevertCharacter was not Successful: {success}");
 
         return Task.CompletedTask;
     }
@@ -315,9 +358,15 @@ public class GlamourerService : BrioIPC
         if(IsAvailable == false || character is null)
             return false;
 
-        _glamourerApplyDesign.Invoke(design, character!.ObjectIndex);
+        var result = _glamourerApplyDesign.Invoke(design, character!.ObjectIndex);
 
-        return true;
+        if(result is GlamourerApiEc.ActorNotFound && EnsureActorState(character))
+            result = _glamourerApplyDesign.Invoke(design, character.ObjectIndex);
+
+        if(result is not GlamourerApiEc.Success)
+            Brio.Log.Info($"Glamourer ApplyDesign was not Successful: {result}");
+
+        return result is GlamourerApiEc.Success;
     }
 
     private void OnConfigurationChanged()

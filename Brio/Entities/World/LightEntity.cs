@@ -61,7 +61,9 @@ public class LightEntity(IGameLight gameLight, IServiceProvider provider) : Tran
     {
         using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor, GameLight.IsVisible))
         {
-            string toolTip = !GameLight.IsVisible ? $"Show {FriendlyName}" : $"Hide {FriendlyName}";
+            string toolTip = !GameLight.IsVisible
+                ? global::Brio.Resources.Localize.Format("Show {0}", FriendlyName)
+                : global::Brio.Resources.Localize.Format("Hide {0}", FriendlyName);
             if(ImBrio.FontIconButtonRight($"###{Id}_hideLight", !GameLight.IsVisible ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye, 1f, toolTip, bordered: false))
             {
                 GameLight.ToggleLight();

@@ -388,7 +388,7 @@ public class PosingGraphicalWindow : Window, IDisposable
 
         PosingEditorCommon.DrawMirrorModeSelect(posing, new Vector2(width, 0));
 
-        var boneName = posing.IsMultiSelecting ? "Multiple Selected" : posing.Selected.DisplayName;
+        var boneName = posing.IsMultiSelecting ? global::Brio.Resources.Localize.Text("Multiple Selected") : posing.Selected.DisplayName;
         ImBrio.SeparatorText($"[{boneName}]");
     }
 

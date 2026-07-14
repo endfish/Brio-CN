@@ -58,10 +58,13 @@ public class ActorAppearanceCapability : ActorCharacterCapability
 
 
     private ActorAppearance? _originalAppearance = null;
+    private bool _isResettingAppearance;
+    private bool _isReapplyingAfterPenumbraRedraw;
     public bool IsAppearanceOverridden => _originalAppearance.HasValue || HasMCDF || IsDesignOverridden || IsProfileOverridden | IsCollectionOverridden;
 
     public bool HasPenumbraIntegration => _penumbraService.IsAvailable;
-    public bool HasGlamourerIntegration => _glamourerService.IsAvailable;
+    private bool UseGlamourerIntegration => Actor.Parent is not ActorEntity;
+    public bool HasGlamourerIntegration => UseGlamourerIntegration && _glamourerService.IsAvailable;
     public bool HasCustomizePlusIntegration => _customizePlusService.IsAvailable;
 
     public ActorAppearance CurrentAppearance => _actorAppearanceService.GetActorAppearance(Character);
@@ -223,7 +226,7 @@ public class ActorAppearanceCapability : ActorCharacterCapability
         if(!IsCollectionOverridden && old is not null)
             _oldCollection = old.ToString();
 
-        _ = _actorAppearanceService.Redraw(Character, HasMCDF);
+        _ = _actorAppearanceService.Redraw(Character, HasMCDF, UseGlamourerIntegration);
     }
     public async void ResetCollection()
     {
@@ -231,12 +234,15 @@ public class ActorAppearanceCapability : ActorCharacterCapability
         {
             _penumbraService.SetCollectionForObject(Character, Guid.Parse(_oldCollection!));
             _oldCollection = null;
-            _ = _actorAppearanceService.Redraw(Character, HasMCDF);
+            _ = _actorAppearanceService.Redraw(Character, HasMCDF, UseGlamourerIntegration);
         }
     }
 
     public void SetDesign(Guid design)
     {
+        if(!UseGlamourerIntegration)
+            return;
+
         IsDesignOverridden = true;
         CurrentDesign = (null, design);
         _ = _glamourerService.ApplyDesign(design, Character);
@@ -247,9 +253,10 @@ public class ActorAppearanceCapability : ActorCharacterCapability
         {
             HasMCDF = false;
             IsDesignOverridden = false;
-            _glamourerService.RevertCharacter(Character);
+            if(UseGlamourerIntegration)
+                _glamourerService.RevertCharacter(Character);
 
-            if(checkResetLock && _glamourerService.CheckForLock(Character))
+            if(checkResetLock && UseGlamourerIntegration && _glamourerService.CheckForLock(Character))
             {
                 ResetCollection();
                 ResetProfile(false);
@@ -269,7 +276,7 @@ public class ActorAppearanceCapability : ActorCharacterCapability
             IsProfileOverridden = false;
             _customizePlusService.RemoveTemporaryProfile(Character);
 
-            if(checkResetLock && _glamourerService.CheckForLock(Character))
+            if(checkResetLock && UseGlamourerIntegration && _glamourerService.CheckForLock(Character))
             {
                 ResetCollection();
                 ResetDesign(false);
@@ -324,7 +331,7 @@ public class ActorAppearanceCapability : ActorCharacterCapability
         Brio.Log.Debug($"Setting appearance for gameobject {GameObject.ObjectIndex}...");
 
         _originalAppearance ??= _actorAppearanceService.GetActorAppearance(Character);
-        _ = await _actorAppearanceService.SetCharacterAppearance(Character, appearance, options, forceRedaw);
+        _ = await _actorAppearanceService.SetCharacterAppearance(Character, appearance, options, forceRedaw, UseGlamourerIntegration);
 
         if(options.HasFlag(AppearanceImportOptions.Shaders))
         {
@@ -451,7 +458,7 @@ public class ActorAppearanceCapability : ActorCharacterCapability
 
     public async Task Redraw()
     {
-        await _actorAppearanceService.Redraw(Character, HasMCDF);
+        await _actorAppearanceService.Redraw(Character, HasMCDF, UseGlamourerIntegration);
 
         ApplyShaderOverride();
 
@@ -460,24 +467,56 @@ public class ActorAppearanceCapability : ActorCharacterCapability
 
     public async Task ResetAppearance()
     {
-        if(HasMCDF)
-        {
-            _ = _characterHandlerService.Revert(GameObject);
-            HasMCDF = false;
-        }
-        else
-        {
-            ResetDesign();
-            ResetCollection();
-            ResetProfile();
-        }
+        if(_isResettingAppearance)
+            return;
 
-        _modelShaderOverride.Reset();
-        if(_originalAppearance.HasValue)
+        _isResettingAppearance = true;
+        try
         {
-            var oldAppearance = _originalAppearance.Value;
-            _originalAppearance = null;
-            await _actorAppearanceService.SetCharacterAppearance(Character, oldAppearance, AppearanceImportOptions.All, true);
+            if(HasMCDF)
+            {
+                await _characterHandlerService.Revert(GameObject, useGlamourer: UseGlamourerIntegration);
+                HasMCDF = false;
+            }
+            else
+            {
+                // Reset all integrations as one operation. The individual reset helpers
+                // each request their own redraw, which can feed Penumbra redraw events
+                // back into appearance reapplication for companions.
+                if(IsDesignOverridden)
+                {
+                    IsDesignOverridden = false;
+                    if(UseGlamourerIntegration)
+                        await _glamourerService.RevertCharacter(Character);
+                }
+
+                if(IsCollectionOverridden)
+                {
+                    _penumbraService.SetCollectionForObject(Character, Guid.Parse(_oldCollection!));
+                    _oldCollection = null;
+                }
+
+                if(IsProfileOverridden)
+                {
+                    IsProfileOverridden = false;
+                    _customizePlusService.RemoveTemporaryProfile(Character);
+                    SetSelectedProfile();
+                }
+            }
+
+            _modelShaderOverride.Reset();
+            if(_originalAppearance.HasValue)
+            {
+                var oldAppearance = _originalAppearance.Value;
+                _originalAppearance = null;
+                await _actorAppearanceService.SetCharacterAppearance(Character, oldAppearance, AppearanceImportOptions.All, true, UseGlamourerIntegration);
+            }
+        }
+        finally
+        {
+            // Penumbra publishes redraw completion asynchronously. Keep the guard for a
+            // few more framework ticks so that completion is not mistaken for a new edit.
+            await _framework.RunOnTick(() => _isResettingAppearance = false, delayTicks: 5);
         }
     }
 
@@ -530,10 +569,20 @@ public class ActorAppearanceCapability : ActorCharacterCapability
 
         //CurrentDesign = (_glamourerService.GetState(Character), Guid.Empty);
     }
-    private void OnPenumbraRedraw(int gameObjectId)
+    private async void OnPenumbraRedraw(int gameObjectId)
     {
-        if(Character.ObjectIndex == gameObjectId && IsAppearanceOverridden)
-            _ = SetAppearance(CurrentAppearance, AppearanceImportOptions.All);
+        if(Character.ObjectIndex != gameObjectId || !IsAppearanceOverridden || _isResettingAppearance || _isReapplyingAfterPenumbraRedraw)
+            return;
+
+        _isReapplyingAfterPenumbraRedraw = true;
+        try
+        {
+            await SetAppearance(CurrentAppearance, AppearanceImportOptions.All);
+        }
+        finally
+        {
+            _isReapplyingAfterPenumbraRedraw = false;
+        }
     }
 
     public override void Dispose()

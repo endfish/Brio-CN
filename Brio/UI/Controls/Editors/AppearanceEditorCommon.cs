@@ -101,7 +101,7 @@ public static class AppearanceEditorCommon
             }
         }
 
-        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Apply Penumbra Collection."));
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Get("ui.actor.applyPenumbraCollection", "Apply Penumbra Collection."));
 
         ImGui.SameLine();
 
@@ -171,7 +171,7 @@ public static class AppearanceEditorCommon
         if(capability.HasMCDF)
             ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Unable to apply Glamourer Design while a MCDF is applied!"));
         else
-            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Apply Glamourer Design."));
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Get("ui.actor.applyGlamourerDesign", "Apply Glamourer Design."));
 
         ImGui.SameLine();
 

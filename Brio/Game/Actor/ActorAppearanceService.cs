@@ -88,16 +88,16 @@ public class ActorAppearanceService : IDisposable
 
     //
 
-    public async Task<RedrawResult> Redraw(ICharacter character, bool revert)
+    public async Task<RedrawResult> Redraw(ICharacter character, bool revert, bool useGlamourer = true)
     {
         if(revert)
-            await _characterHandlerService.Revert(character);
+            await _characterHandlerService.Revert(character, useGlamourer: useGlamourer);
 
         var appearance = GetActorAppearance(character);
-        return await SetCharacterAppearance(character, appearance, AppearanceImportOptions.All, true);
+        return await SetCharacterAppearance(character, appearance, AppearanceImportOptions.All, true, useGlamourer);
     }
 
-    public async Task<RedrawResult> SetCharacterAppearance(ICharacter character, ActorAppearance appearance, AppearanceImportOptions options, bool forceRedraw = false)
+    public async Task<RedrawResult> SetCharacterAppearance(ICharacter character, ActorAppearance appearance, AppearanceImportOptions options, bool forceRedraw = false, bool useGlamourer = true)
     {
         var existingAppearance = GetActorAppearance(character);
 
@@ -139,7 +139,7 @@ public class ActorAppearanceService : IDisposable
                     if(!existingAppearance.Customize.Equals(appearance.Customize))
                         glamourerReset |= true;
 
-                    if(_glamourerService.CheckForLock(character))
+                    if(useGlamourer && _glamourerService.CheckForLock(character))
                     {
                         if(!existingAppearance.Customize.Equals(appearance.Customize) || !existingAppearance.Equipment.Equals(appearance.Equipment))
                             glamourerUnlocked |= true;
@@ -246,7 +246,7 @@ public class ActorAppearanceService : IDisposable
             }
         }
 
-        if(glamourerUnlocked)
+        if(useGlamourer && glamourerUnlocked)
         {
             _glamourerService.UnlockAndRevertCharacter(character);
 
@@ -258,7 +258,7 @@ public class ActorAppearanceService : IDisposable
         if(needsRedraw)
             redrawResult = await _redrawService.Redraw(character);
 
-        if(glamourerReset)
+        if(useGlamourer && glamourerReset)
             await _glamourerService.RevertCharacter(character);
 
         unsafe

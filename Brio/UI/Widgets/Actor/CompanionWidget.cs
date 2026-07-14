@@ -10,12 +10,12 @@ namespace Brio.UI.Widgets.Actor;
 
 public unsafe class CompanionWidget(CompanionCapability capability) : Widget<CompanionCapability>(capability)
 {
-    public override string HeaderName => Capability.Mode switch
+    public override string HeaderName => global::Brio.Resources.Localize.Text(Capability.Mode switch
     {
         CompanionCapability.ModeType.Owner => "Companion",
         CompanionCapability.ModeType.Companion => "Type",
         _ => "Companion"
-    };
+    });
 
     private static readonly CompanionSelector _selector = new("global_companion_selector");
 

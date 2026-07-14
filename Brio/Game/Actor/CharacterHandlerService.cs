@@ -73,12 +73,15 @@ public class CharacterHandlerService : IDisposable
         }
     }
 
-    public async Task Revert(IGameObject obj, bool afterGpose = false)
+    public async Task Revert(IGameObject obj, bool afterGpose = false, bool useGlamourer = true)
     {
         if(obj is null) return;
 
-        _glamourerService.UnlockAndRevertCharacterByName(obj.Name.TextValue);
-        _glamourerService.UnlockAndRevertCharacter(obj);
+        if(useGlamourer)
+        {
+            _glamourerService.UnlockAndRevertCharacterByName(obj.Name.TextValue);
+            _glamourerService.UnlockAndRevertCharacter(obj);
+        }
 
         _customizePlusService.RemoveTemporaryProfile(obj);
 

@@ -171,6 +171,7 @@ public class Brio(IDalamudPluginInterface pluginInterface) : IAsyncDalamudPlugin
         serviceCollection.AddSingleton(dalamudServices.ClientState);
         serviceCollection.AddSingleton(dalamudServices.SigScanner);
         serviceCollection.AddSingleton(dalamudServices.ObjectTable);
+        serviceCollection.AddSingleton(dalamudServices.PlayerState);
         serviceCollection.AddSingleton(dalamudServices.DataManager);
         serviceCollection.AddSingleton(dalamudServices.SeStringEvaluator);
         serviceCollection.AddSingleton(dalamudServices.CommandManager);

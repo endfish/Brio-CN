@@ -4,6 +4,34 @@ namespace Brio.Core;
 
 public static class IntExtensions
 {
+    private static string ToChineseClientActorName(int number)
+    {
+        // The CN client validates generated PCs with different player-name rules.
+        // Keep the native name ASCII-only, without spaces, and at most six bytes so
+        // Penumbra.GameData can create a valid player identifier for Glamourer.
+        if(number < 0 || number >= 260)
+            return string.Empty;
+
+        char prefix = (char)('A' + (number / 10));
+        string suffix = (number % 10) switch
+        {
+            0 => "zero",
+            1 => "one",
+            2 => "two",
+            3 => "three",
+            4 => "four",
+            5 => "five",
+            6 => "six",
+            7 => "seven",
+            8 => "eight",
+            9 => "nine",
+            _ => string.Empty
+        };
+
+        string name = $"{prefix}{suffix}";
+        return name.Length > 6 ? name[..6] : name;
+    }
+
     public static string ToWords(this int number, string separator = " ")
     {
         string[] ones = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
@@ -49,6 +77,9 @@ public static class IntExtensions
 
     public static string ToBrioName(this int i)
     {
+        if(ClientRegionHelper.IsChineseClient())
+            return ToChineseClientActorName(i);
+
         string result = ToWords(i, " ");
 
         if(!result.Contains(' '))
@@ -59,10 +90,13 @@ public static class IntExtensions
 
     public static string ToName(this int i)
     {
+        if(ClientRegionHelper.IsChineseClient())
+            return ToChineseClientActorName(i);
+
         return ToWords(i, " ");
     }
     public static string ToName(this ulong i)
     {
-        return ToWords((int)i, " ");
+        return ((int)i).ToName();
     }
 }

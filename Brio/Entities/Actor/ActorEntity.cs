@@ -95,7 +95,9 @@ public class ActorEntity(IGameObject gameObject, IServiceProvider provider) : Tr
 
         using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor, aac.IsHidden))
         {
-            string toolTip = aac.IsHidden ? $"Show {aac.Actor.FriendlyName}" : $"Hide {aac.Actor.FriendlyName}";
+            string toolTip = aac.IsHidden
+                ? global::Brio.Resources.Localize.Format("Show {0}", aac.Actor.FriendlyName)
+                : global::Brio.Resources.Localize.Format("Hide {0}", aac.Actor.FriendlyName);
             if(ImBrio.FontIconButtonRight($"###{Id}_hideActor", aac.IsHidden ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye, 1f, toolTip, bordered: false))
             {
                 aac.ToggleHide();

@@ -41,7 +41,9 @@ public class ReferenceImageEntity : Entity
 
     public override void DrawContextButton()
     {
-        string toolTip = IsWindowOpen ? $"Hide {FriendlyName}" : $"Show {FriendlyName}";
+        string toolTip = IsWindowOpen
+            ? global::Brio.Resources.Localize.Format("Hide {0}", FriendlyName)
+            : global::Brio.Resources.Localize.Format("Show {0}", FriendlyName);
 
         using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor, IsWindowOpen))
             if(ImBrio.FontIconButtonRight($"###{Id}_toggle_window", IsWindowOpen ? FontAwesomeIcon.Eye : FontAwesomeIcon.EyeSlash, 1f, toolTip, bordered: false))

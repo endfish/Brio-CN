@@ -12,6 +12,7 @@ public class DalamudPluginService
     [PluginService] public IClientState ClientState { get; private set; } = null!;
     [PluginService] public ISigScanner SigScanner { get; private set; } = null!;
     [PluginService] public IObjectTable ObjectTable { get; private set; } = null!;
+    [PluginService] public IPlayerState PlayerState { get; private set; } = null!;
     [PluginService] public IDataManager DataManager { get; private set; } = null!;
     [PluginService] public ISeStringEvaluator SeStringEvaluator { get; private set; } = null!;
     [PluginService] public ICommandManager CommandManager { get; private set; } = null!;

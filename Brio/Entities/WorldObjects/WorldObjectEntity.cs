@@ -51,7 +51,9 @@ public class WorldObjectEntity(IWorldObject worldObject, IServiceProvider provid
     {
         using(ImRaii.PushColor(ImGuiCol.Button, ThemeManager.CurrentTheme.Accent.AccentColor, !worldObject.IsVisible))
         {
-            string toolTip = worldObject.IsVisible ? $"Hide {FriendlyName}" : $"Show {FriendlyName}";
+            string toolTip = worldObject.IsVisible
+                ? global::Brio.Resources.Localize.Format("Hide {0}", FriendlyName)
+                : global::Brio.Resources.Localize.Format("Show {0}", FriendlyName);
             if(ImBrio.FontIconButtonRight($"###{Id}_hideObj", worldObject.IsVisible ? FontAwesomeIcon.Eye : FontAwesomeIcon.EyeSlash, 1f, toolTip, bordered: false))
                 worldObject.IsVisible = !worldObject.IsVisible;
         }

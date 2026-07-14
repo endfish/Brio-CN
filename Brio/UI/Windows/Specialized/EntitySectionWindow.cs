@@ -38,9 +38,10 @@ public class EntitySectionWindow : Window, IDisposable
         var selected = _entityManager.SelectedEntity;
         var hasMultipleSelected = _entityManager.SelectedEntities.Count > 1;
         var sectionEntity = hasMultipleSelected ? _entityManager.EntityManagerContainer : selected;
+        var multipleSelectedLabel = global::Brio.Resources.Localize.Text("Multiple Selected");
 
         WindowName = hasMultipleSelected
-            ? $"{Brio.Name} - [Multiple Selected]###brio_entity_section_window"
+            ? $"{Brio.Name} - [{multipleSelectedLabel}]###brio_entity_section_window"
             : selected is not null
                 ? $"{Brio.Name} - [{selected.FriendlyName}]###brio_entity_section_window"
                 : $"{Brio.Name} - ENTITY###brio_entity_section_window";

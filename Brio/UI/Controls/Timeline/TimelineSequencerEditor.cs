@@ -405,7 +405,7 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
         var changed = false;
 
         var mode = (int)representative.InterpolationMode;
-        if(ImBrio.ButtonSelectorStrip("interpolation_mode", Vector2.Zero, ref mode, _modeNames))
+        if(ImBrio.ButtonSelectorStrip("interpolation_mode", Vector2.Zero, ref mode, _modeNames.Select(global::Brio.Resources.Localize.Text).ToArray()))
         {
             var newMode = (InterpolationMode)mode;
             foreach(var kf in selected)

@@ -530,7 +530,7 @@ public class CatalogWindow : Window, IDisposable
 
         ImGui.SameLine();
 
-        bool add = ImBrio.FontIconButton($"###{id}_add", FontAwesomeIcon.Plus, "Add", !string.IsNullOrWhiteSpace(input));
+        bool add = ImBrio.FontIconButton($"###{id}_add", FontAwesomeIcon.Plus, global::Brio.Resources.Localize.Text("Add"), !string.IsNullOrWhiteSpace(input));
 
         if((add || confirmed) && !string.IsNullOrWhiteSpace(input))
         {
@@ -553,7 +553,7 @@ public class CatalogWindow : Window, IDisposable
 
         for(int i = 0; i < values.Count; i++)
         {
-            if(ImBrio.FontIconButton($"###{id}_del_{i}", FontAwesomeIcon.Minus, "Remove"))
+            if(ImBrio.FontIconButton($"###{id}_del_{i}", FontAwesomeIcon.Minus, global::Brio.Resources.Localize.Text("Remove")))
             {
                 values.RemoveAt(i);
                 break;
@@ -592,7 +592,7 @@ public class CatalogWindow : Window, IDisposable
 
         for(int i = 0; i < values.Count; i++)
         {
-            if(ImBrio.FontIconButton($"###meta_terr_del_{i}", FontAwesomeIcon.Minus, "Remove"))
+            if(ImBrio.FontIconButton($"###meta_terr_del_{i}", FontAwesomeIcon.Minus, global::Brio.Resources.Localize.Text("Remove")))
             {
                 values.RemoveAt(i);
                 break;
@@ -1215,7 +1215,7 @@ public class CatalogWindow : Window, IDisposable
         if(objectPath.Value.IsValid == false)
         {
             // This text doesn't quite make sense for all of the cases this would catch TODO
-            Brio.NotifyError("Invalid path. Please enter a valid game path.");
+            Brio.NotifyError(global::Brio.Resources.Localize.Text("Invalid path. Please enter a valid game path."));
             return;
         }
 
