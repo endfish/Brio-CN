@@ -1,4 +1,6 @@
-﻿using Dalamud.Bindings.ImGui;
+﻿using Brio.UI.Controls.Stateless;
+using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using System;
 using System.Collections.Generic;
@@ -72,6 +74,9 @@ public abstract class Selector<T> where T : class
 
     public unsafe void Draw()
     {
+
+        ImBrio.BlurPopup();
+
         var items = _filteredAndSortedItems;
 
         SoftSelectionChanged = false;
@@ -106,11 +111,12 @@ public abstract class Selector<T> where T : class
                 }
             }
 
-            var listSize = MinimumListSize;
+            var minSize = MinimumListSize * ImGuiHelpers.GlobalScale;
+            var listSize = minSize;
 
             if(_useAvailableSpace)
             {
-                // Use all available space in the current context (e.g. pinned window) I hate this, kill it 
+                // Use all available space in the current context (e.g. pinned window) I hate this, kill it
                 var availableSize = ImGui.GetContentRegionAvail();
                 listSize.X = availableSize.X;
                 listSize.Y = availableSize.Y;
@@ -122,7 +128,7 @@ public abstract class Selector<T> where T : class
                 if(listSize.X < maxSize.X)
                 {
                     listSize.X = maxSize.X;
-                    listSize.Y = MinimumListSize.Y * (1.0f + (listSize.X / MinimumListSize.X));
+                    listSize.Y = minSize.Y * (1.0f + (listSize.X / minSize.X));
                 }
             }
 
