@@ -173,7 +173,7 @@ public sealed partial class PathIndex
         { "cry",  "Crystal"   },
         { "wat",  "Water"     }, { "sea",  "Sea"       },
         { "stc",  "Structure" },
-        { "gls",  "Glass"     }, { "grs",  "Glass"     },
+        { "gls",  "Glass"     }, { "grs",  "Grass"     },
         { "box",  "Box"       },
         { "flw",  "Flower"    },
         { "bos",  "Boss"      },
@@ -292,7 +292,7 @@ public sealed partial class PathIndex
         return new PathIndex(infos, byHash, byFileName);
     }
 
-    private static GamePathInfo ParsePath(string path)
+    public static GamePathInfo ParsePath(string path)
     {
         var splitPath = path.Split('/');
         string expansion = "Base Game";

@@ -219,7 +219,7 @@ public class CatalogWindow : Window, IDisposable
     {
         float buttonWidth = 110 * ImGuiHelpers.GlobalScale;
 
-        ImGui.TextUnformatted("Enter a game path (.sgb, .avfx, etc.)");
+        ImGui.TextUnformatted("Enter a game path (.mdl, .avfx, etc.)");
 
         ImBrio.HorizontalPadding(2);
 
@@ -229,13 +229,11 @@ public class CatalogWindow : Window, IDisposable
         ImGui.SameLine();
 
         using(ImRaii.Disabled(string.IsNullOrWhiteSpace(_spawnPath)))
-            if(ImGui.Button("Spawn BgObject", new Vector2(buttonWidth, 0)))
+            if(ImGui.Button("Spawn Object", new Vector2(buttonWidth, 0)))
             {
                 var objectPath = new ObjectPath(_spawnPath);
                 if(objectPath.IsValid)
-                    Spawn(objectPath.GetPathKind(), _spawnPath.Trim(), _spawnPath.Trim(), 0);
-                else
-                    Brio.NotifyError("Invalid path. Please enter a valid game path.");
+                    Spawn(objectPath.GetPathKind(), _spawnPath.Trim(), _spawnPath.Trim(), 0, objectPath);
             }
     }
 
@@ -637,8 +635,13 @@ public class CatalogWindow : Window, IDisposable
     private bool DrawSearchAndViewMode(ref string searchText, ref CatalogDisplayMode mode, string id)
     {
         bool applay = false;
-        ImGui.SetNextItemWidth((ImBrio.GetRemainingWidth() - 125) * ImGuiHelpers.GlobalScale);
-        if(ImGui.InputTextWithHint("###vfx_search", "Search...", ref searchText, 256))
+
+        float buttonWidth = 49 * ImGuiHelpers.GlobalScale;
+        float spacing = ImGui.GetStyle().ItemSpacing.X;
+        float reservedWidth = (buttonWidth * 2) + (spacing * 2);
+
+        ImGui.SetNextItemWidth(ImBrio.GetRemainingWidth() - reservedWidth);
+        if(ImGui.InputTextWithHint($"###{id}_search", "Search...", ref searchText, 256))
             applay = true;
 
         ImGui.SameLine();
@@ -936,8 +939,18 @@ public class CatalogWindow : Window, IDisposable
 
     //
 
-    private void Spawn(ObjectPathKind kind, string path, string name, uint iconId)
+    private void Spawn(ObjectPathKind kind, string path, string name, uint iconId, ObjectPath? objectPath = null)
     {
+        if(objectPath == null) 
+            objectPath = new ObjectPath(path);
+
+        if(objectPath.Value.IsValid == false)
+        {
+            // This text doesn't quite make sense for all of the cases this would catch TODO
+            Brio.NotifyError("Invalid path. Please enter a valid game path.");
+            return;
+        }
+
         switch(kind)
         {
             case ObjectPathKind.SharedGroup: _worldObjectService.SpawnFurniture(path); break;
@@ -949,6 +962,8 @@ public class CatalogWindow : Window, IDisposable
     }
     private void SpawnEntry(QuickAccessEntry entry)
     {
+        // We shouldn't asume this is a valid path, but we can for now
+
         var parts = entry.Data.Split('|', 2);
         if(parts.Length != 2 || !int.TryParse(parts[0], out var k)) return;
         Spawn((ObjectPathKind)k, parts[1], entry.DisplayName, entry.IconId);

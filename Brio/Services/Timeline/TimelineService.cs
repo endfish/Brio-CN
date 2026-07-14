@@ -1,4 +1,5 @@
 using Brio.Config;
+using Brio.Entities.Core;
 using Brio.Game.GPose;
 using Brio.Services.MediatorMessages;
 using Dalamud.Plugin.Services;
@@ -14,6 +15,8 @@ public interface ITimelineHost
 {
     string Name { get; }
     string CaptureHint { get; }
+
+    EntityId OwnerId { get; }
 
     List<TimelineTrack> Tracks { get; }
     IReadOnlyList<TimelineCaptureChannel> CaptureChannels { get; }

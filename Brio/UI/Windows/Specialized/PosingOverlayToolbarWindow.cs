@@ -6,6 +6,7 @@ using Brio.Config;
 using Brio.Entities;
 using Brio.Entities.Actor;
 using Brio.Entities.Core;
+using Brio.Game.GPose;
 using Brio.Game.Input;
 using Brio.Game.Posing;
 using Brio.Game.WorldObjects.Objects;
@@ -38,11 +39,13 @@ public class PosingOverlayToolbarWindow : Window
     private readonly PosingOverlayWindow _overlayWindow;
     private readonly PosingService _posingService;
     private readonly EntityManager _entityManager;
+    private readonly GPoseService _gPoseService;
     private readonly LightWindow _lightWindow;
     private readonly IFramework _framework;
 
     private bool _pushedStyle = false;
-    public PosingOverlayToolbarWindow(PosingOverlayWindow overlayWindow, IFramework framework, LightWindow lightWindow, GameInputService gameInputService, EntityManager entityManager, PosingTransformWindow overlayTransformWindow, PosingService posingService, ConfigurationService configurationService) : base($"{Brio.Name} OVERLAY###brio_posing_overlay_toolbar_window", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)
+    public PosingOverlayToolbarWindow(PosingOverlayWindow overlayWindow, IFramework framework, GPoseService gPoseService, LightWindow lightWindow, GameInputService gameInputService, EntityManager entityManager, PosingTransformWindow overlayTransformWindow, PosingService posingService, ConfigurationService configurationService) : base($"{Brio.Name} OVERLAY###brio_PosingOverlayToolbar", 
+        ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoSavedSettings)
     {
         Namespace = "brio_posing_overlay_toolbar_namespace";
 
@@ -54,15 +57,13 @@ public class PosingOverlayToolbarWindow : Window
         _posingService = posingService;
         _lightWindow = lightWindow;
         _framework = framework;
+        _gPoseService = gPoseService;
 
         ShowCloseButton = false;
         this.AllowBackgroundBlur = false;
+        this.RespectCloseHotkey = false;
 
-        SizeConstraints = new WindowSizeConstraints
-        {
-            MinimumSize = new Vector2(((button4XSize * 4) + 30) , 400),
-            MaximumSize = new Vector2(((button4XSize * 4) + 30) , 400)
-        };
+        this.SizeCondition = ImGuiCond.Appearing;
     }
 
     public override void PreOpenCheck()
@@ -82,17 +83,14 @@ public class PosingOverlayToolbarWindow : Window
     {
         _gameInputService.AllowEscape = true;
 
+        if(_gPoseService.IsGPosing == false)
+            return false;
+
         return base.DrawConditions();
     }
 
     public override void PreDraw()
     {
-        //SizeConstraints = new WindowSizeConstraints
-        //{
-        //    MinimumSize = new Vector2(((button4XSize * 4) + 30) * ImGuiHelpers.GlobalScale, 400 * ImGuiHelpers.GlobalScale),
-        //    MaximumSize = new Vector2(((button4XSize * 4) + 30) * ImGuiHelpers.GlobalScale, 400 * ImGuiHelpers.GlobalScale)
-        //}; 
-
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowTitleAlign, new Vector2(0.5f, 0.5f));
         ImGui.PushStyleColor(ImGuiCol.NavWindowingHighlight, UIConstants.Transparent);
@@ -182,7 +180,7 @@ public class PosingOverlayToolbarWindow : Window
                 posing?.Actor.IsOverlayVisible = !posing.Actor.IsOverlayVisible;
             }
         }
-        ImBrio.AttachToolTip(posing is null ? "(This Entity has no Bones)" : posing?.Actor.IsOverlayVisible ?? false ? "Hide Actor's bones in overlay" : "Always show Actor's bones in overlay");
+        ImBrio.AttachToolTip(posing is null ? "(This Entity has no Bones)" : posing?.Actor.IsOverlayVisible ?? false ? "Hide Actor's bones in overlay when not selected" : "Always show Actor's bones when not selected");
 
         ImGui.SameLine();
 
@@ -360,33 +358,6 @@ public class PosingOverlayToolbarWindow : Window
 
             PosingEditorCommon.DrawMirrorModeSelect(posing, new Vector2(button4XSize));
 
-            // Set IK Button
-
-            //using(ImRaii.Disabled(posing?.SkeletonPosing.PoseInfo.HasIKStacks is false))
-            //{
-            //    using(ImRaii.PushFont(UiBuilder.IconFont))
-            //        if(ImGui.Button($"{FontAwesomeIcon.Lock.ToIconString()}###clear_ik", new Vector2(button4XSize)))
-            //            posing?.SkeletonPosing.ResetIK();
-            //    ImBrio.AttachToolTip($"Set IK Changes{(!posing?.SkeletonPosing.PoseInfo.HasIKStacks ?? false ? ". Enable IK & make a change with IK to 'Lock in' IK changes using this button." : "")}");
-
-            //    var center = ImGui.GetItemRectMin() + (ImGui.GetItemRectSize() / 2);
-            //    var radius = MathF.Ceiling(ImGui.GetTextLineHeight() * 0.9f);
-            //    var thickness = MathF.Ceiling(ImGui.GetTextLineHeight() * 0.1f);
-
-            //    ImGui.GetWindowDrawList().AddCircle(center, radius, ImGui.GetColorU32(ImGuiCol.Text) & 0x80FFFFFF, 32, thickness);
-
-            //    if(posing?.SkeletonPosing.PoseInfo.HasIKStacks is false)
-            //    {
-            //        thickness += 0.2f;
-            //        var offset = (radius - thickness) / MathF.Sqrt(2.0f);
-            //        var lineStart = center + new Vector2(-offset, -offset);
-            //        var lineEnd = center + new Vector2(offset, offset);
-            //        ImGui.GetWindowDrawList().AddLine(lineStart, lineEnd, 0x400000FF, thickness);
-            //    }
-            //}
-
-            //ImGui.SameLine();
-
             // Bone Filter Button
 
             using(ImRaii.Disabled(hasMultipleActorsSelected))
@@ -395,7 +366,7 @@ public class PosingOverlayToolbarWindow : Window
                 if(ImGui.Button($"{FontAwesomeIcon.Bone.ToIconString()}###toggle_filter_window", button2XSizeVector2))
                     ImGui.OpenPopup(_boneFilterPopupName);
             }
-            ImBrio.AttachToolTip("Bone Filter");
+            ImBrio.AttachToolTip("Overlay Bone Visibility Filter");
 
             ImGui.SameLine();
 
@@ -407,7 +378,7 @@ public class PosingOverlayToolbarWindow : Window
                 if(ImGui.Button($"{FontAwesomeIcon.Search.ToIconString()}###bone_search", button2XSizeVector2))
                     ImGui.OpenPopup("overlay_bone_search_popup");
             }
-            ImBrio.AttachToolTip("Bone Search");
+            ImBrio.AttachToolTip("Search for Bones");
         }
 
         //
@@ -476,42 +447,7 @@ public class PosingOverlayToolbarWindow : Window
                 }
             }
         }
-        ImBrio.AttachToolTip($"Reset Transform {_entityManager.SelectedEntity?.FriendlyName}");
-
-        //using(ImRaii.PushFont(UiBuilder.IconFont))
-        //{
-        //    using(ImRaii.Disabled(!posing?.HasOverride(posing.SkeletonPosing.FilterNonFaceBones) ?? true))
-        //    {
-        //        if(ImGui.Button($"{FontAwesomeIcon.Undo.ToIconString()}###reset_body_pose", new Vector2(button3XSize)))
-        //        {
-        //            posing!.Snapshot(false, reconcile: false);
-        //            posing!.ClearStacks(posing.SkeletonPosing.FilterNonFaceBones);
-        //        }
-
-        //        ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + ImGui.GetItemRectSize() / 2, ImGui.GetColorU32(ImGuiCol.Text), FontAwesomeIcon.ChildReaching.ToIconString());
-
-        //    }
-        //}
-
-        //ImBrio.AttachToolTip("Reset Body");
-
-        //ImGui.SameLine();
-
-        //using(ImRaii.PushFont(UiBuilder.IconFont))
-        //using(ImRaii.Disabled(!posing?.HasOverride(posing.SkeletonPosing.FilterFaceBones) ?? false))
-        //{
-        //    if(ImGui.Button($"{FontAwesomeIcon.Undo.ToIconString()}###reset_face_pose", new Vector2(button3XSize)))
-        //    {
-        //        posing?.ClearStacks(posing.SkeletonPosing.FilterFaceBones);
-        //    }
-
-        //    ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + ImGui.GetItemRectSize() / 2, ImGui.GetColorU32(ImGuiCol.Text), FontAwesomeIcon.Smile.ToIconString());
-
-        //}
-
-        //ImBrio.AttachToolTip("Reset Face");
-
-        //ImGui.SameLine();
+        ImBrio.AttachToolTip($"Reset Transform for [{_entityManager.SelectedEntity?.FriendlyName}]");
 
         //
         // ------------- File
@@ -717,6 +653,8 @@ public class PosingOverlayToolbarWindow : Window
             using var popup = ImRaii.Popup(_boneFilterPopupName);
             if(popup.Success)
             {
+                ImBrio.BlurPopup();
+
                 PosingEditorCommon.DrawBoneFilterEditor(actorEntity.OverlayFilter, _posingService);
             }
         }
