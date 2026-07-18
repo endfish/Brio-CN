@@ -1493,6 +1493,13 @@
     "Switch to World": "切换到世界坐标",
     "This object is not available on the free trial version of the game.": "该对象在游戏免费试玩版中不可用。",
     "Type": "类型",
+    "Position Offset Speed": "位置偏移速度",
+    "Reset Position Offset Speed": "重置位置偏移速度",
+    "Game Camera Position Offset Speed": "游戏相机位置偏移速度",
+    "Create a Free Camera when entering GPose": "进入拍照模式时自动新增自由相机",
+    "Automatically creates one Free Camera in addition to the Default Camera.": "除默认相机外，自动新增一个自由相机。",
+    "Activate the automatically created Free Camera": "同时激活自动新增的自由相机",
+    "Makes the new Free Camera active immediately without changing the selected scene entity.": "立即将新增的自由相机设为当前相机，但不改变场景中选中的实体。",
     "(This Entity has no Bones)": "（此实体没有骨骼）"
   }
 }
