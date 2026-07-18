@@ -41,6 +41,10 @@ public enum InputAction
     FreeCamera_IncreaseCamMovement,
     FreeCamera_DecreaseCamMovement,
 
+    // World Model Preview
+    WorldModelPreview_Previous,
+    WorldModelPreview_Next,
+
     Brio_Ctrl,
     Brio_Alt,
     Brio_Shift

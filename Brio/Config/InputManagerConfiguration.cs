@@ -43,6 +43,9 @@ public class InputManagerConfiguration
         { InputAction.FreeCamera_IncreaseCamMovement, new KeyConfig(VirtualKey.CONTROL) },
         { InputAction.FreeCamera_DecreaseCamMovement, new KeyConfig(VirtualKey.MENU) },
 
+        { InputAction.WorldModelPreview_Previous, new KeyConfig(VirtualKey.UP) },
+        { InputAction.WorldModelPreview_Next, new KeyConfig(VirtualKey.DOWN) },
+
         { InputAction.Brio_Alt, new KeyConfig(VirtualKey.MENU) },
         { InputAction.Brio_Ctrl, new KeyConfig(VirtualKey.CONTROL) },
         { InputAction.Brio_Shift, new KeyConfig(VirtualKey.SHIFT) }
@@ -85,6 +88,9 @@ public class InputManagerConfiguration
         { InputAction.FreeCamera_IncreaseCamMovement, new KeyConfig(VirtualKey.CONTROL) },
         { InputAction.FreeCamera_DecreaseCamMovement, new KeyConfig(VirtualKey.MENU) },
 
+        { InputAction.WorldModelPreview_Previous, new KeyConfig(VirtualKey.UP) },
+        { InputAction.WorldModelPreview_Next, new KeyConfig(VirtualKey.DOWN) },
+
         { InputAction.Brio_Alt, new KeyConfig(VirtualKey.MENU) },
         { InputAction.Brio_Ctrl, new KeyConfig(VirtualKey.CONTROL) },
         { InputAction.Brio_Shift, new KeyConfig(VirtualKey.SHIFT) }
@@ -106,5 +112,11 @@ public class InputManagerConfiguration
             return value;
         }
         return new KeyConfig(VirtualKey.NO_KEY);
+    }
+
+    public void EnsureDefaultKeyBindings()
+    {
+        foreach(var (action, keyConfig) in _defaultKeyBindings)
+            KeyBindings.TryAdd(action, keyConfig);
     }
 }

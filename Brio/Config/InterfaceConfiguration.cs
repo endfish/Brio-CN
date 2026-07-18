@@ -15,7 +15,8 @@ public class InterfaceConfiguration
     public float DefaultBoneTransformMovementSpeed { get; set; } = 0.01f;
 
     // Free Camera Movement Speed
-    public float DefaultFreeCameraMovementSpeed { get; set; } = 0.03f;
+    public float DefaultFreeCameraMovementSpeed { get; set; } = 0.005f;
+    public int DefaultFreeCameraMovementSpeedVersion { get; set; } = 0;
 
     // Game Camera Position Offset Speed
     public float DefaultCameraPositionOffsetSpeed { get; set; } = 0.03f;

@@ -108,11 +108,10 @@ public class ActorEntity(IGameObject gameObject, IServiceProvider provider) : Tr
     public override void OnAttached()
     {
         OverlayFilter = new BoneFilter(_posingService);
-        OverlayFilter.DisableCategory("ex");
-        OverlayFilter.DisableCategory("weapon");
-        OverlayFilter.DisableCategory("clothing");
-        OverlayFilter.DisableCategory("legacy");
-        OverlayFilter.DisableCategory("other");
+        OverlayFilter.DisableAll();
+        OverlayFilter.EnableSubCategory("bodyCategory");
+        OverlayFilter.EnableCategory("head");
+        OverlayFilter.EnableCategory("eyes");
 
         //
 

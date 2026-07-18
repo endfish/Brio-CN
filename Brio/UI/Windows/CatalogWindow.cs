@@ -2,6 +2,7 @@ using Brio.Config;
 using Brio.Game.Core;
 using Brio.Game.GPose;
 using Brio.Game.WorldObjects;
+using Brio.Input;
 using Brio.Resources;
 using Brio.Resources.Extra;
 using Brio.Services;
@@ -386,6 +387,14 @@ public class CatalogWindow : Window, IDisposable
         var items = _metaKind == ObjectPathKind.Model ? _filteredModels : _filteredVfx;
         var selectedIndex = items.FindIndex(item => item.Path == _metaSelectedPath);
         var buttonHeight = ImGui.GetFrameHeight();
+
+        if(_metaPreviewMode && !_modelPreviewWindow.IsOpen && CanNavigatePreviewWithKeyboard())
+        {
+            if(InputManagerService.ActionKeysPressedLastFrame(InputAction.WorldModelPreview_Previous))
+                SelectMetadataItem(selectedIndex - 1);
+            else if(InputManagerService.ActionKeysPressedLastFrame(InputAction.WorldModelPreview_Next))
+                SelectMetadataItem(selectedIndex + 1);
+        }
 
         if(ImBrio.IconButtonWithText(FontAwesomeIcon.PlusCircle, global::Brio.Resources.Localize.Text("Spawn preview"),
             new Vector2(120 * ImGuiHelpers.GlobalScale, buttonHeight)))
@@ -1129,6 +1138,14 @@ public class CatalogWindow : Window, IDisposable
     {
         ImBrio.BlurWindow();
 
+        if(CanNavigatePreviewWithKeyboard())
+        {
+            if(InputManagerService.ActionKeysPressedLastFrame(InputAction.WorldModelPreview_Previous))
+                NavigateModelPreview(-1);
+            else if(InputManagerService.ActionKeysPressedLastFrame(InputAction.WorldModelPreview_Next))
+                NavigateModelPreview(1);
+        }
+
         if(_filteredModels.Count == 0 || _modelLivePreviewIndex < 0 || _modelLivePreviewIndex >= _filteredModels.Count)
         {
             ImGui.TextWrapped(Localize.Text("No models match the current filter."));
@@ -1160,6 +1177,9 @@ public class CatalogWindow : Window, IDisposable
             if(ImGui.Button(Localize.Text("Apply This Model"), new Vector2(-1, 0)))
                 ApplyModelPreview();
     }
+
+    private static bool CanNavigatePreviewWithKeyboard()
+        => !ImGui.GetIO().WantTextInput && !ImGui.IsAnyItemActive();
 
     private async void PreviewModel(string path)
     {

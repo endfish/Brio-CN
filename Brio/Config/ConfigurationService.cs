@@ -28,8 +28,25 @@ public class ConfigurationService : IDisposable
         Instance = this;
         _pluginInterface = pluginInterface;
         Configuration = _pluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        Configuration.InputManager.EnsureDefaultKeyBindings();
+        MigrateLocalDefaults();
 
         ThemeManager.SetThemeByName(Configuration.Appearance.Theme);
+    }
+
+    private void MigrateLocalDefaults()
+    {
+        const int currentFreeCameraMovementSpeedVersion = 1;
+        var interfaceConfiguration = Configuration.Interface;
+
+        if(interfaceConfiguration.DefaultFreeCameraMovementSpeedVersion >= currentFreeCameraMovementSpeedVersion)
+            return;
+
+        const float previousDefault = 0.03f;
+        if(MathF.Abs(interfaceConfiguration.DefaultFreeCameraMovementSpeed - previousDefault) < 0.0001f)
+            interfaceConfiguration.DefaultFreeCameraMovementSpeed = 0.005f;
+
+        interfaceConfiguration.DefaultFreeCameraMovementSpeedVersion = currentFreeCameraMovementSpeedVersion;
     }
 
     public void Save()

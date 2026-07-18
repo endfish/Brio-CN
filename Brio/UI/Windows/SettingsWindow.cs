@@ -1143,6 +1143,12 @@ public class SettingsWindow : Window
 
         using(ImRaii.Disabled(!enableKeybinds))
         {
+            if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("World Model Preview")))
+            {
+                DrawKeyBind(InputAction.WorldModelPreview_Previous);
+                DrawKeyBind(InputAction.WorldModelPreview_Next);
+            }
+
             if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Interface")))
             {
                 DrawKeyBind(InputAction.Interface_ToggleBrioWindow);

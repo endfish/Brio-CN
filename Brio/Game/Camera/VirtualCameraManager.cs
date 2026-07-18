@@ -28,7 +28,7 @@ public class VirtualCameraManager : IDisposable
     private readonly ConfigurationService _configurationService;
 
     private CameraEntity? DefaultCamera;
-    private float _moveSpeed = 0.03f;
+    private float _moveSpeed = 0.005f;
     private float DefaultMovementSpeed => _configurationService.Configuration.Interface.DefaultFreeCameraMovementSpeed;
     private float DefaultMouseSensitivity => _configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity;
 

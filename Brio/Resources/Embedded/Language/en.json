@@ -343,6 +343,8 @@
         "FreeCamera_UpAlt": "Up (Alternative)",
         "FreeCamera_DownAlt": "Down (Alternative)",
         "FreeCamera_IncreaseCamMovement": "Increase Camera Movement",
-        "FreeCamera_DecreaseCamMovement": "Decrease Camera Movement"
+        "FreeCamera_DecreaseCamMovement": "Decrease Camera Movement",
+        "WorldModelPreview_Previous": "Previous Model",
+        "WorldModelPreview_Next": "Next Model"
     }
 }

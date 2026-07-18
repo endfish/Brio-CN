@@ -338,7 +338,9 @@
     "FreeCamera_UpAlt": "向上（备用）",
     "FreeCamera_DownAlt": "向下（备用）",
     "FreeCamera_IncreaseCamMovement": "提高相机移动速度",
-    "FreeCamera_DecreaseCamMovement": "降低相机移动速度"
+    "FreeCamera_DecreaseCamMovement": "降低相机移动速度",
+    "WorldModelPreview_Previous": "上一个世界模型",
+    "WorldModelPreview_Next": "下一个世界模型"
   },
   "ui": {
     "common": {
