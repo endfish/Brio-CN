@@ -2,7 +2,7 @@
   "Author": "Minmoose, Asgard 与贡献者；汉化：Endfish",
   "Name": "Brio-CN",
   "InternalName": "Brio-CN",
-  "AssemblyVersion": "1.0.2.0",
+  "AssemblyVersion": "1.0.3.0",
   "Description": "Brio 的简体中文本地化版本，为 GPose 提供角色生成、骨骼姿势编辑、动作播放、灯光、镜头、时间、天气与场景控制等高级功能。\n\n本分支还包含常用姿势快捷入口、Penumbra 动作 Mod 识别，以及可导航的世界模型实时预览。",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/endfish/Brio-CN",
@@ -20,6 +20,6 @@
   "LoadPriority": 0,
   "IconUrl": "https://raw.githubusercontent.com/endfish/Brio-CN/zh-CN/Resources/Images/BrioIcon.png",
   "Punchline": "面向 GPose 的高级角色、姿势、动作与场景工具（简体中文版）。",
-  "Changelog": "新增进入拍照模式时自动创建或激活自由相机、游戏相机位置偏移速度及其快照保存；修复竖屏方向处理、姿势 Gizmo 与窗口拖动冲突，以及 Penumbra Mod 动作缺少标准时间轴时的回退，并补齐对应中文文案。",
+  "Changelog": "新增世界模型预览的上下模型键盘导航及可配置按键，并为旧配置补齐默认绑定；降低自由相机默认移动速度并迁移旧默认值；优化姿势编辑的默认骨骼筛选范围。",
   "AcceptsFeedback": true
 }
