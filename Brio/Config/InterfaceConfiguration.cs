@@ -17,6 +17,9 @@ public class InterfaceConfiguration
     // Free Camera Movement Speed
     public float DefaultFreeCameraMovementSpeed { get; set; } = 0.03f;
 
+    // Game Camera Position Offset Speed
+    public float DefaultCameraPositionOffsetSpeed { get; set; } = 0.03f;
+
     // Free Camera Mouse Sensitivity
     public float DefaultFreeCameraMouseSensitivity { get; set; } = 0.1f;
 }

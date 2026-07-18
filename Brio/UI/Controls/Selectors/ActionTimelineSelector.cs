@@ -312,8 +312,10 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
             }
             else
             {
-                AddModTimeline(modAction, 0, ActionTimelineSelectorEntry.AnimationPurpose.Standard);
-                AddModTimeline(modAction, 1, ActionTimelineSelectorEntry.AnimationPurpose.Intro);
+                var hasStandardTimeline = AddModTimeline(modAction, 0, ActionTimelineSelectorEntry.AnimationPurpose.Standard);
+                if(!hasStandardTimeline)
+                    AddModTimeline(modAction, 1, ActionTimelineSelectorEntry.AnimationPurpose.Intro);
+
                 AddModTimeline(modAction, 2, ActionTimelineSelectorEntry.AnimationPurpose.Ground);
                 AddModTimeline(modAction, 3, ActionTimelineSelectorEntry.AnimationPurpose.Chair);
                 AddModTimeline(modAction, 4, ActionTimelineSelectorEntry.AnimationPurpose.Blend);
@@ -321,21 +323,21 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
         }
     }
 
-    private void AddModTimeline(PenumbraModAction modAction, int timelineIndex, ActionTimelineSelectorEntry.AnimationPurpose purpose)
+    private bool AddModTimeline(PenumbraModAction modAction, int timelineIndex, ActionTimelineSelectorEntry.AnimationPurpose purpose)
     {
         if(modAction.Emote is not Emote emote)
-            return;
+            return false;
 
         var timelineId = emote.ActionTimeline[timelineIndex].RowId;
-        AddModTimeline(modAction, timelineId, purpose);
+        return AddModTimeline(modAction, timelineId, purpose);
     }
 
-    private void AddModTimeline(PenumbraModAction modAction, uint timelineId, ActionTimelineSelectorEntry.AnimationPurpose purpose)
+    private bool AddModTimeline(PenumbraModAction modAction, uint timelineId, ActionTimelineSelectorEntry.AnimationPurpose purpose)
     {
         var emote = modAction.Emote;
         if(timelineId == 0 || timelineId > ushort.MaxValue
             || !GameDataProvider.Instance.ActionTimelines.TryGetRow(timelineId, out BrioActionTimeline timeline))
-            return;
+            return false;
 
         AddItem(new ActionTimelineSelectorEntry(
             $"{modAction.ModName} - {modAction.EmoteName}",
@@ -348,6 +350,8 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
             emote?.Icon ?? 0,
             emote?.DrawsWeapon ?? false,
             emote is Emote value ? (byte)value.EmoteCategory.RowId : (byte)0));
+
+        return true;
     }
 
     protected override void DrawItem(ActionTimelineSelectorEntry item, bool isSoftSelected)

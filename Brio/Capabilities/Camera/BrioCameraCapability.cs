@@ -102,6 +102,7 @@ public class BrioCameraCapability : CameraCapability
         Vector3.Zero, Vector3.Zero, "Select an actor to track",
         0f, 2.5f, 0f, Vector2.Zero, Vector2.Zero,
         false, false, false,
+        VirtualCamera.PositionOffsetSpeed,
         VirtualCamera.FreeCamValues.MovementSpeed, VirtualCamera.FreeCamValues.MouseSensitivity, VirtualCamera.FreeCamValues.DelimitAngle, VirtualCamera.FreeCamValues.IsMovementEnabled, VirtualCamera.FreeCamValues.Move2D);
 
     private CameraSnapshot CaptureCurrent() => new(
@@ -109,6 +110,7 @@ public class BrioCameraCapability : CameraCapability
         VirtualCamera.PositionOffset, VirtualCamera.TargetOffset, VirtualCamera.SelectedActorName,
         VirtualCamera.PivotRotation, VirtualCamera.Zoom, VirtualCamera.FoV, VirtualCamera.Pan, VirtualCamera.Angle,
         VirtualCamera.DisableCollision, VirtualCamera.DelimitCamera, VirtualCamera.IsPortraitMode,
+        VirtualCamera.PositionOffsetSpeed,
         VirtualCamera.FreeCamValues.MovementSpeed, VirtualCamera.FreeCamValues.MouseSensitivity, VirtualCamera.FreeCamValues.DelimitAngle, VirtualCamera.FreeCamValues.IsMovementEnabled, VirtualCamera.FreeCamValues.Move2D);
 
     private void ApplyState(CameraSnapshot state)
@@ -129,6 +131,7 @@ public class BrioCameraCapability : CameraCapability
         if(state.IsPortraitMode != VirtualCamera.IsPortraitMode)
             VirtualCamera.TogglePortraitMode();
 
+        VirtualCamera.PositionOffsetSpeed = state.PositionOffsetSpeed;
         VirtualCamera.FreeCamValues.MovementSpeed = state.MovementSpeed;
         VirtualCamera.FreeCamValues.MouseSensitivity = state.MouseSensitivity;
         VirtualCamera.FreeCamValues.DelimitAngle = state.DelimitAngle;
@@ -139,4 +142,5 @@ public class BrioCameraCapability : CameraCapability
 
 public record struct CameraSnapshot(Vector3 Position, Vector3 Rotation, Vector3 PositionOffset, Vector3 TargetOffset, string SelectedActorName,
     float PivotRotation, float Zoom, float FoV, Vector2 Pan, Vector2 Angle,
-    bool DisableCollision, bool DelimitCamera, bool IsPortraitMode, float MovementSpeed, float MouseSensitivity, bool DelimitAngle, bool IsMovementEnabled, bool Move2D);
+    bool DisableCollision, bool DelimitCamera, bool IsPortraitMode, float PositionOffsetSpeed,
+    float MovementSpeed, float MouseSensitivity, bool DelimitAngle, bool IsMovementEnabled, bool Move2D);

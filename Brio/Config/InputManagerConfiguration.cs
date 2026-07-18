@@ -96,6 +96,8 @@ public class InputManagerConfiguration
     public bool EnableConsumeAllInput { get; set; } = false;
     public bool FlipKeyBindsPastNinety { get; set; } = false;
     public bool DisableScrollWheelOnInputs { get; set; } = false;
+    public bool CreateFreeCameraOnGPoseEnter { get; set; } = false;
+    public bool ActivateCreatedFreeCameraOnGPoseEnter { get; set; } = false;
 
     public KeyConfig GetDefaultKey(InputAction action)
     {

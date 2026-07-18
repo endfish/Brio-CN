@@ -957,10 +957,19 @@ public class SettingsWindow : Window
             _configurationService.ApplyChange();
         }
 
-        var defaultFreeCamMouseSensitivity = _configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity;
-        var label4 = Localize.Text("Free Camera Mouse Sensitivity");
+        var defaultCameraPositionOffsetSpeed = _configurationService.Configuration.Interface.DefaultCameraPositionOffsetSpeed;
+        var label4 = Localize.Text("Game Camera Position Offset Speed");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label4).X - 15);
-        if(ImGui.DragFloat(label4, ref defaultFreeCamMouseSensitivity, 0.001f, 0.001f, 0.2f))
+        if(ImGui.DragFloat(label4, ref defaultCameraPositionOffsetSpeed, 0.001f, 0.001f, 0.3f))
+        {
+            _configurationService.Configuration.Interface.DefaultCameraPositionOffsetSpeed = defaultCameraPositionOffsetSpeed;
+            _configurationService.ApplyChange();
+        }
+
+        var defaultFreeCamMouseSensitivity = _configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity;
+        var label5 = Localize.Text("Free Camera Mouse Sensitivity");
+        ImGui.SetNextItemWidth(-ImGui.CalcTextSize(label5).X - 15);
+        if(ImGui.DragFloat(label5, ref defaultFreeCamMouseSensitivity, 0.001f, 0.001f, 0.2f))
         {
             _configurationService.Configuration.Interface.DefaultFreeCameraMouseSensitivity = defaultFreeCamMouseSensitivity;
             _configurationService.ApplyChange();
@@ -1094,6 +1103,26 @@ public class SettingsWindow : Window
         {
             _configurationService.Configuration.InputManager.ShowPromptsInGPose = showPrompts;
             _configurationService.ApplyChange();
+        }
+
+        bool createFreeCameraOnGPoseEnter = _configurationService.Configuration.InputManager.CreateFreeCameraOnGPoseEnter;
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Create a Free Camera when entering GPose"), ref createFreeCameraOnGPoseEnter))
+        {
+            _configurationService.Configuration.InputManager.CreateFreeCameraOnGPoseEnter = createFreeCameraOnGPoseEnter;
+            _configurationService.ApplyChange();
+        }
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Automatically creates one Free Camera in addition to the Default Camera."));
+
+        using(ImRaii.Disabled(!createFreeCameraOnGPoseEnter))
+        using(ImRaii.PushIndent())
+        {
+            bool activateCreatedFreeCameraOnGPoseEnter = _configurationService.Configuration.InputManager.ActivateCreatedFreeCameraOnGPoseEnter;
+            if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Activate the automatically created Free Camera"), ref activateCreatedFreeCameraOnGPoseEnter))
+            {
+                _configurationService.Configuration.InputManager.ActivateCreatedFreeCameraOnGPoseEnter = activateCreatedFreeCameraOnGPoseEnter;
+                _configurationService.ApplyChange();
+            }
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Makes the new Free Camera active immediately without changing the selected scene entity."));
         }
 
         ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Key Bindings"));

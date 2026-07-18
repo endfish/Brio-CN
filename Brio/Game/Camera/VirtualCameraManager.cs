@@ -7,6 +7,7 @@ using Brio.Game.GPose;
 using Brio.Game.Input;
 using Brio.Input;
 using Brio.Services.Models;
+using FFXIVClientStructs.FFXIV.Client.Graphics.Render;
 using Swan;
 using System;
 using System.Collections.Generic;
@@ -326,7 +327,9 @@ public class VirtualCameraManager : IDisposable
         //
         // Handle keyboard input
         //
-        if(CurrentCamera.IsPortraitMode)
+        var isPortraitOrientation = CurrentCamera.IsPortraitMode ^ IsGamePortraitModeActive();
+
+        if(isPortraitOrientation)
         {
 
         }
@@ -392,17 +395,17 @@ public class VirtualCameraManager : IDisposable
         else if(InputManagerService.ActionKeysPressed(InputAction.FreeCamera_DecreaseCamMovement))
             _moveSpeed = CurrentCamera.FreeCamValues.MovementSpeed * 0.3f;
 
-        if(CurrentCamera.IsPortraitMode)
+        if(isPortraitOrientation)
             leftRight = -leftRight;
 
         var inputVector = new Vector3(leftRight, upDown, forwardBackward);
-        if(CurrentCamera.IsPortraitMode)
+        if(isPortraitOrientation)
             inputVector = Vector3.Transform(inputVector, Quaternion.CreateFromAxisAngle(Vector3.UnitZ, MathF.PI / 2f));
 
         _forward = Vector3.Transform(inputVector,
             Quaternion.CreateFromYawPitchRoll(CurrentCamera!.Rotation.X, FreeCamValues.Move2D ? 0 : -CurrentCamera.Rotation.Y, CurrentCamera.Rotation.Z));
     }
-    public Matrix4x4 UpdateMatrix()
+    public unsafe Matrix4x4 UpdateMatrix()
     {
         if(CurrentCamera is null)
         {
@@ -411,7 +414,10 @@ public class VirtualCameraManager : IDisposable
 
         _lastMousePosition *= CurrentCamera.FreeCamValues.MouseSensitivity * MathHelpers.DegreesToRadians;
 
-        if(CurrentCamera.IsPortraitMode)
+        var isGamePortraitMode = IsGamePortraitModeActive();
+        var isPortraitOrientation = CurrentCamera.IsPortraitMode ^ isGamePortraitMode;
+
+        if(isPortraitOrientation)
             _lastMousePosition = new Vector2(-_lastMousePosition.Y, _lastMousePosition.X);
 
         CurrentCamera.Position += _forward * _moveSpeed;
@@ -447,8 +453,15 @@ public class VirtualCameraManager : IDisposable
         );
 
         // apply the Z axis rotation
-        var viewMatrix = Matrix4x4.Transform(matrix, Quaternion.CreateFromAxisAngle(Vector3.UnitZ, CurrentCamera.PivotRotation));
+        var portraitRotation = isGamePortraitMode ? MathF.PI / 2f : 0f;
+        var viewMatrix = Matrix4x4.Transform(matrix, Quaternion.CreateFromAxisAngle(Vector3.UnitZ, CurrentCamera.PivotRotation + portraitRotation));
         return viewMatrix;
+    }
+
+    private static unsafe bool IsGamePortraitModeActive()
+    {
+        var graphicsConfig = GraphicsConfig.Instance();
+        return graphicsConfig is not null && graphicsConfig->PortraitMode;
     }
 
     private void OnGPoseStateChange(bool newState)
@@ -465,6 +478,14 @@ public class VirtualCameraManager : IDisposable
                 defaultCam.VirtualCamera.SaveCameraState();
                 SelectCamera(defaultCam.VirtualCamera);
                 defaultCam.IsLocked = false;
+            }
+
+            if(_configurationService.Configuration.InputManager.CreateFreeCameraOnGPoseEnter)
+            {
+                CreateCamera(
+                    CameraType.Free,
+                    selectCamera: _configurationService.Configuration.InputManager.ActivateCreatedFreeCameraOnGPoseEnter,
+                    targetNewInHierarch: false);
             }
         }
     }

@@ -100,9 +100,6 @@ public static partial class ImBrioGizmo
                 Vector2 botPos = ImGui.GetWindowPos() + ImGui.GetWindowContentRegionMax();
                 bool isMouseOverArea = (mouseData.mousePos.X > topPos.X && mouseData.mousePos.Y > topPos.Y && mouseData.mousePos.X < botPos.X && mouseData.mousePos.Y < botPos.Y);
 
-                if(isMouseOverArea)
-                    isUsing = true;
-
                 Vector2 center = topPos + ((botPos - topPos) / 2);
 
                 drawList.AddCircleFilled(center, radius, 0x50000000);
@@ -110,6 +107,10 @@ public static partial class ImBrioGizmo
                 DrawAxis(ref drawList, ref viewMatrix, ref transformMatrix, mouseData, center, lineThickness, radius, Axis.X);
                 DrawAxis(ref drawList, ref viewMatrix, ref transformMatrix, mouseData, center, lineThickness, radius, Axis.Y);
                 DrawAxis(ref drawList, ref viewMatrix, ref transformMatrix, mouseData, center, lineThickness, radius, Axis.Z);
+
+                var isAxisHovered = isMouseOverArea
+                    && mouseData.closestAxisMousePos is not null
+                    && (mouseData.closestAxisPointToMouseDistance < axisHoverMouseDist || lockedAxis is not null);
 
                 // Mouse drag
                 if(dragStartToPos != null && dragStartFromPos != null)
@@ -162,8 +163,10 @@ public static partial class ImBrioGizmo
                 }
 
                 // Mouse Hover
-                else if(isMouseOverArea && mouseData.closestAxisMousePos != null && (mouseData.closestAxisPointToMouseDistance < axisHoverMouseDist || lockedAxis != null))
+                else if(isAxisHovered && mouseData.closestAxisMousePos is Vector2 axisMousePosition)
                 {
+                    isUsing = true;
+
                     if(ImGui.IsMouseDown(ImGuiMouseButton.Left))
                     {
                         dragStartToPos = mouseData.closestAxisMousePos;
@@ -215,13 +218,14 @@ public static partial class ImBrioGizmo
                         }
                     }
 
-                    drawList.AddCircle((Vector2)mouseData.closestAxisMousePos, axisHoverMouseDist, style.AxisForegroundColors[(int)closestMouseAxis]);
+                    drawList.AddCircle(axisMousePosition, axisHoverMouseDist, style.AxisForegroundColors[(int)closestMouseAxis]);
                 }
 
-                if(size.X != 0 & size.Y != 0)
-                {
+                // Keep the gizmo area as an ImGui item so dragging a colored axis
+                // can not be mistaken for dragging the containing window. Rotation
+                // still starts only through the axis-distance check above.
+                if(size.X != 0 && size.Y != 0)
                     ImGui.InvisibleButton("##imbriozmo_cover", size);
-                }
             }
         }
 

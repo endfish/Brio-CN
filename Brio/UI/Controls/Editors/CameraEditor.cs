@@ -291,13 +291,46 @@ public static class CameraEditor
 
                     {
                         Vector3 pos = camera.PositionOffset;
-                        (var panyActive, var pdidChange) = ImBrio.DragFloat3($"###_transformPosition_2", ref pos, 0.001f, FontAwesomeIcon.ArrowsUpDownLeftRight, "Position Offset", enableExpanded: false);
+                        (var panyActive, var pdidChange) = ImBrio.DragFloat3($"###_transformPosition_2", ref pos, camera.PositionOffsetSpeed, FontAwesomeIcon.ArrowsUpDownLeftRight, "Position Offset", enableExpanded: false);
 
                         if(pdidChange)
                         {
                             camera.PositionOffset = pos;
                         }
                         anyActiveThisFrame |= panyActive;
+                    }
+
+                    ImBrio.Icon(FontAwesomeIcon.Walking);
+                    ImGui.SameLine();
+                    ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Position Offset Speed"));
+
+                    ImBrio.CenterNextElementWithPadding(5);
+
+                    float positionOffsetSpeed = camera.PositionOffsetSpeed;
+                    (var positionOffsetSpeedDidChange, var positionOffsetSpeedAnyActive) = ImBrio.SliderFloat(
+                        "##PositionOffsetSpeed",
+                        ref positionOffsetSpeed,
+                        0.001f,
+                        0.3f,
+                        "%.4f",
+                        ImGuiSliderFlags.AlwaysClamp,
+                        step: 0.001f,
+                        toolTip: "Position Offset Speed");
+                    if(positionOffsetSpeedDidChange)
+                        camera.PositionOffsetSpeed = positionOffsetSpeed;
+                    anyActiveThisFrame |= positionOffsetSpeedAnyActive;
+
+                    ImGui.SameLine();
+
+                    if(ImBrio.FontIconButtonRight(
+                        "resetPositionOffsetSpeed",
+                        FontAwesomeIcon.Undo,
+                        1f,
+                        global::Brio.Resources.Localize.Text("Reset Position Offset Speed"),
+                        positionOffsetSpeed != capability._configurationService.Configuration.Interface.DefaultCameraPositionOffsetSpeed))
+                    {
+                        camera.PositionOffsetSpeed = capability._configurationService.Configuration.Interface.DefaultCameraPositionOffsetSpeed;
+                        capability.Snapshot();
                     }
 
                     //

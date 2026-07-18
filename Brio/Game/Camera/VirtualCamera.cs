@@ -47,6 +47,7 @@ public unsafe partial class VirtualCamera
     public Vector3 PositionOffset = Vector3.Zero;
     public Vector3 TargetOffset = Vector3.Zero;
     public Vector3 Rotation = Vector3.Zero;
+    public float PositionOffsetSpeed { get; set; } = ConfigurationService.Instance.Configuration.Interface.DefaultCameraPositionOffsetSpeed;
 
     public bool IsSelectingActor => TargetOffset != Vector3.Zero;
     public string SelectedActorName = "Select an actor to track";
