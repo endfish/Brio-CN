@@ -1554,6 +1554,18 @@
     "Automatically creates one Free Camera in addition to the Default Camera.": "除默认相机外，自动新增一个自由相机。",
     "Activate the automatically created Free Camera": "同时激活自动新增的自由相机",
     "Makes the new Free Camera active immediately without changing the selected scene entity.": "立即将新增的自由相机设为当前相机，但不改变场景中选中的实体。",
+    "%d seconds": "%d 秒",
+    "Mirror Mode": "镜像模式",
+    "Mirror Mode: {0}": "镜像模式：{0}",
+    "Mirror Mode: None": "镜像模式：无",
+    "Mirror": "镜像",
+    "Quadratic": "二次",
+    "Control": "Ctrl",
+    "Alt": "Alt",
+    "Shift": "Shift",
+    "Reset Key to Default": "恢复默认按键",
+    "Toggles the Brio window.": "切换 Brio 主窗口。",
+    "No offsets.Add one below.": "尚无偏移，请在下方添加。",
     "(This Entity has no Bones)": "（此实体没有骨骼）"
   }
 }
