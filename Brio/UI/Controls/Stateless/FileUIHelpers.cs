@@ -106,7 +106,10 @@ public class FileUIHelpers
             if(ImGui.IsItemHovered())
                 ImGui.SetTooltip("Save this Scene in the currently loaded Project");
 
-            if(ImBrio.IconButtonWithText(FontAwesomeIcon.FileCirclePlus, "Save as new...", buttonSize))
+            if(ImBrio.IconButtonWithText(
+                FontAwesomeIcon.FileCirclePlus,
+                global::Brio.Resources.Localize.Text("Save as new..."),
+                buttonSize))
             {
                 ModalManager.Instance.OpenSaveProjectModal();
                 ImGui.CloseCurrentPopup();

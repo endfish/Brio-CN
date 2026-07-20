@@ -19,20 +19,24 @@ public class LightEditor
         if(light == null) return;
 
         // Falloff Mode
-        ImGui.Text("Light Falloff Mode:"u8);
+        ImGui.Text(global::Brio.Resources.Localize.Text("Light Falloff Mode:"));
         ImBrio.CenterNextElementWithPadding(15);
-        if(ImGui.BeginCombo("###falloffMode"u8, $"{light->FalloffType.ToString()}"))
+        if(ImGui.BeginCombo(
+            "###falloffMode",
+            global::Brio.Resources.Localize.Text(light->FalloffType.ToString())))
         {
             foreach(var value in Enum.GetValues<FalloffType>())
             {
-                if(ImGui.Selectable(value.ToString(), light->FalloffType == value))
+                var localizedValue = global::Brio.Resources.Localize.Text(value.ToString());
+                var valueLabel = $"{localizedValue}##falloff_{value}";
+                if(ImGui.Selectable(valueLabel, light->FalloffType == value))
                 {
                     light->FalloffType = value;
                 }
             }
             ImGui.EndCombo();
         }
-        ImBrio.AttachToolTip("Light Falloff Mode");
+        ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Light Falloff Mode"));
 
         // Shadows
         //

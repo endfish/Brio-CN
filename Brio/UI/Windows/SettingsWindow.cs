@@ -389,7 +389,12 @@ public class SettingsWindow : Window
             }
 
             var saveInterval = _configurationService.Configuration.AutoSave.AutoSaveInterval;
-            if(ImGui.SliderInt("Auto-Save Interval", ref saveInterval, 15, 500, "%d seconds"))
+            if(ImGui.SliderInt(
+                "Auto-Save Interval",
+                ref saveInterval,
+                15,
+                500,
+                global::Brio.Resources.Localize.Text("%d seconds")))
             {
                 _configurationService.Configuration.AutoSave.AutoSaveInterval = saveInterval;
                 _configurationService.ApplyChange();
@@ -766,7 +771,7 @@ public class SettingsWindow : Window
     {
         if(boneOffsets.Count == 0)
         {
-            ImGui.TextDisabled("No offsets. Add one below.");
+            ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No offsets. Add one below."));
             return;
         }
 

@@ -197,7 +197,13 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
 
                 ImBrio.CenterNextElementWithPadding(5);
                 var refreshInterval = staticVfx.VfxRefreshIntervalSeconds;
-                if(ImGui.DragInt("###vfx_refresh_interval", ref refreshInterval, 0.1f, 0, 60, "%d seconds"))
+                if(ImGui.DragInt(
+                    "###vfx_refresh_interval",
+                    ref refreshInterval,
+                    0.1f,
+                    0,
+                    60,
+                    global::Brio.Resources.Localize.Text("%d seconds")))
                 {
                     staticVfx.VfxRefreshIntervalSeconds = refreshInterval;
                     staticVfx.Expires = DateTime.Now.AddSeconds(staticVfx.VfxRefreshIntervalSeconds);

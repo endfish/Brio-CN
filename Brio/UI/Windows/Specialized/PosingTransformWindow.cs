@@ -193,7 +193,8 @@ public class PosingTransformWindow : Window
             _posingService.CoordinateMode = _posingService.CoordinateMode == PosingCoordinateMode.Local ? PosingCoordinateMode.World : PosingCoordinateMode.Local;
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip(_posingService.CoordinateMode == PosingCoordinateMode.World ? "Switch to Local" : "Switch to World");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text(
+                _posingService.CoordinateMode == PosingCoordinateMode.World ? "Switch to Local" : "Switch to World"));
 
         if(isMultiEntitySelection)
         {

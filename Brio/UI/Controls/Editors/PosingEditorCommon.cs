@@ -245,10 +245,12 @@ public static class PosingEditorCommon
         }
 
         string tooltip = posing?.Selected.Match(
-            boneSelect => $"Mirror Mode: {posing.SkeletonPosing.GetBonePose(boneSelect).MirrorMode}",
-            _ => "Mirror Mode: None",
-            _ => "Mirror Mode: None"
-        ) ?? "Mirror Mode";
+            boneSelect => global::Brio.Resources.Localize.Format(
+                "Mirror Mode: {0}",
+                global::Brio.Resources.Localize.Text(posing.SkeletonPosing.GetBonePose(boneSelect).MirrorMode.ToString())),
+            _ => global::Brio.Resources.Localize.Text("Mirror Mode: None"),
+            _ => global::Brio.Resources.Localize.Text("Mirror Mode: None")
+        ) ?? global::Brio.Resources.Localize.Text("Mirror Mode");
 
         ImBrio.AttachToolTip(tooltip);
     }

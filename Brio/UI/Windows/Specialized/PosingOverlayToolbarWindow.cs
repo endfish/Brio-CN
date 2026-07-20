@@ -220,7 +220,8 @@ public class PosingOverlayToolbarWindow : Window
 
         if(ImBrio.SeparatorTextButton("Gizmo",
             _posingService.CoordinateMode == PosingCoordinateMode.Local ? FontAwesomeIcon.Globe : FontAwesomeIcon.Atom,
-            tooltip: _posingService.CoordinateMode == PosingCoordinateMode.Local ? "Switch to World" : "Switch to Local")
+            tooltip: global::Brio.Resources.Localize.Text(
+                _posingService.CoordinateMode == PosingCoordinateMode.Local ? "Switch to World" : "Switch to Local"))
             || InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_ToggleWorld))
         {
             _posingService.CoordinateMode = _posingService.CoordinateMode == PosingCoordinateMode.Local ? PosingCoordinateMode.World : PosingCoordinateMode.Local;

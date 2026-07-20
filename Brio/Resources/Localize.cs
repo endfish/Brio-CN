@@ -25,6 +25,23 @@ public static class Localize
         return null;
     }
 
+    public static string Text(string source)
+    {
+        if(string.IsNullOrEmpty(source))
+            return source;
+
+        var idIndex = source.IndexOf("##", System.StringComparison.Ordinal);
+        var visibleText = idIndex >= 0 ? source[..idIndex] : source;
+        if(visibleText.Length == 0)
+            return source;
+
+        var localized = Get($"text.{visibleText}", visibleText);
+        return idIndex >= 0 ? $"{localized}{source[idIndex..]}" : localized;
+    }
+
+    public static string Format(string source, params object?[] args)
+        => string.Format(Text(source), args);
+
     public static void Load(ResourceProvider provider, string? clientLanguage = null)
     {
         _stringDb.Clear();
