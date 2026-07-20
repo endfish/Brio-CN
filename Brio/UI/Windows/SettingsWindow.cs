@@ -920,7 +920,7 @@ public class SettingsWindow : Window
         }
 
         bool swapRotationXandY = _configurationService.Configuration.Posing.SwapRotationXandY;
-        if(ImGui.Checkbox("Swap Rotation X and Y in Transform Editors", ref swapRotationXandY))
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Swap Rotation X and Y in Transform Editors"), ref swapRotationXandY))
         {
             _configurationService.Configuration.Posing.SwapRotationXandY = swapRotationXandY;
             _configurationService.ApplyChange();
