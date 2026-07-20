@@ -6,6 +6,7 @@ using Dalamud.Hooking;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using System;
+using System.Threading;
 
 namespace Brio.Game.Input;
 
@@ -34,6 +35,14 @@ public class GameInputService : IDisposable
 
     int _undo = 0;
     int _redo = 0;
+
+    private int _mousePositionX;
+    private int _mousePositionY;
+    private long _leftClickSequence;
+    private int _lastLeftPressed;
+    private int _lastLeftClicked;
+    private int _ctrlPressed;
+    private long _lastLeftClickTimestamp;
 
     //
 
@@ -85,6 +94,11 @@ public class GameInputService : IDisposable
         // This is a hot path, all of the games input flows through here 
 
         _handleInputHook.Original(arg1, arg2, arg3, mouseFrame, keyboardFrame);
+
+        if(mouseFrame is not null)
+            CaptureMouseInput(mouseFrame);
+        if(keyboardFrame is not null)
+            Volatile.Write(ref _ctrlPressed, keyboardFrame->KeyState[17] == 1 ? 1 : 0);
 
         if(_gPoseService.IsGPosing is true && !RaptureAtkModule.Instance()->AtkModule.IsTextInputActive())
         {
@@ -171,6 +185,37 @@ public class GameInputService : IDisposable
         }
     }
 
+    public GameMouseInputSnapshot GetMouseInputSnapshot()
+        => new(
+            Volatile.Read(ref _mousePositionX),
+            Volatile.Read(ref _mousePositionY),
+            Volatile.Read(ref _leftClickSequence),
+            Volatile.Read(ref _ctrlPressed) != 0);
+
+    private unsafe void CaptureMouseInput(MouseFrame* mouseFrame)
+    {
+        var buttonsPressed = mouseFrame->ButtonsPressed;
+        var buttonsClicked = mouseFrame->ButtonsClicked;
+        var leftPressed = buttonsPressed.HasFlag(MouseState.Left);
+        var leftClicked = buttonsClicked.HasFlag(MouseState.Left);
+        var wasLeftPressed = Interlocked.Exchange(ref _lastLeftPressed, leftPressed ? 1 : 0) != 0;
+        var wasLeftClicked = Interlocked.Exchange(ref _lastLeftClicked, leftClicked ? 1 : 0) != 0;
+
+        Volatile.Write(ref _mousePositionX, mouseFrame->PositionX);
+        Volatile.Write(ref _mousePositionY, mouseFrame->PositionY);
+
+        if((leftPressed && !wasLeftPressed) || (leftClicked && !wasLeftClicked))
+        {
+            var now = Environment.TickCount64;
+            var previous = Interlocked.Read(ref _lastLeftClickTimestamp);
+            if(now - previous >= 100)
+            {
+                Interlocked.Exchange(ref _lastLeftClickTimestamp, now);
+                Interlocked.Increment(ref _leftClickSequence);
+            }
+        }
+    }
+
     public unsafe void ConsumeAllInput(KeyboardFrame* keyboardFrame)
     {
         for(int i = 0; i < KeyboardFrame.KeyStateLength; i++)
@@ -194,3 +239,9 @@ public class GameInputService : IDisposable
         GC.SuppressFinalize(this);
     }
 }
+
+public readonly record struct GameMouseInputSnapshot(
+    int PositionX,
+    int PositionY,
+    long LeftClickSequence,
+    bool CtrlPressed);

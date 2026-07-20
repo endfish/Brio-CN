@@ -65,6 +65,7 @@ public class CatalogWindow : Window, IDisposable
     private List<string> _modelSubtypeOptions = [];
     private List<string> _modelAssetOptions = [];
     private CatalogDisplayMode _modelDisplayMode = CatalogDisplayMode.Compact;
+    private HashSet<string> _mapModelFilterPaths = new(StringComparer.OrdinalIgnoreCase);
     private readonly CatalogModelPreviewWindow _modelPreviewWindow;
     private IWorldObject? _modelLivePreview;
     private string _modelLivePreviewPath = string.Empty;
@@ -785,6 +786,21 @@ public class CatalogWindow : Window, IDisposable
     }
     private void DrawModelFilters(bool showPreviewButton = true)
     {
+        if(_mapModelFilterPaths.Count > 0)
+        {
+            ImGui.TextColored(
+                new Vector4(0.65f, 0.5f, 1f, 1f),
+                string.Format(
+                    Localize.Get("ui.mapModelInspector.catalogFilter", "Map Model Inspector filter: {0:N0} model paths"),
+                    _mapModelFilterPaths.Count));
+            ImGui.SameLine();
+            if(ImGui.SmallButton(Localize.Get("ui.mapModelInspector.clearCatalogFilter", "Clear Map Filter")))
+            {
+                _mapModelFilterPaths.Clear();
+                ApplyModelFilter();
+            }
+        }
+
         const float previewButtonWidth = 145;
         if(DrawSearchAndViewMode(ref _modelSearch, ref _modelDisplayMode, "model_view", showPreviewButton ? previewButtonWidth : 0))
             ApplyModelFilter();
@@ -1091,6 +1107,26 @@ public class CatalogWindow : Window, IDisposable
         _metaKind = ObjectPathKind.Model;
     }
 
+    public void OpenMapModels(IEnumerable<string> modelPaths, string? selectedPath = null)
+    {
+        _mapModelFilterPaths = modelPaths
+            .Select(PathData.Normalize)
+            .Where(path => !string.IsNullOrEmpty(path))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        _selectedModelExpansions.Clear();
+        _selectedModelSubtypes.Clear();
+        _selectedModelAssets.Clear();
+        _modelSearch = string.IsNullOrWhiteSpace(selectedPath) ? string.Empty : PathData.Normalize(selectedPath);
+
+        IsOpen = true;
+        categorySelection = 1;
+        BringToFront();
+
+        if(_pathsLoaded)
+            ApplyModelFilter();
+    }
+
     private void SelectModelPreview(string path)
     {
         var index = _filteredModels.FindIndex(model => model.Path == path);
@@ -1295,6 +1331,7 @@ public class CatalogWindow : Window, IDisposable
     {
         var items = _allModels.AsEnumerable();
 
+        if(_mapModelFilterPaths.Count > 0) items = items.Where(m => _mapModelFilterPaths.Contains(PathData.Normalize(m.Path)));
         if(_selectedModelExpansions.Count > 0) items = items.Where(m => _selectedModelExpansions.Contains(m.Expansion));
         if(_selectedModelSubtypes.Count > 0) items = items.Where(m => _selectedModelSubtypes.Contains(m.Subtype));
         if(_selectedModelAssets.Count > 0) items = items.Where(m => _selectedModelAssets.Contains(m.AssetType));

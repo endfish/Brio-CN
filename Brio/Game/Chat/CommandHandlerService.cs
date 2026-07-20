@@ -1,5 +1,6 @@
 ﻿using Brio.Services;
 using Brio.UI;
+using Brio.Resources;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
 using System;
@@ -11,6 +12,7 @@ public class CommandHandlerService : IDisposable
     private const string BrioCommandName = "/brio";
     private const string XATCommandName = "/xat";
     private const string MCDFCommandName = "/mcdf";
+    private const string MapModelsCommandName = "/briomodels";
 
     private readonly ICommandManager _commandManager;
     private readonly IChatGui _chatGui;
@@ -39,6 +41,13 @@ public class CommandHandlerService : IDisposable
             HelpMessage = "Toggles Brio's MCDF window.",
             ShowInHelp = false,
         });
+        _commandManager.AddHandler(MapModelsCommandName, new CommandInfo(OnCommand)
+        {
+            HelpMessage = Localize.Get(
+                "ui.mapModelInspector.commandHelp",
+                "Opens Brio's on-demand map model inspector."),
+            ShowInHelp = true,
+        });
     }
 
     private void OnCommand(string command, string arguments)
@@ -46,6 +55,12 @@ public class CommandHandlerService : IDisposable
         if(command == MCDFCommandName)
         {
             _uiManager.ToggleMCDFWindow();
+            return;
+        }
+
+        if(command == MapModelsCommandName)
+        {
+            _uiManager.ToggleMapModelInspectorWindow();
             return;
         }
 
@@ -76,6 +91,11 @@ public class CommandHandlerService : IDisposable
                 _uiManager.ToggleMCDFWindow();
                 break;
 
+            case "models":
+            case "mapmodels":
+                _uiManager.ToggleMapModelInspectorWindow();
+                break;
+
             case "mediator":
                 _mediator.PrintSubscriberInfo();
                 break;
@@ -94,6 +114,7 @@ public class CommandHandlerService : IDisposable
         _chatGui.Print("<none> - Toggle main Brio window");
         _chatGui.Print("window - Toggle main Brio window");
         _chatGui.Print("settings - Toggle Brio settings window");
+        _chatGui.Print($"models - {Localize.Get("ui.mapModelInspector.commandSubHelp", "Toggle the on-demand map model inspector")}");
         _chatGui.Print("about - Toggle Brio info window");
         _chatGui.Print("help - Print this help prompt");
     }
@@ -103,5 +124,6 @@ public class CommandHandlerService : IDisposable
         _commandManager.RemoveHandler(BrioCommandName);
         _commandManager.RemoveHandler(XATCommandName);
         _commandManager.RemoveHandler(MCDFCommandName);
+        _commandManager.RemoveHandler(MapModelsCommandName);
     }
 }

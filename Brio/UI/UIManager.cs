@@ -43,6 +43,7 @@ public class UIManager : IDisposable
     private readonly TimelineWindow _timelineWindow;
 
     private readonly CatalogWindow _catalogWindow;
+    private readonly MapModelInspectorWindow _mapModelInspectorWindow;
     private readonly ReferenceImageService _referenceImageService;
 
     private readonly ModalManager _modalManager;
@@ -105,6 +106,7 @@ public class UIManager : IDisposable
             EntitySectionWindow entitySectionWindow,
             TimelineWindow timelineWindow,
             CatalogWindow furnitureCatalogWindow,
+            MapModelInspectorWindow mapModelInspectorWindow,
             ReferenceImageService referenceImageService,
 
             ModalManager modalManager,
@@ -140,6 +142,7 @@ public class UIManager : IDisposable
         _entitySectionWindow = entitySectionWindow;
         _timelineWindow = timelineWindow;
         _catalogWindow = furnitureCatalogWindow;
+        _mapModelInspectorWindow = mapModelInspectorWindow;
         _referenceImageService = referenceImageService;
 
         _modalManager = modalManager;
@@ -171,6 +174,7 @@ public class UIManager : IDisposable
         _windowSystem.AddWindow(_timelineWindow);
         _windowSystem.AddWindow(_catalogWindow);
         _windowSystem.AddWindow(_catalogWindow.ModelPreviewWindow);
+        _windowSystem.AddWindow(_mapModelInspectorWindow);
 
         _gPoseService.OnGPoseStateChange += OnGPoseStateChange;
         _configurationService.OnConfigurationChanged += ApplySettings;
@@ -215,6 +219,14 @@ public class UIManager : IDisposable
     public void OpenModelPreviewBrowser()
     {
         _catalogWindow.OpenModelPreviewBrowser();
+    }
+
+    public void ToggleMapModelInspectorWindow()
+    {
+        if(_mapModelInspectorWindow.IsOpen)
+            _mapModelInspectorWindow.IsOpen = false;
+        else
+            _mapModelInspectorWindow.OpenAndScan();
     }
 
     public void ToggleProjectWindow()

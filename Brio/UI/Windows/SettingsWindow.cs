@@ -33,6 +33,7 @@ public class SettingsWindow : Window
     private readonly WebService _webService;
     private readonly CustomizePlusService _customizePlusService;
     private readonly PosingService _posingService;
+    private readonly MapModelInspectorWindow _mapModelInspectorWindow;
 
     public SettingsWindow(
         ConfigurationService configurationService,
@@ -40,7 +41,8 @@ public class SettingsWindow : Window
         GlamourerService glamourerService,
         WebService webService,
         CustomizePlusService customizePlusService,
-        PosingService posingService) : base($"{Brio.Name} SETTINGS###brio_settings_window", ImGuiWindowFlags.NoResize)
+        PosingService posingService,
+        MapModelInspectorWindow mapModelInspectorWindow) : base($"{Brio.Name} SETTINGS###brio_settings_window", ImGuiWindowFlags.NoResize)
     {
         Namespace = "brio_settings_namespace";
 
@@ -50,6 +52,7 @@ public class SettingsWindow : Window
         _webService = webService;
         _customizePlusService = customizePlusService;
         _posingService = posingService;
+        _mapModelInspectorWindow = mapModelInspectorWindow;
 
         this.AllowBackgroundBlur = false;
 
@@ -149,6 +152,19 @@ public class SettingsWindow : Window
         DrawThirdPartyIPC();
 
         ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Other"));
+
+        if(ImGui.CollapsingHeader(
+            global::Brio.Resources.Localize.Get("ui.mapModelInspector.title", "Map Model Inspector"),
+            ImGuiTreeNodeFlags.DefaultOpen))
+        {
+            ImGui.TextWrapped(global::Brio.Resources.Localize.Get(
+                "ui.mapModelInspector.settingsDescription",
+                "Inspect and identify model paths that are loaded on the current map. The scan runs only when you open the inspector or click Refresh."));
+            if(ImGui.Button(
+                global::Brio.Resources.Localize.Get("ui.mapModelInspector.open", "Open Map Model Inspector"),
+                new Vector2(-1, 0)))
+                _mapModelInspectorWindow.OpenAndScan();
+        }
 
         if(ImGui.CollapsingHeader(global::Brio.Resources.Localize.Text("Library"), ImGuiTreeNodeFlags.DefaultOpen))
         {
