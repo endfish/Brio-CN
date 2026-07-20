@@ -506,13 +506,6 @@ public class SettingsWindow : Window
                 _configurationService.ApplyChange();
             }
 
-            bool autoSelectModelTransform = _configurationService.Configuration.Posing.AutoSelectTransformOnEntitySelect;
-            if(ImGui.Checkbox("Select Model Transform on Entity Select", ref autoSelectModelTransform))
-            {
-                _configurationService.Configuration.Posing.AutoSelectTransformOnEntitySelect = autoSelectModelTransform;
-                _configurationService.ApplyChange();
-            }
-
             bool autoSelectLight = _configurationService.Configuration.Posing.AutoSelectLightWhenClickingOnALight;
             if(ImGui.Checkbox("Select Light in Light Window when Clicking a Light Entity", ref autoSelectLight))
             {
@@ -925,6 +918,13 @@ public class SettingsWindow : Window
             _configurationService.Configuration.Posing.UndoStackSize = undoStackSize;
             _configurationService.ApplyChange();
         }
+
+        bool swapRotationXandY = _configurationService.Configuration.Posing.SwapRotationXandY;
+        if(ImGui.Checkbox("Swap Rotation X and Y in Transform Editors", ref swapRotationXandY))
+        {
+            _configurationService.Configuration.Posing.SwapRotationXandY = swapRotationXandY;
+            _configurationService.ApplyChange();
+        }
     }
 
     private void DrawOffsetSection()
@@ -1152,13 +1152,6 @@ public class SettingsWindow : Window
             if(ImGui.Checkbox("Flip Free Camera Keybinds Past -90/90 Degrees", ref flipKeybindsPastNinety))
             {
                 _configurationService.Configuration.InputManager.FlipKeyBindsPastNinety = flipKeybindsPastNinety;
-                _configurationService.ApplyChange();
-            }
-
-            bool disableScrollOnInputs = _configurationService.Configuration.InputManager.DisableScrollWheelOnInputs;
-            if(ImGui.Checkbox("Disable scroll wheel for input boxes and gizmos", ref disableScrollOnInputs))
-            {
-                _configurationService.Configuration.InputManager.DisableScrollWheelOnInputs = disableScrollOnInputs;
                 _configurationService.ApplyChange();
             }
         }
