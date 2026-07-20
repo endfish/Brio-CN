@@ -101,7 +101,7 @@ public class InputManagerConfiguration
     public bool EnableKeyHandlingOnKeyMod { get; set; } = true;
     public bool EnableConsumeAllInput { get; set; } = false;
     public bool FlipKeyBindsPastNinety { get; set; } = false;
-    public bool DisableScrollWheelOnInputs { get; set; } = false;
+    public bool DisableScrollWheelOnInputs { get; set; } = false; // Kept for continued configuration compatibility.
     public bool CreateFreeCameraOnGPoseEnter { get; set; } = false;
     public bool ActivateCreatedFreeCameraOnGPoseEnter { get; set; } = false;
 
