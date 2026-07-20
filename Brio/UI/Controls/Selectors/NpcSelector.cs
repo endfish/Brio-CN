@@ -13,7 +13,7 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
 {
     protected override Vector2 MinimumListSize { get; } = new(300, 300);
 
-    protected override float EntrySize => ImGui.GetTextLineHeight() * 3.2f;
+    protected override float EntrySize => ImGui.GetTextLineHeight() * 4.2f;
     protected virtual Vector2 IconSize => new(ImGui.GetTextLineHeight() * 3f);
 
     protected override SelectorFlags Flags => SelectorFlags.AllowSearch | SelectorFlags.ShowOptions | SelectorFlags.AdaptiveSizing;
@@ -31,31 +31,35 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
         foreach(var row in gameDataProvider.FilteredBNpcBases)
         {
             var name = gameDataProvider.GetBNpcNameByBase(row.RowId);
-            AddItem(new NpcSelectorEntry(name, 0, row));
+            AddItem(new NpcSelectorEntry(name, 0, row, GetTexToolsModelId(row.ModelChara.ValueNullable)));
         }
 
         foreach(var row in gameDataProvider.FilteredENpcBases)
         {
             var name = gameDataProvider.GetENpcName(row.RowId);
-            AddItem(new NpcSelectorEntry(name, 0, row));
+            AddItem(new NpcSelectorEntry(name, 0, row, GetTexToolsModelId(row.ModelChara.ValueNullable)));
         }
 
         foreach(var row in gameDataProvider.FilteredMounts)
         {
             var name = gameDataProvider.GetMountName(row.RowId);
-            AddItem(new NpcSelectorEntry(name, row.Icon, row));
+            AddItem(new NpcSelectorEntry(name, row.Icon, row, GetTexToolsModelId(row.ModelChara.ValueNullable)));
         }
 
         foreach(var row in gameDataProvider.FilteredCompanions)
         {
             var name = gameDataProvider.GetCompanionName(row.RowId);
-            AddItem(new NpcSelectorEntry(name, row.Icon, row));
+            AddItem(new NpcSelectorEntry(name, row.Icon, row, GetTexToolsModelId(row.Model.ValueNullable)));
         }
 
+        var modelCharaSheet = gameDataProvider.GetExcelSheet<ModelChara>();
         foreach(var row in gameDataProvider.FilteredOrnaments)
         {
-            var name = GameDataProvider.Instance.GetOrnamentName(row.RowId);
-            AddItem(new NpcSelectorEntry(name, row.Icon, row));
+            var name = gameDataProvider.GetOrnamentName(row.RowId);
+            var texToolsModelId = modelCharaSheet.TryGetRow(row.Model, out var modelChara)
+                ? GetTexToolsModelId(modelChara)
+                : null;
+            AddItem(new NpcSelectorEntry(name, row.Icon, row, texToolsModelId));
         }
     }
 
@@ -94,9 +98,13 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
             none => ""
         );
 
+        var texToolsDetails = item.TexToolsModelId is not null
+            ? $"TexTools: {item.TexToolsModelId}"
+            : "TexTools: N/A";
+
         ImBrio.BorderedGameIcon("icon", item.Icon, "Images.UnknownIcon.png", flags: ImGuiButtonFlags.None, size: IconSize);
         ImGui.SameLine();
-        ImGui.Text($"{item.Name}\n{details}");
+        ImGui.Text($"{item.Name}\n{details}\n{texToolsDetails}");
     }
 
     protected override bool Filter(NpcSelectorEntry item, string search)
@@ -122,7 +130,24 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
             none => ""
         );
 
+        searchTerm = $"{searchTerm} {item.TexToolsModelId}";
+
         return searchTerm.Contains(search, StringComparison.InvariantCultureIgnoreCase);
+    }
+
+    private static string? GetTexToolsModelId(ModelChara? modelChara)
+    {
+        if(modelChara is not { Model: > 0 } model)
+            return null;
+
+        var baseModelId = model.Type switch
+        {
+            2 => $"d{model.Model:D4}e{model.Base:D4}",
+            3 => $"m{model.Model:D4}b{model.Base:D4}",
+            _ => null
+        };
+
+        return baseModelId is null ? null : $"{baseModelId} (v{model.Variant})";
     }
 
     protected override int Compare(NpcSelectorEntry itemA, NpcSelectorEntry itemB)
@@ -191,5 +216,5 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
         }
     }
 
-    public record class NpcSelectorEntry(string Name, uint Icon, ActorAppearanceUnion Appearance);
+    public record class NpcSelectorEntry(string Name, uint Icon, ActorAppearanceUnion Appearance, string? TexToolsModelId);
 }
