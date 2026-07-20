@@ -67,7 +67,7 @@ public static class KeybindEditor
 
             if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
             {
-                ImGui.SetTooltip("Control");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Control"));
             }
         }
 
@@ -84,7 +84,7 @@ public static class KeybindEditor
 
             if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
             {
-                ImGui.SetTooltip("Alt");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Alt"));
             }
         }
 
@@ -101,13 +101,13 @@ public static class KeybindEditor
 
             if(ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
             {
-                ImGui.SetTooltip("Shift");
+                ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Shift"));
             }
         }
 
         // Reset to Default Button
         ImGui.SameLine();
-        if(ImGui.Button($"Reset##{label}"))
+        if(ImGui.Button(global::Brio.Resources.Localize.Text($"Reset##{label}")))
         {
             keyBind = config.GetDefaultKey(evt);
             changed = true;
@@ -115,7 +115,7 @@ public static class KeybindEditor
 
         if(ImGui.IsItemHovered())
         {
-            ImGui.SetTooltip("Reset Key to Default");
+            ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Reset Key to Default"));
         }
 
         // Key

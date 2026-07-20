@@ -28,12 +28,12 @@ public class CommandHandlerService : IDisposable
 
         _commandManager.AddHandler(BrioCommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Toggles the Brio window.",
+            HelpMessage = global::Brio.Resources.Localize.Text("Toggles the Brio window."),
             ShowInHelp = true,
         });
         _commandManager.AddHandler(XATCommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Toggles the Brio window.",
+            HelpMessage = global::Brio.Resources.Localize.Text("Toggles the Brio window."),
             ShowInHelp = false,
         });
         _commandManager.AddHandler(MCDFCommandName, new CommandInfo(OnCommand)

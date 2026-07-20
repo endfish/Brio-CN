@@ -21,11 +21,15 @@ public class LightEditor
         // Falloff Mode
         ImGui.Text(global::Brio.Resources.Localize.Text("Light Falloff Mode:"));
         ImBrio.CenterNextElementWithPadding(15);
-        if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###falloffMode"), $"{light->FalloffType.ToString()}"))
+        if(ImGui.BeginCombo(
+            global::Brio.Resources.Localize.Text("###falloffMode"),
+            global::Brio.Resources.Localize.Text(light->FalloffType.ToString())))
         {
             foreach(var value in Enum.GetValues<FalloffType>())
             {
-                if(ImGui.Selectable(value.ToString(), light->FalloffType == value))
+                var localizedValue = global::Brio.Resources.Localize.Text(value.ToString());
+                var valueLabel = $"{localizedValue}##falloff_{value}";
+                if(ImGui.Selectable(valueLabel, light->FalloffType == value))
                 {
                     light->FalloffType = value;
                 }

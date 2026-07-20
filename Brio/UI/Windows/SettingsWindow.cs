@@ -406,7 +406,12 @@ public class SettingsWindow : Window
             }
 
             var saveInterval = _configurationService.Configuration.AutoSave.AutoSaveInterval;
-            if(ImGui.SliderInt(global::Brio.Resources.Localize.Text("Auto-Save Interval"), ref saveInterval, 15, 500, "%d seconds"))
+            if(ImGui.SliderInt(
+                global::Brio.Resources.Localize.Text("Auto-Save Interval"),
+                ref saveInterval,
+                15,
+                500,
+                global::Brio.Resources.Localize.Text("%d seconds")))
             {
                 _configurationService.Configuration.AutoSave.AutoSaveInterval = saveInterval;
                 _configurationService.ApplyChange();
