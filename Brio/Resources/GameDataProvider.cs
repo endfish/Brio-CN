@@ -40,6 +40,7 @@ public class GameDataProvider
 
     public BNpcBase[] FilteredBNpcBases { get; }
     public ENpcBase[] FilteredENpcBases { get; }
+    public Transformation[] FilteredTransformations { get; }
     public Mount[] FilteredMounts { get; }
     public Companion[] FilteredCompanions { get; }
     public Ornament[] FilteredOrnaments { get; }
@@ -55,6 +56,7 @@ public class GameDataProvider
 
         FilteredBNpcBases = [.. dataManager.GetExcelSheet<BNpcBase>().Where(row => row.RowId != 0 && row.ModelChara.RowId != 0)];
         FilteredENpcBases = [.. dataManager.GetExcelSheet<ENpcBase>().Where(row => row.RowId != 0)];
+        FilteredTransformations = [.. dataManager.GetExcelSheet<Transformation>().Where(row => row.RowId != 0 && row.Model.RowId != 0)];
         FilteredMounts = [.. dataManager.GetExcelSheet<Mount>().Where(row => row.RowId != 0 && row.ModelChara.RowId != 0)];
         FilteredCompanions = [.. dataManager.GetExcelSheet<Companion>().Where(row => row.RowId != 0 && row.Model.RowId != 0)];
         FilteredOrnaments = [.. dataManager.GetExcelSheet<Ornament>().Where(row => row.RowId != 0 && row.Model != 0)];

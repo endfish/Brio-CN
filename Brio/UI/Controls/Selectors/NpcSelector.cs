@@ -23,6 +23,7 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
     private bool showMounts = true;
     private bool showCompanions = true;
     private bool showOrnaments = true;
+    private bool showTransformations = true;
 
     protected override void PopulateList()
     {
@@ -59,7 +60,25 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
             var texToolsModelId = modelCharaSheet.TryGetRow(row.Model, out var modelChara)
                 ? GetTexToolsModelId(modelChara)
                 : null;
-            AddItem(new NpcSelectorEntry(name, row.Icon, row, texToolsModelId));
+            AddItem(new NpcSelectorEntry(name, row.Icon, row, texToolsModelId, GetModelPath(modelChara)));
+        }
+
+        foreach(var row in gameDataProvider.FilteredTransformations)
+        {
+            var modelChara = row.Model.ValueNullable;
+            if(modelChara is null)
+                continue;
+
+            var name = row.BNpcName.ValueNullable?.Singular.ToString();
+            if(string.IsNullOrWhiteSpace(name))
+                name = global::Brio.Resources.Localize.Format("Transformation {0}", row.RowId);
+
+            AddItem(new NpcSelectorEntry(
+                name,
+                0,
+                row,
+                GetTexToolsModelId(modelChara),
+                GetModelPath(modelChara)));
         }
     }
 
@@ -85,26 +104,53 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
 
         if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Ornaments"), ref showOrnaments))
             UpdateList();
+
+        if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Transformations"), ref showTransformations))
+            UpdateList();
     }
 
     protected override void DrawItem(NpcSelectorEntry item, bool isHovered)
     {
+        var battleNpcLabel = global::Brio.Resources.Localize.Text("Battle NPC");
+        var eventNpcLabel = global::Brio.Resources.Localize.Text("Event NPC");
+        var mountLabel = global::Brio.Resources.Localize.Text("Mount");
+        var companionLabel = global::Brio.Resources.Localize.Text("Companion");
+        var ornamentLabel = global::Brio.Resources.Localize.Text("Ornament");
+        var transformationLabel = global::Brio.Resources.Localize.Text("Transformation");
+        var modelLabel = global::Brio.Resources.Localize.Text("Model");
         var details = item.Appearance.Match(
-            bnpc => $"Battle NPC: {bnpc.RowId}\nModel: {bnpc.ModelChara.RowId}",
-            enpc => $"Event NPC: {enpc.RowId}\nModel: {enpc.ModelChara.RowId}",
-            mount => $"Mount: {mount.RowId}\nModel: {mount.ModelChara.RowId}",
-            companion => $"Companion: {companion.RowId}\nModel: {companion.Model.RowId}",
-            ornament => $"Ornament: {ornament.RowId}\nModel: {ornament.Model}",
+            bnpc => $"{battleNpcLabel}: {bnpc.RowId}\n{modelLabel}: {bnpc.ModelChara.RowId}",
+            enpc => $"{eventNpcLabel}: {enpc.RowId}\n{modelLabel}: {enpc.ModelChara.RowId}",
+            mount => $"{mountLabel}: {mount.RowId}\n{modelLabel}: {mount.ModelChara.RowId}",
+            companion => $"{companionLabel}: {companion.RowId}\n{modelLabel}: {companion.Model.RowId}",
+            ornament => $"{ornamentLabel}: {ornament.RowId}\n{modelLabel}: {ornament.Model}",
+            transformation => $"{transformationLabel}: {transformation.RowId}\n{modelLabel}: {transformation.Model.RowId}",
             none => ""
         );
 
+        var unavailableLabel = global::Brio.Resources.Localize.Text("N/A");
         var texToolsDetails = item.TexToolsModelId is not null
             ? $"TexTools: {item.TexToolsModelId}"
-            : "TexTools: N/A";
+            : $"TexTools: {unavailableLabel}";
 
         ImBrio.BorderedGameIcon("icon", item.Icon, "Images.UnknownIcon.png", flags: ImGuiButtonFlags.None, size: IconSize);
         ImGui.SameLine();
-        ImGui.Text($"{item.Name}\n{details}\n{texToolsDetails}");
+        if(item.Appearance.Value is Transformation transformation)
+        {
+            var scaleLabel = global::Brio.Resources.Localize.Text("Scale");
+            ImGui.Text($"{item.Name}\n{details}\n{texToolsDetails} · {scaleLabel}: {transformation.Scale:0.###}");
+        }
+        else
+            ImGui.Text($"{item.Name}\n{details}\n{texToolsDetails}");
+    }
+
+    protected override void DrawTooltip(NpcSelectorEntry item)
+    {
+        if(!string.IsNullOrWhiteSpace(item.ModelPath))
+        {
+            var pathLabel = global::Brio.Resources.Localize.Text("Path");
+            ImGui.SetTooltip($"{pathLabel}: {item.ModelPath}");
+        }
     }
 
     protected override bool Filter(NpcSelectorEntry item, string search)
@@ -115,6 +161,7 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
             mount => !showMounts,
             companion => !showCompanions,
             ornament => !showOrnaments,
+            transformation => !showTransformations,
             none => true
         );
 
@@ -127,10 +174,11 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
             mount => $"{item.Name} {mount.RowId} {mount.ModelChara.RowId}",
             companion => $"{item.Name} {companion.RowId} {companion.Model.RowId}",
             ornament => $"{item.Name} {ornament.RowId} {ornament.Model}",
+            transformation => $"{item.Name} {transformation.RowId} {transformation.Model.RowId}",
             none => ""
         );
 
-        searchTerm = $"{searchTerm} {item.TexToolsModelId}";
+        searchTerm = $"{searchTerm} {item.TexToolsModelId} {item.ModelPath}";
 
         return searchTerm.Contains(search, StringComparison.InvariantCultureIgnoreCase);
     }
@@ -148,6 +196,19 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
         };
 
         return baseModelId is null ? null : $"{baseModelId} (v{model.Variant})";
+    }
+
+    private static string? GetModelPath(ModelChara? modelChara)
+    {
+        if(modelChara is not { Model: > 0 } model)
+            return null;
+
+        return model.Type switch
+        {
+            2 => $"chara/demihuman/d{model.Model:D4}/obj/equipment/e{model.Base:D4}",
+            3 => $"chara/monster/m{model.Model:D4}/obj/body/b{model.Base:D4}/model/m{model.Model:D4}b{model.Base:D4}.mdl",
+            _ => null
+        };
     }
 
     protected override int Compare(NpcSelectorEntry itemA, NpcSelectorEntry itemB)
@@ -180,6 +241,12 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
         if(itemA?.Appearance?.Value is Ornament && itemB?.Appearance?.Value is not Ornament)
             return -1;
         if(itemA?.Appearance?.Value is not Ornament && itemB?.Appearance?.Value is Ornament)
+            return 1;
+
+        // Transformations
+        if(itemA?.Appearance?.Value is Transformation && itemB?.Appearance?.Value is not Transformation)
+            return -1;
+        if(itemA?.Appearance?.Value is not Transformation && itemB?.Appearance?.Value is Transformation)
             return 1;
 
         string nameA = itemA?.Name ?? string.Empty;
@@ -216,5 +283,10 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
         }
     }
 
-    public record class NpcSelectorEntry(string Name, uint Icon, ActorAppearanceUnion Appearance, string? TexToolsModelId);
+    public record class NpcSelectorEntry(
+        string Name,
+        uint Icon,
+        ActorAppearanceUnion Appearance,
+        string? TexToolsModelId,
+        string? ModelPath = null);
 }

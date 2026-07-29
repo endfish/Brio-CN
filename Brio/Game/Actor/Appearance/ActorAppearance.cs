@@ -86,34 +86,7 @@ public struct ActorAppearance()
 
         if(npc.BNpcCustomize.RowId != 0 && npc.BNpcCustomize.ValueNullable is not null)
         {
-            var customize = npc.BNpcCustomize.Value!;
-
-            actorAppearance.Customize.Race = (Races)customize.Race.RowId;
-            actorAppearance.Customize.Gender = (Genders)customize.Gender;
-            actorAppearance.Customize.BodyType = (BodyTypes)customize.BodyType;
-            actorAppearance.Customize.Tribe = (Tribes)customize.Tribe.RowId;
-            actorAppearance.Customize.Height = customize.Height;
-            actorAppearance.Customize.FaceType = customize.Face;
-            actorAppearance.Customize.HairStyle = customize.HairStyle;
-            actorAppearance.Customize.HasHighlights = customize.HairHighlight;
-            actorAppearance.Customize.SkinTone = customize.SkinColor;
-            actorAppearance.Customize.REyeColor = customize.EyeHeterochromia;
-            actorAppearance.Customize.HairColor = customize.HairColor;
-            actorAppearance.Customize.HairHighlightColor = customize.HairHighlightColor;
-            actorAppearance.Customize.FaceFeatures = (FacialFeature)customize.FacialFeature;
-            actorAppearance.Customize.FaceFeaturesColor = customize.FacialFeatureColor;
-            actorAppearance.Customize.Eyebrows = customize.Eyebrows;
-            actorAppearance.Customize.LEyeColor = customize.EyeColor;
-            actorAppearance.Customize.EyeShape = customize.EyeShape;
-            actorAppearance.Customize.NoseShape = customize.Nose;
-            actorAppearance.Customize.JawShape = customize.Jaw;
-            actorAppearance.Customize.LipStyle = customize.Mouth;
-            actorAppearance.Customize.LipColor = customize.LipColor;
-            actorAppearance.Customize.RaceFeatureSize = customize.BustOrTone1;
-            actorAppearance.Customize.RaceFeatureType = customize.ExtraFeature1;
-            actorAppearance.Customize.BustSize = customize.ExtraFeature2OrBust;
-            actorAppearance.Customize.Facepaint = customize.FacePaint;
-            actorAppearance.Customize.FacePaintColor = customize.FacePaintColor;
+            actorAppearance.Customize = FromBNpcCustomize(npc.BNpcCustomize.Value!);
         }
 
         if(npc.NpcEquip.RowId != 0 && npc.NpcEquip.ValueNullable is not null)
@@ -127,6 +100,31 @@ public struct ActorAppearance()
         // TODO: Can NPCs have facewear?
         actorAppearance.Facewear = 0;
 
+        return actorAppearance;
+    }
+
+    public static ActorAppearance FromTransformation(Transformation transformation)
+    {
+        ActorAppearance actorAppearance = new()
+        {
+            ModelCharaId = (int)transformation.Model.RowId
+        };
+
+        if(transformation.BNpcCustomize.RowId != 0 && transformation.BNpcCustomize.ValueNullable is not null)
+        {
+            actorAppearance.Customize = FromBNpcCustomize(transformation.BNpcCustomize.Value!);
+        }
+
+        if(transformation.NpcEquip.RowId != 0 && transformation.NpcEquip.ValueNullable is not null)
+        {
+            var (mainHand, offHand, equipment) = FromNpcEquip(transformation.NpcEquip.Value!);
+            actorAppearance.Weapons.MainHand = mainHand;
+            actorAppearance.Weapons.OffHand = offHand;
+            actorAppearance.Equipment = equipment;
+        }
+
+        // Transformation actions, VFX and scale are runtime behavior and are
+        // intentionally not part of the imported actor appearance.
         return actorAppearance;
     }
 
@@ -286,6 +284,40 @@ public struct ActorAppearance()
         actorAppearance.Facewear = 0;
 
         return actorAppearance;
+    }
+
+    private static ActorCustomize FromBNpcCustomize(BNpcCustomize customize)
+    {
+        ActorCustomize actorCustomize = new();
+
+        actorCustomize.Race = (Races)customize.Race.RowId;
+        actorCustomize.Gender = (Genders)customize.Gender;
+        actorCustomize.BodyType = (BodyTypes)customize.BodyType;
+        actorCustomize.Tribe = (Tribes)customize.Tribe.RowId;
+        actorCustomize.Height = customize.Height;
+        actorCustomize.FaceType = customize.Face;
+        actorCustomize.HairStyle = customize.HairStyle;
+        actorCustomize.HasHighlights = customize.HairHighlight;
+        actorCustomize.SkinTone = customize.SkinColor;
+        actorCustomize.REyeColor = customize.EyeHeterochromia;
+        actorCustomize.HairColor = customize.HairColor;
+        actorCustomize.HairHighlightColor = customize.HairHighlightColor;
+        actorCustomize.FaceFeatures = (FacialFeature)customize.FacialFeature;
+        actorCustomize.FaceFeaturesColor = customize.FacialFeatureColor;
+        actorCustomize.Eyebrows = customize.Eyebrows;
+        actorCustomize.LEyeColor = customize.EyeColor;
+        actorCustomize.EyeShape = customize.EyeShape;
+        actorCustomize.NoseShape = customize.Nose;
+        actorCustomize.JawShape = customize.Jaw;
+        actorCustomize.LipStyle = customize.Mouth;
+        actorCustomize.LipColor = customize.LipColor;
+        actorCustomize.RaceFeatureSize = customize.BustOrTone1;
+        actorCustomize.RaceFeatureType = customize.ExtraFeature1;
+        actorCustomize.BustSize = customize.ExtraFeature2OrBust;
+        actorCustomize.Facepaint = customize.FacePaint;
+        actorCustomize.FacePaintColor = customize.FacePaintColor;
+
+        return actorCustomize;
     }
 
     private static (WeaponModelId, WeaponModelId, ActorEquipment) FromNpcEquip(NpcEquip npcEquip)
