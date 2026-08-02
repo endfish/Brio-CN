@@ -211,6 +211,7 @@ public class Brio(IDalamudPluginInterface pluginInterface) : IAsyncDalamudPlugin
         serviceCollection.AddSingleton<MapModelInspectorService>();
         serviceCollection.AddSingleton<ReferenceImageService>();
         serviceCollection.AddSingleton<PathMetadataService>();
+        serviceCollection.AddSingleton<ActionTimelineAnnotationService>();
         serviceCollection.AddSingleton<QuickAccessService>();
 
         // API & Web

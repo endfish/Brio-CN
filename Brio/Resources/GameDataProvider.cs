@@ -35,6 +35,7 @@ public class GameDataProvider
     public FurnitureDatabase FurnitureDatabase { get; }
     public PathDatabase PathDatabase { get; }
     public HumanData HumanData { get; }
+    public ActionTimelineMetadataDatabase ActionTimelineMetadata { get; }
 
     public ExcelSheet<BrioActionTimeline> ActionTimelines { get; }
 
@@ -53,6 +54,7 @@ public class GameDataProvider
         this.seStringEvaluator = seStringEvaluator;
 
         ActionTimelines = dataManager.GetExcelSheet<BrioActionTimeline>();
+        ActionTimelineMetadata = new(this, resourceProvider);
 
         FilteredBNpcBases = [.. dataManager.GetExcelSheet<BNpcBase>().Where(row => row.RowId != 0 && row.ModelChara.RowId != 0)];
         FilteredENpcBases = [.. dataManager.GetExcelSheet<ENpcBase>().Where(row => row.RowId != 0)];

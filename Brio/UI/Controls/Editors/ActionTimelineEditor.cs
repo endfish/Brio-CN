@@ -57,15 +57,21 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
         if(_globalTimelineSelector.SelectionChanged && _globalTimelineSelector.Selected != null)
         {
+            var selected = _globalTimelineSelector.Selected;
+            var playbackContext = _globalTimelineSelector.GetPlaybackContext(selected);
+            _capability.ConfigureAnimationContext(
+                selected.TimelineId,
+                playbackContext);
+
             if(_isBaseMode)
             {
-                _capability.SlotedBaseAnimation = _globalTimelineSelector.Selected.TimelineId;
+                _capability.SlotedBaseAnimation = selected.TimelineId;
                 if(_startAnimationOnSelect)
                     ApplyBaseOverride(_capability, true);
             }
             else
             {
-                _capability.SlotedBlendAnimation = _globalTimelineSelector.Selected.TimelineId;
+                _capability.SlotedBlendAnimation = selected.TimelineId;
                 ApplyBlend(_capability);
             }
 
@@ -79,6 +85,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
     {
         _capability = capability;
         _globalTimelineSelector.ModActionActor = capability.GameObject;
+        _globalTimelineSelector.PlaybackCapability = capability;
 
         _globalTimelineSelector.DrawAsWindow();
 
@@ -152,8 +159,9 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
         if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Animation"), _capability.HasOverride))
         {
             _capability.Reset();
-            _cutsceneManager.StopPlayback();
-            _cutsceneManager.CameraPath = null;
+            _cutsceneManager?.StopPlayback();
+            if(_cutsceneManager is not null)
+                _cutsceneManager.CameraPath = null;
             _cameraPath = string.Empty;
         }
 
@@ -281,6 +289,32 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
                 ImGui.Checkbox(global::Brio.Resources.Localize.Text("Start Animation On Select"), ref _startAnimationOnSelect);
                 if(ImGui.IsItemHovered())
                     ImGui.SetTooltip(global::Brio.Resources.Localize.Text("Start Animation On Select"));
+
+                ImGui.SameLine();
+                var crossRaceEnabled = _capability.CrossRaceAnimationEmulationEnabled;
+                using(ImRaii.Disabled(!_capability.CanUseCrossRaceAnimationEmulation))
+                {
+                    if(ImGui.Checkbox(
+                        global::Brio.Resources.Localize.Text("Cross-race###current_actor_cross_race_animation"),
+                        ref crossRaceEnabled))
+                    {
+                        _capability.CrossRaceAnimationEmulationEnabled = crossRaceEnabled;
+                    }
+                }
+
+                ImGui.SameLine();
+                ImBrio.FontIcon(FontAwesomeIcon.ExclamationTriangle);
+                if(ImGui.IsItemHovered())
+                {
+                    using(ImRaii.Tooltip())
+                    {
+                        ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + ImGui.GetFontSize() * 28f);
+                        ImGui.TextUnformatted(global::Brio.Resources.Localize.Get(
+                            "ui.pose.crossRaceWarning",
+                            "Only affects the current actor and resets when GPose ends.\nSome modded animations or custom skeletons may be incompatible.\nDisable it immediately if animation or rendering behaves abnormally."));
+                        ImGui.PopTextWrapPos();
+                    }
+                }
 
                 _globalTimelineSelector.Draw();
             }
@@ -701,6 +735,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
         if(resetSpeed || cap.SpeedMultiplier == 0)
             cap.ResetOverallSpeedOverride();
 
+        cap.PrepareAnimationContext((ushort)cap.SlotedBaseAnimation);
         cap.ApplyBaseOverride((ushort)cap.SlotedBaseAnimation, cap.DoBaseInterrupt);
     }
     public static void ApplyBlend(ActionTimelineCapability cap)
@@ -708,6 +743,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
         if(cap.SlotedBlendAnimation == 0 || cap.IsPaused)
             return;
 
+        cap.PrepareAnimationContext((ushort)cap.SlotedBlendAnimation);
         cap.BlendTimeline((ushort)cap.SlotedBlendAnimation);
     }
 }

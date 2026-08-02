@@ -396,7 +396,8 @@ public class FileUIHelpers
             {
                 Brio.Log.Warning("Blocked expression import because pose is not DT compatible.");
 
-                Brio.NotifyError("Blocked expression import because pose is not DT compatible.");
+                Brio.NotifyError(global::Brio.Resources.Localize.Text(
+                    "Blocked expression import because the pose is not compatible with Dawntrail facial bones."));
 
                 doExpression = false;
             }
@@ -473,20 +474,25 @@ public class FileUIHelpers
 
             var buttonSize = new Vector2(buttonwidth, butonHeight);
 
-            ImBrio.SeparatorText($"Import Pose [{capability.Entity.FriendlyName}]");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Format(
+                "Import Pose [{0}]",
+                capability.Entity.FriendlyName));
 
             ImGui.Checkbox(global::Brio.Resources.Localize.Text("Freeze Actor"), ref freezeOnLoad);
             ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Freeze the actor on import"));
 
-            ImGui.Checkbox(global::Brio.Resources.Localize.Text("Smart Import"), ref smartDefaults);
-            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("""
-
+            ImGui.Checkbox(
+                global::Brio.Resources.Localize.Get("ui.pose.smartImport", "Smart Import"),
+                ref smartDefaults);
+            ImBrio.AttachToolTip(global::Brio.Resources.Localize.Get(
+                "ui.pose.smartImportHelp",
+                """
                 Smart Import will adapt the loading process based on the pose being imported.
 
-                For example: 
+                For example:
                 - If the pose has a Model-ID, it will automatically transform the model to match.
-                - If the pose is taged as Expression/Body only, it will automatically disable the other option.
-                - If trying to load the pose as an expression, will automatically determine if the pose was made after Dawntrail and adapt the import process accordingly.
+                - If the pose is tagged as Expression/Body only, it will automatically disable the other option.
+                - If trying to load the pose as an expression, it will automatically determine whether the pose was made after Dawntrail and adapt the import process accordingly.
                 """));
 
             ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Import Type"));
@@ -565,7 +571,7 @@ public class FileUIHelpers
             }
             else
             {
-                if(ImBrio.Button(global::Brio.Resources.Localize.Text("From File..."), FontAwesomeIcon.FileDownload, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Import Pose from File")))
+                if(ImBrio.Button(global::Brio.Resources.Localize.Get("ui.pose.fromFile", "From File..."), FontAwesomeIcon.FileDownload, new(width, height), centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Import Pose from File")))
                 {
                     ShowImportPoseModal(capability, transformComponents: transformComponents, applyModelTransformOverride: doTransform);
                 }
@@ -681,7 +687,8 @@ public class FileUIHelpers
         {
             if(doExpression)
             {
-                Brio.NotifyError("CMP poses do not support expression import!");
+                Brio.NotifyError(global::Brio.Resources.Localize.Text(
+                    "CMP poses do not support expression import!"));
 
                 if(doBody is false)
                     return;
@@ -719,7 +726,11 @@ public class FileUIHelpers
 
     public static void ShowExportPoseModal(PosingCapability? capability)
     {
-        UIManager.Instance.FileDialogManager.SaveFileDialog("Export Pose###export_pose", "Pose File (*.pose){.pose}", "brio", ".pose",
+        UIManager.Instance.FileDialogManager.SaveFileDialog(
+            global::Brio.Resources.Localize.Text("Export Pose###export_pose"),
+            global::Brio.Resources.Localize.Text("Pose File (*.pose){.pose}"),
+            "brio",
+            ".pose",
                 (success, path) =>
                 {
                     if(success)
@@ -763,7 +774,9 @@ public class FileUIHelpers
         {
             var buttonSize = new Vector2(MenuWidth * ImGuiHelpers.GlobalScale, 0);
 
-            ImBrio.SeparatorText($"Export Pose [{capability.Entity.FriendlyName}]");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Format(
+                "Export Pose [{0}]",
+                capability.Entity.FriendlyName));
 
             if(ImBrio.Button(global::Brio.Resources.Localize.Text("Export"), FontAwesomeIcon.Save, buttonSize, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Export Pose")))
             {
@@ -771,7 +784,7 @@ public class FileUIHelpers
                 ImGui.CloseCurrentPopup();
             }
 
-            if(ImBrio.Button(global::Brio.Resources.Localize.Text("With Metadata..."), FontAwesomeIcon.FileExport, buttonSize, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Export Pose with Metadata")))
+            if(ImBrio.Button(global::Brio.Resources.Localize.Get("ui.pose.withMetadata", "With Metadata..."), FontAwesomeIcon.FileExport, buttonSize, centerTest: true, tooltip: global::Brio.Resources.Localize.Text("Export Pose with Metadata")))
             {
                 ShowExportPoseMetadataModal(capability);
                 ImGui.CloseCurrentPopup();
@@ -809,7 +822,11 @@ public class FileUIHelpers
 
     public static void ShowExportPoseMetadataModal(PosingCapability? capability)
     {
-        UIManager.Instance.FileDialogManager.SaveFileDialog("Export Pose###export_pose_metadata", "Pose File (*.pose){.pose}", "brio", ".pose",
+        UIManager.Instance.FileDialogManager.SaveFileDialog(
+            global::Brio.Resources.Localize.Text("Export Pose###export_pose_metadata"),
+            global::Brio.Resources.Localize.Text("Pose File (*.pose){.pose}"),
+            "brio",
+            ".pose",
                 (success, path) =>
                 {
                     if(success)

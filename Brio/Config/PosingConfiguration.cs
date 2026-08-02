@@ -62,6 +62,8 @@ public class PosingConfiguration
 
     public bool FreezeActorOnPoseImport { get; set; } = false;
 
+    public Vector2? AdvancedAnimationFilterWindowPosition { get; set; } = null;
+
     public bool FreeCameraHasMovementEnabledByDefault { get; set; } = true;
     public bool IsAdvancedGizmoEnabled { get; set; } = true;
 

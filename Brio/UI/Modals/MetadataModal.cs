@@ -33,7 +33,7 @@ public class MetadataModal : Modal
 
     private bool _pickingImage;
 
-    public MetadataModal() : base("Export Pose###brio_export_pose_metadata_modal", new(450, 600), ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.AlwaysAutoResize)
+    public MetadataModal() : base(Localize.Text("Export Pose###brio_export_pose_metadata_modal"), new(450, 600), ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.AlwaysAutoResize)
     {
     }
 

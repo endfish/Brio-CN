@@ -4,7 +4,6 @@ using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,6 +39,7 @@ public abstract class Selector<T> where T : class
     protected abstract SelectorFlags Flags { get; }
 
     private Task _taskQueue = Task.CompletedTask;
+    private int _updateGeneration;
 
     private Vector2 _selectableSize = new();
 
@@ -244,6 +244,9 @@ public abstract class Selector<T> where T : class
 
     protected void UpdateList(bool shouldClear = false)
     {
+        var generation = Interlocked.Increment(ref _updateGeneration);
+        var search = _search;
+
         if(shouldClear)
         {
             Interlocked.Exchange(ref _filteredAndSortedItems, null);
@@ -251,17 +254,27 @@ public abstract class Selector<T> where T : class
 
         _taskQueue = _taskQueue.ContinueWith(_ =>
         {
-            var newList = _items.Where(x =>
-            {
-                // Selected is always shown
-                if(IsItemSelected(x))
-                    return true;
+            if(generation != Volatile.Read(ref _updateGeneration))
+                return;
 
-                return Filter(x, _search);
-            }).ToList();
+            List<T> newList = [];
+            foreach(var item in _items)
+            {
+                if(generation != Volatile.Read(ref _updateGeneration))
+                    return;
+
+                // Selected is always shown
+                if(IsItemSelected(item) || Filter(item, search))
+                    newList.Add(item);
+            }
+
+            if(generation != Volatile.Read(ref _updateGeneration))
+                return;
+
             newList.Sort(Compare);
 
-            Interlocked.Exchange(ref _filteredAndSortedItems, newList);
+            if(generation == Volatile.Read(ref _updateGeneration))
+                Interlocked.Exchange(ref _filteredAndSortedItems, newList);
 
         }, TaskScheduler.Default);
     }
