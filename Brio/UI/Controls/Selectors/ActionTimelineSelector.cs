@@ -32,6 +32,7 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
     private static readonly ActionLibraryCategory[] QuickLibraryCategories =
     [
         ActionLibraryCategory.Emotes,
+        ActionLibraryCategory.Emotes,
         ActionLibraryCategory.NpcActions,
         ActionLibraryCategory.Mods,
         ActionLibraryCategory.Poses,
@@ -41,10 +42,11 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
     private static readonly string[] QuickLibraryCategoryLabels =
     [
         "Emotes",
-        "NPC Actions",
-        "Mod",
+        "Expression",
+        "NPC",
+        "Action Mods",
         "Poses",
-        "Player Skills",
+        "Skills",
     ];
 
     protected override Vector2 MinimumListSize { get; } = new(300, 300);
@@ -706,7 +708,8 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
             ImportAnnotations();
         }
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip(Localize.Text(
+            ImGui.SetTooltip(Localize.Get(
+                "ui.actionTimeline.importBackupWarning",
                 "Importing a backup replaces all current user action annotations."));
 
         if(selected is not null
@@ -1328,7 +1331,11 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
     private void DrawQuickLibraryCategoryTabs()
     {
-        var selectedCategory = Array.IndexOf(QuickLibraryCategories, _libraryCategory);
+        var selectedCategory = _libraryCategory == ActionLibraryCategory.Emotes
+            && _filterByEmoteCategory
+            && _emoteCategoryValue == 3
+                ? 1
+                : Array.IndexOf(QuickLibraryCategories, _libraryCategory);
         if(!ImBrio.ButtonSelectorStrip(
             "action_timeline_quick_categories",
             Vector2.Zero,
@@ -1339,6 +1346,8 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
         }
 
         _libraryCategory = QuickLibraryCategories[selectedCategory];
+        _filterByEmoteCategory = selectedCategory == 1;
+        _emoteCategoryValue = selectedCategory == 1 ? 3 : 0;
         UpdateList();
     }
 

@@ -26,12 +26,13 @@ public sealed class PenumbraModActionService
 
     private IReadOnlyList<PenumbraModAction> _cachedActions = [];
     private string _cacheSignature = string.Empty;
-    private string _statusMessage = Localize.Text("Penumbra mod actions have not been scanned yet.");
+    private string _statusMessageSource = "Penumbra mod actions have not been scanned yet.";
+    private object?[] _statusMessageArguments = [];
     private DateTime _nextRefreshAtUtc = DateTime.MinValue;
     private ushort _cachedObjectIndex = ushort.MaxValue;
 
     public int Version { get; private set; }
-    public string StatusMessage => _statusMessage;
+    public string StatusMessage => Localize.Format(_statusMessageSource, _statusMessageArguments);
 
     public PenumbraModActionService(IDalamudPluginInterface pluginInterface, PenumbraService penumbraService)
     {
@@ -64,36 +65,35 @@ public sealed class PenumbraModActionService
         {
             if(!_penumbraService.AllowIntegration || !_penumbraService.IsAvailable)
             {
-                SetCache([], Localize.Text("Penumbra integration is unavailable or disabled."));
+                SetCache([], "Penumbra integration is unavailable or disabled.");
                 return;
             }
 
             if(!_getEnabledState.Invoke())
             {
-                SetCache([], Localize.Text("Penumbra is currently disabled."));
+                SetCache([], "Penumbra is currently disabled.");
                 return;
             }
 
             var (objectValid, _, collection) = _getCollectionForObject.Invoke(actor.ObjectIndex);
             if(!objectValid)
             {
-                SetCache([], Localize.Text("The actor's Penumbra collection could not be resolved."));
+                SetCache([], "The actor's Penumbra collection could not be resolved.");
                 return;
             }
 
             var changedItems = _getChangedItemsForCollection.Invoke(collection.Id);
             var modLookup = _checkCurrentChangedItem.Invoke();
             var actions = BuildActions(changedItems, modLookup, actor.ObjectIndex);
-            var status = actions.Count == 0
-                ? Localize.Format("No active mod actions were found in {0}.", collection.Name)
-                : Localize.Format("{0} active mod actions from {1}.", actions.Count, collection.Name);
-
-            SetCache(actions, status);
+            if(actions.Count == 0)
+                SetCache(actions, "No active mod actions were found in {0}.", collection.Name);
+            else
+                SetCache(actions, "{0} active mod actions from {1}.", actions.Count, collection.Name);
         }
         catch(Exception ex)
         {
             Brio.Log.Warning(ex, "Failed to scan Penumbra mod actions");
-            SetCache([], Localize.Text("Failed to scan Penumbra mod actions."));
+            SetCache([], "Failed to scan Penumbra mod actions.");
         }
     }
 
@@ -303,7 +303,10 @@ public sealed class PenumbraModActionService
         return normalizedPath.StartsWith(pathPrefix, StringComparison.OrdinalIgnoreCase);
     }
 
-    private void SetCache(IReadOnlyList<PenumbraModAction> actions, string status)
+    private void SetCache(
+        IReadOnlyList<PenumbraModAction> actions,
+        string statusSource,
+        params object?[] statusArguments)
     {
         var signature = string.Join('\n', actions.Select(action => $"{action.Emote?.RowId ?? 0}|{action.ModName}|{action.TimelineId}"));
         if(!string.Equals(_cacheSignature, signature, StringComparison.Ordinal))
@@ -313,7 +316,8 @@ public sealed class PenumbraModActionService
             Version++;
         }
 
-        _statusMessage = status;
+        _statusMessageSource = statusSource;
+        _statusMessageArguments = statusArguments;
     }
 
     private sealed record ResolvedModReference(string ModDirectory, string DisplayName, string? PathPrefix);
