@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using static Brio.Game.Actor.ActorRedrawService;
 using static FFXIVClientStructs.FFXIV.Client.Graphics.Scene.Human;
 using DrawDataContainer = FFXIVClientStructs.FFXIV.Client.Game.Character.DrawDataContainer;
+using HumanDrawData = FFXIVClientStructs.FFXIV.Client.Graphics.Scene.Human.DrawData;
 
 namespace Brio.Game.Actor;
 
@@ -185,7 +186,7 @@ public class ActorAppearanceService : IDisposable
                                     Buffer.MemoryCopy(existingAppearance.Equipment.Data, ptr + 32, 80, 80);
                                 }
 
-                                var didUpdate = human->Human.UpdateDrawData((DrawData*)ptr, false);
+                                var didUpdate = human->Human.UpdateDrawData((HumanDrawData*)ptr, false);
                                 needsRedraw |= !didUpdate;
                             }
                         }
