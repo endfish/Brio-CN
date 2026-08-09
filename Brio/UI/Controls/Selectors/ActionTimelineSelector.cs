@@ -16,6 +16,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
+using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 using Lumina.Excel.Sheets;
 using System;
@@ -79,7 +80,7 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
     private bool _isPinned = false;
     private bool _isWindowOpen = false;
 
-    private IGameObject? _modActionActor;
+    private ushort? _modActionActorIndex;
     private ActionTimelineCapability? _playbackCapability;
     private ActionTimelineContext? _actorContext;
     private IReadOnlyList<PenumbraModAction> _modActions = [];
@@ -97,29 +98,22 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
     public bool IsPinned => _isPinned;
 
-    public IGameObject? ModActionActor
+    public void SetActor(ActionTimelineCapability? capability)
     {
-        get => _modActionActor;
-        set
-        {
-            var changed = _modActionActor?.ObjectIndex != value?.ObjectIndex;
-            _modActionActor = value;
-            if(changed)
-            {
-                _modActionVersion = -1;
-                RefreshActorContext();
-            }
-        }
-    }
+        var actorIndex = capability?.ActorObjectIndex;
+        var actorChanged = !ReferenceEquals(_playbackCapability, capability)
+            || _modActionActorIndex != actorIndex;
 
-    public ActionTimelineCapability? PlaybackCapability
-    {
-        get => _playbackCapability;
-        set
+        _playbackCapability = capability;
+        _modActionActorIndex = actorIndex;
+
+        if(actorChanged)
         {
-            _playbackCapability = value;
-            RefreshActorContext();
+            _modActionVersion = -1;
+            _modActions = [];
         }
+
+        RefreshActorContext();
     }
 
     //TODO(KEN) at some point make all of them use `field`
@@ -229,10 +223,10 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
     private unsafe ActionTimelineContext? ReadActorContext()
     {
-        if(_playbackCapability?.GetAnimationContext() is ActionTimelineContext capabilityContext)
-            return capabilityContext;
+        if(_playbackCapability?.GetOriginalAnimationContext() is ActionTimelineContext originalContext)
+            return originalContext;
 
-        if(_modActionActor is not ICharacter character)
+        if(ResolveModActionActor() is not ICharacter character)
             return null;
 
         var characterBase = character.GetCharacterBase();
@@ -271,12 +265,23 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
         };
     }
 
+    private ICharacter? ResolveModActionActor()
+    {
+        if(_modActionActorIndex is not ushort objectIndex
+            || !Brio.TryGetService<IObjectTable>(out var objectTable))
+            return null;
+
+        return objectTable[objectIndex] as ICharacter;
+    }
+
     private void RefreshModActions()
     {
-        if(_modActionActor is null || !Brio.TryGetService<PenumbraModActionService>(out var service))
+        if(_modActionActorIndex is not ushort objectIndex
+            || ResolveModActionActor() is null
+            || !Brio.TryGetService<PenumbraModActionService>(out var service))
             return;
 
-        var actions = service.GetActiveActions(_modActionActor);
+        var actions = service.GetActiveActions(objectIndex);
         if(_modActionVersion == service.Version)
             return;
 

@@ -23,6 +23,8 @@ public class ActionTimelineCapability : ActorCharacterCapability
 {
     private readonly IFramework _framework;
 
+    public ushort ActorObjectIndex { get; }
+
     public unsafe float SpeedMultiplier => SpeedMultiplierOverride ?? Character.Native()->Timeline.OverallSpeed;
     public bool HasSpeedMultiplierOverride => SpeedMultiplierOverride.HasValue;
     public float? SpeedMultiplierOverride { get; private set; }
@@ -78,6 +80,7 @@ public class ActionTimelineCapability : ActorCharacterCapability
         GPoseService gPoseService) : base(parent)
     {
         _framework = framework;
+        ActorObjectIndex = parent.GameObject.ObjectIndex;
         gPoseService.OnGPoseStateChange += OnGPoseStateChange;
         _gPoseService = gPoseService;
 
@@ -366,6 +369,10 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public unsafe ActionTimelineContext? GetAnimationContext(bool preferOriginal = true)
     {
+        if(preferOriginal
+            && GetOriginalAnimationContext() is ActionTimelineContext originalContext)
+            return originalContext;
+
         var characterBase = Character.GetCharacterBase();
         if(characterBase is null)
             return null;
@@ -373,15 +380,6 @@ public class ActionTimelineCapability : ActorCharacterCapability
         var animationVariant = characterBase->CharacterBase.AnimationVariant;
         if(characterBase->CharacterBase.GetModelType() == CharacterBase.ModelType.Human)
         {
-            if(preferOriginal
-                && _originalAnimationContext is OriginalAnimationContext original)
-            {
-                return new(
-                    ActionTimelineModelKind.Human,
-                    original.RaceSexId,
-                    original.AnimationVariant);
-            }
-
             var human = (BrioHuman*)characterBase;
             return new(
                 ActionTimelineModelKind.Human,
@@ -390,6 +388,17 @@ public class ActionTimelineCapability : ActorCharacterCapability
         }
 
         return null;
+    }
+
+    public ActionTimelineContext? GetOriginalAnimationContext()
+    {
+        if(_originalAnimationContext is not OriginalAnimationContext original)
+            return null;
+
+        return new(
+            ActionTimelineModelKind.Human,
+            original.RaceSexId,
+            original.AnimationVariant);
     }
 
     public unsafe void RestoreAnimationContext()

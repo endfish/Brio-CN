@@ -1,5 +1,4 @@
 using Brio.Resources;
-using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin;
 using Lumina.Excel.Sheets;
 using Penumbra.Api.Enums;
@@ -46,20 +45,20 @@ public sealed class PenumbraModActionService
         _resolveGameObjectPath = new ResolveGameObjectPath(pluginInterface);
     }
 
-    public IReadOnlyList<PenumbraModAction> GetActiveActions(IGameObject actor)
+    public IReadOnlyList<PenumbraModAction> GetActiveActions(ushort objectIndex)
     {
-        var objectChanged = _cachedObjectIndex != actor.ObjectIndex;
+        var objectChanged = _cachedObjectIndex != objectIndex;
         if(!objectChanged && DateTime.UtcNow < _nextRefreshAtUtc)
             return _cachedActions;
 
-        _cachedObjectIndex = actor.ObjectIndex;
+        _cachedObjectIndex = objectIndex;
         _nextRefreshAtUtc = DateTime.UtcNow + RefreshInterval;
 
-        Refresh(actor);
+        Refresh(objectIndex);
         return _cachedActions;
     }
 
-    private void Refresh(IGameObject actor)
+    private void Refresh(ushort objectIndex)
     {
         try
         {
@@ -75,7 +74,7 @@ public sealed class PenumbraModActionService
                 return;
             }
 
-            var (objectValid, _, collection) = _getCollectionForObject.Invoke(actor.ObjectIndex);
+            var (objectValid, _, collection) = _getCollectionForObject.Invoke(objectIndex);
             if(!objectValid)
             {
                 SetCache([], "The actor's Penumbra collection could not be resolved.");
@@ -84,7 +83,7 @@ public sealed class PenumbraModActionService
 
             var changedItems = _getChangedItemsForCollection.Invoke(collection.Id);
             var modLookup = _checkCurrentChangedItem.Invoke();
-            var actions = BuildActions(changedItems, modLookup, actor.ObjectIndex);
+            var actions = BuildActions(changedItems, modLookup, objectIndex);
             if(actions.Count == 0)
                 SetCache(actions, "No active mod actions were found in {0}.", collection.Name);
             else
