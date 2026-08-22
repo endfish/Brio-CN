@@ -2,7 +2,7 @@
   "Author": "Minmoose, Asgard 与贡献者；汉化：Endfish",
   "Name": "Brio-CN",
   "InternalName": "Brio-CN",
-  "AssemblyVersion": "1.0.7.0",
+  "AssemblyVersion": "1.0.8.0",
   "Description": "Brio 的简体中文本地化版本，为 GPose 提供角色生成、骨骼姿势编辑、动作播放、灯光、镜头、时间、天气与场景控制等高级功能。\n\n本分支还包含常用姿势快捷入口、Penumbra 动作 Mod 识别，以及可导航的世界模型实时预览。",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/endfish/Brio-CN",
@@ -20,6 +20,6 @@
   "LoadPriority": 0,
   "IconUrl": "https://raw.githubusercontent.com/endfish/Brio-CN/zh-CN/Resources/Images/BrioIcon.png",
   "Punchline": "面向 GPose 的高级角色、姿势、动作与场景工具（简体中文版）。",
-  "Changelog": "修复动作选择器长期持有失效游戏对象引用而导致角色上下文解析不稳定的问题；改为保存对象索引并按需重新解析角色，同时优先使用角色原始动画上下文，以稳定 Penumbra Mod 动作扫描与跨种族动作播放。",
+  "Changelog": "新增可选角色联动：选择 Brio 角色时可同步 Glamourer 与集体动作目标，并可中键点击 Penumbra 受影响物品，通过 Glamourer 快速穿戴到当前角色；稳定 GPose 角色跟踪；修复跨种族动作模拟状态下播放面部动画可能导致游戏崩溃的问题。",
   "AcceptsFeedback": true
 }
