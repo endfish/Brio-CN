@@ -6,6 +6,7 @@ using Brio.Core;
 using Brio.Entities.Core;
 using Brio.Game.Actor;
 using Brio.Game.Actor.Extensions;
+using Brio.Game.Core;
 using Brio.Game.Posing;
 using Brio.IPC;
 using Brio.UI;
@@ -23,9 +24,12 @@ namespace Brio.Entities.Actor;
 public class ActorEntity(IGameObject gameObject, IServiceProvider provider) : TransformableEntity(new EntityId(gameObject), provider)
 {
     public readonly IGameObject GameObject = gameObject;
+    public readonly nint ObjectAddress = gameObject.Address;
+    public readonly ushort ObjectIndex = gameObject.ObjectIndex;
 
     private readonly ConfigurationService _configService = provider.GetRequiredService<ConfigurationService>();
     private readonly PosingService _posingService = provider.GetRequiredService<PosingService>();
+    private readonly TargetService _targetService = provider.GetRequiredService<TargetService>();
     private readonly GlamourerService _glamourerService = provider.GetRequiredService<GlamourerService>();
 
     private ActorAppearanceCapability _actorAppearanceCapability = null!;
@@ -76,6 +80,18 @@ public class ActorEntity(IGameObject gameObject, IServiceProvider provider) : Tr
     public override void OnDoubleClick()
     {
         ModalManager.Instance.OpenRenameModal(this);
+    }
+
+    public override void OnSelected()
+    {
+        base.OnSelected();
+
+        if(_configService.Configuration.IPC.SyncGlamourerActorSelection
+            && EntityManager.SelectedEntity == this)
+        {
+            _targetService.GPoseTarget = GameObject;
+            _glamourerService.SelectActor(GameObject);
+        }
     }
 
     public override void SetVisibility(bool visible)

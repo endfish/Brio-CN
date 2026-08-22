@@ -315,6 +315,7 @@ public class SettingsWindow : Window
         {
             var penumbraStatus = _penumbraService.CheckStatus();
             var penumbraUnavailable = penumbraStatus is IPCStatus.None or IPCStatus.NotInstalled or IPCStatus.VersionMismatch or IPCStatus.Error;
+            bool enablePenumbra = _configurationService.Configuration.IPC.AllowPenumbraIntegration;
 
             if(penumbraUnavailable)
             {
@@ -324,7 +325,6 @@ public class SettingsWindow : Window
 
             using(ImRaii.Disabled(penumbraUnavailable))
             {
-                bool enablePenumbra = _configurationService.Configuration.IPC.AllowPenumbraIntegration;
                 if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Allow Penumbra Integration"), ref enablePenumbra))
                 {
                     _configurationService.Configuration.IPC.AllowPenumbraIntegration = enablePenumbra;
@@ -357,6 +357,42 @@ public class SettingsWindow : Window
                 {
                     _glamourerService.CheckStatus(true);
                 }
+            }
+
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Get(
+                "ui.settings.actorIntegrationOptions",
+                "Actor Integration Options"));
+
+            using(ImRaii.Disabled(!enableGlamourer))
+            {
+                bool syncGlamourerActor = _configurationService.Configuration.IPC.SyncGlamourerActorSelection;
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Get(
+                    "ui.settings.syncGlamourerActorSelection",
+                    "Sync Glamourer actor and GPose target when selecting a Brio actor"), ref syncGlamourerActor))
+                {
+                    _configurationService.Configuration.IPC.SyncGlamourerActorSelection = syncGlamourerActor;
+                    _configurationService.ApplyChange();
+                }
+
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Get(
+                    "ui.settings.syncGlamourerActorSelectionHelp",
+                    "Sets the same actor as the GPose target and silently selects it in Glamourer, keeping Glamourer's quick-design target in sync without opening a Glamourer window."));
+            }
+
+            using(ImRaii.Disabled(!enablePenumbra || !enableGlamourer))
+            {
+                bool enableQuickEquip = _configurationService.Configuration.IPC.EnablePenumbraChangedItemQuickEquip;
+                if(ImGui.Checkbox(global::Brio.Resources.Localize.Get(
+                    "ui.settings.enablePenumbraChangedItemQuickEquip",
+                    "Middle-click Penumbra changed items to equip them on the selected Brio actor"), ref enableQuickEquip))
+                {
+                    _configurationService.Configuration.IPC.EnablePenumbraChangedItemQuickEquip = enableQuickEquip;
+                    _configurationService.ApplyChange();
+                }
+
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Get(
+                    "ui.settings.enablePenumbraChangedItemQuickEquipHelp",
+                    "Requires both Penumbra and Glamourer integration. Rings use middle-click for the right finger and Shift + middle-click for the left finger."));
             }
 
             bool enableCustomizePlus = _configurationService.Configuration.IPC.AllowCustomizePlusIntegration;

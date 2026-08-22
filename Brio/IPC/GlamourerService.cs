@@ -66,10 +66,12 @@ public class GlamourerService : BrioIPC
     private readonly GetDesignList _glamourerGetDesignList;
     private readonly ApplyDesign _glamourerApplyDesign;
     private readonly OpenEquipmentBarIndex _glamourerEnsureActorState;
+    private readonly SetItem _glamourerSetItem;
 
     //
 
     private readonly uint LockCode = 0x6D617265;
+    private static readonly List<byte> UndyedStains = [0, 0];
 
     public GlamourerService(IDalamudPluginInterface pluginInterface, GPoseService gPoseService, IObjectTable gameObjects, ICommandManager commandManager, DalamudService dalamudService, ConfigurationService configurationService, IFramework framework, ActorRedrawService redrawService)
     {
@@ -99,6 +101,7 @@ public class GlamourerService : BrioIPC
         _glamourerGetDesignList = new GetDesignList(_pluginInterface);
         _glamourerApplyDesign = new ApplyDesign(_pluginInterface);
         _glamourerEnsureActorState = new OpenEquipmentBarIndex(_pluginInterface);
+        _glamourerSetItem = new SetItem(_pluginInterface);
 
         OnConfigurationChanged();
 
@@ -175,6 +178,57 @@ public class GlamourerService : BrioIPC
             Brio.Log.Info($"Glamourer could not register gameobject {character.ObjectIndex}: {status}");
 
         return status is GlamourerApiEc.Success;
+    }
+
+    /// <summary>
+    /// Selects an actor in Glamourer without opening any Glamourer window.
+    /// </summary>
+    public bool SelectActor(IGameObject? character)
+    {
+        if(IsAvailable == false || character is null || character.Address == nint.Zero)
+            return false;
+
+        try
+        {
+            _glamourerEnsureActorState.Invoke(false, character.ObjectIndex);
+            var (status, _) = _glamourerGetState.Invoke(character.ObjectIndex);
+            if(status is GlamourerApiEc.Success)
+                return true;
+
+            Brio.Log.Info($"Glamourer could not select gameobject {character.ObjectIndex}: {status}");
+        }
+        catch(Exception ex)
+        {
+            Brio.Log.Debug(ex, $"Failed to select gameobject {character.ObjectIndex} in Glamourer");
+        }
+
+        return false;
+    }
+
+    public GlamourerApiEc ApplyItem(IGameObject? character, ApiEquipSlot slot, ulong itemId)
+    {
+        if(IsAvailable == false || character is null || character.Address == nint.Zero)
+            return GlamourerApiEc.UnknownError;
+
+        try
+        {
+            // Dalamud's IPC fallback serializes byte arrays as Base64 when the provider
+            // expects IReadOnlyList<byte>. A List<byte> stays a numeric JSON array and
+            // can be converted safely, so pass both explicit undyed channels this way.
+            var result = _glamourerSetItem.Invoke(character.ObjectIndex, slot, itemId, UndyedStains, LockCode, ApplyFlag.Once);
+            if(result is GlamourerApiEc.ActorNotFound && EnsureActorState(character))
+                result = _glamourerSetItem.Invoke(character.ObjectIndex, slot, itemId, UndyedStains, LockCode, ApplyFlag.Once);
+
+            if(result is not GlamourerApiEc.Success)
+                Brio.Log.Info($"Glamourer SetItem was not successful for gameobject {character.ObjectIndex}: {result}");
+
+            return result;
+        }
+        catch(Exception ex)
+        {
+            Brio.Log.Warning(ex, $"Failed to apply item {itemId} to gameobject {character.ObjectIndex} through Glamourer");
+            return GlamourerApiEc.UnknownError;
+        }
     }
 
     public bool CopyTo(IGameObject? character, IGameObject? targetCharacter)
