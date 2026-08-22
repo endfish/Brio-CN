@@ -346,6 +346,28 @@
     "actionTimeline": {
       "importBackupWarning": "导入备份会替换当前全部玩家动作备注。"
     },
+    "settings": {
+      "actorIntegrationOptions": "角色联动选项",
+      "syncGlamourerActorSelection": "选择 Brio 角色时同步 Glamourer 与集体动作目标",
+      "syncGlamourerActorSelectionHelp": "将同一角色设为集体动作目标并静默选择到 Glamourer，使顶部套装按钮的目标保持同步；不会打开 Glamourer 窗口。",
+      "enablePenumbraChangedItemQuickEquip": "中键点击 Penumbra 受影响物品时穿戴到 Brio 当前角色",
+      "enablePenumbraChangedItemQuickEquipHelp": "需要同时启用 Penumbra 与 Glamourer 集成。戒指使用中键穿戴到右指，使用 Shift + 中键穿戴到左指。"
+    },
+    "penumbraQuickEquip": {
+      "title": "Penumbra 快速穿戴",
+      "selectActorTooltip": "[Brio] 请先在 Brio 中选择一个角色，再使用中键快速穿戴。",
+      "rightRingTooltip": "[Brio] 中键点击：穿戴到「{0}」的右指。",
+      "leftRingTooltip": "[Brio] Shift + 中键点击：穿戴到「{0}」的左指。",
+      "equipTooltip": "[Brio] 中键点击：通过 Glamourer 穿戴到「{0}」。",
+      "selectActor": "使用 Penumbra 快速穿戴前，请先在 Brio 中选择一个角色。",
+      "integrationUnavailable": "Penumbra 或 Glamourer 集成当前不可用。",
+      "locked": "Glamourer 中「{0}」的状态已被其他插件锁定。",
+      "notHuman": "「{0}」不是能够穿戴这件物品的人形角色。",
+      "invalidItem": "Glamourer 无法识别这件物品。",
+      "actorNotFound": "Glamourer 无法找到「{0}」。",
+      "failed": "无法通过 Glamourer 将物品穿戴到「{0}」。",
+      "failedUnexpectedly": "Penumbra 快速穿戴发生异常。"
+    },
     "common": {
       "advanced": "高级",
       "clone": "复制",
