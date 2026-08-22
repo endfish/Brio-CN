@@ -241,7 +241,18 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public unsafe void BlendTimeline(ushort actionTimeline)
     {
+        // Some callers (most notably Dynamic Face Control) play timelines
+        // directly instead of going through ActionTimelineEditor. Always
+        // reconcile the emulated animation context here so those paths can not
+        // leave a spoofed RaceSexId active while loading a facial timeline.
+        PrepareAnimationContext(actionTimeline);
         Character.Native()->Timeline.TimelineSequencer.PlayTimeline(actionTimeline);
+    }
+
+    private static bool IsFacialTimeline(ushort timelineId)
+    {
+        return Brio.TryGetService<TimelineIdentification>(out var identification)
+            && identification.IsFacialExpression(timelineId);
     }
 
     public void Stop()
@@ -345,6 +356,23 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public void PrepareAnimationContext(ushort timelineId)
     {
+        // Facial PAPs and face skeletons are race-specific. Playing one while
+        // Human.RaceSexId is temporarily spoofed for a cross-race body action
+        // can leave the game's pending resource list with an invalid handle and
+        // crash Human.UpdateRender. Facial playback must always use the actor's
+        // native animation context.
+        if(IsFacialTimeline(timelineId))
+        {
+            var wasEmulating = CrossRaceAnimationEmulationEnabled || HasAnimationContextOverride;
+            CrossRaceAnimationEmulationEnabled = false;
+            ClearConfiguredAnimationContext();
+
+            if(wasEmulating)
+                Brio.Log.Warning($"Disabled cross-race animation emulation before playing facial timeline {timelineId}.");
+
+            return;
+        }
+
         if(!CrossRaceAnimationEmulationEnabled || !_gPoseService.IsGPosing)
         {
             ClearConfiguredAnimationContext();

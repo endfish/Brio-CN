@@ -128,6 +128,9 @@ public class TimelineIdentification
         return GetKey(timeline);
     }
 
+    public bool IsFacialExpression(ushort timeline)
+        => facialExpressions.ContainsKey(timeline);
+
     private string GetKey(uint timeline)
     {
         if(_dataManager.GetExcelSheet<ActionTimeline>().TryGetRow(timeline, out var row))

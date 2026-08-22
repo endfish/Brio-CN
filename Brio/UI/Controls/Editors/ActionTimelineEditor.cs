@@ -742,7 +742,6 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
         if(cap.SlotedBlendAnimation == 0 || cap.IsPaused)
             return;
 
-        cap.PrepareAnimationContext((ushort)cap.SlotedBlendAnimation);
         cap.BlendTimeline((ushort)cap.SlotedBlendAnimation);
     }
 }
