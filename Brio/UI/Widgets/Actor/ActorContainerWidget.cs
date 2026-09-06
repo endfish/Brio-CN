@@ -1,5 +1,6 @@
 ﻿using Brio.Capabilities.Actor;
 using Brio.UI.Widgets.Core;
+using Brio.Game.Actor.Extensions;
 using Dalamud.Bindings.ImGui;
 using System.Linq;
 using System.Numerics;
@@ -90,7 +91,8 @@ public class ActorContainerWidget(ActorContainerCapability capability) : Widget<
 
                     var distanceText = $" [{Vector3.Distance(playerPosition, actor.Position):0.0}]";
 
-                    if(ImGui.MenuItem(string.IsNullOrWhiteSpace(actor?.Name.ToString()) ? $"Unknown {distanceText}##actor_containerwidgetpopup_{actor!.GameObjectId}" : $"{actor.Name} {distanceText}##actor_containerwidgetpopup_{actor.GameObjectId}"))
+                    var name = string.IsNullOrWhiteSpace(actor.Name.ToString()) ? actor.GetFriendlyName() : actor.Name.ToString();
+                    if(ImGui.MenuItem($"{name}{distanceText}##actor_containerwidgetpopup_{actor.ObjectIndex}"))
                     {
                         Capability.AddFromWorld(actor);
                         ImGui.CloseCurrentPopup();

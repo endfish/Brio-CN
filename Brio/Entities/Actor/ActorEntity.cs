@@ -41,7 +41,7 @@ public class ActorEntity(IGameObject gameObject, IServiceProvider provider) : Tr
     {
         get
         {
-            if(string.IsNullOrEmpty(RawName))
+            if(string.IsNullOrWhiteSpace(RawName))
             {
                 return GameObject.GetFriendlyName();
             }

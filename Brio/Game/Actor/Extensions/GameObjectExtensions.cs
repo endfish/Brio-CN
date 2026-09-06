@@ -1,5 +1,6 @@
 ﻿using Brio.Config;
 using Brio.Core;
+using Brio.Resources;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface;
@@ -31,6 +32,9 @@ public static class GameObjectExtensions
 
     public static string GetFriendlyName(this IGameObject go)
     {
+        if(string.IsNullOrWhiteSpace(go.Name.ToString()))
+            return Localize.Format("Unnamed Actor #{0}", go.ObjectIndex);
+
         switch(go.ObjectKind)
         {
             case ObjectKind.Ornament:

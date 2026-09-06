@@ -92,7 +92,9 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
         DrawHeder();
 
-        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Current Animation"));
+        DrawActiveTimelines();
+
+        ImBrio.SeparatorText(Localize.Text("Animation to Play"));
 
         DrawBaseOverride();
         DrawBlend();
@@ -237,6 +239,48 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
                 }
             }
         }
+    }
+
+    private void DrawActiveTimelines()
+    {
+        ImBrio.SeparatorText(Localize.Text("Playing Now (Live)"));
+
+        Span<ushort> timelines = stackalloc ushort[14];
+        if(!_capability.TryReadActiveTimelineIds(timelines))
+        {
+            ImGui.TextDisabled(Localize.Text("Current animation is unavailable."));
+            return;
+        }
+
+        var anyActive = false;
+        for(var slot = 0; slot < timelines.Length; slot++)
+        {
+            var timelineId = timelines[slot];
+            if(timelineId == 0)
+                continue;
+
+            anyActive = true;
+            using var id = ImRaii.PushId($"live_timeline_{slot}");
+            ImGui.TextUnformatted(slot == 0
+                ? Localize.Format("Base: {0}", timelineId)
+                : Localize.Format("Slot {0}: {1}", slot, timelineId));
+            ImGui.SameLine();
+            if(ImBrio.FontIconButtonRight("copy", FontAwesomeIcon.Copy, 2, Localize.Text("Copy animation ID")))
+                ImGui.SetClipboardText(timelineId.ToString());
+
+            ImGui.SameLine();
+            if(ImBrio.FontIconButtonRight("use", FontAwesomeIcon.ArrowDown, 1,
+                Localize.Text("Fill the animation input without playing it")))
+            {
+                if(slot == 0)
+                    _capability.SlotedBaseAnimation = timelineId;
+                else
+                    _capability.SlotedBlendAnimation = timelineId;
+            }
+        }
+
+        if(!anyActive)
+            ImGui.TextDisabled(Localize.Text("No active animation timeline."));
     }
 
     private void DrawBaseOverride()
