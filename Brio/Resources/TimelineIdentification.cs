@@ -93,7 +93,17 @@ public class TimelineIdentification
         {
             if(emote.EmoteCategory.RowId == 3)
             {
-                facialExpressions.TryAdd(emote.ActionTimeline[0].RowId, emote.Name.ExtractText());
+                // The expression selector currently uses slot 4, while other
+                // callers and game revisions may reference another timeline
+                // from the same expression emote. Treat every valid timeline
+                // belonging to the expression category as facial playback.
+                foreach(var timeline in emote.ActionTimeline)
+                {
+                    if(timeline.RowId == 0 || !timeline.IsValid)
+                        continue;
+
+                    facialExpressions.TryAdd(timeline.RowId, emote.Name.ExtractText());
+                }
                 continue;
             }
 

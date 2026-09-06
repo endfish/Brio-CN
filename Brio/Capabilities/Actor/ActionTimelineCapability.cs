@@ -50,9 +50,12 @@ public class ActionTimelineCapability : ActorCharacterCapability
     private readonly Dictionary<ActionTimelineSlots, float> _actionTimelineSlotSpeedOverrides = [];
     private OriginalBaseAnimation? _originalBaseAnimation = null;
     private OriginalAnimationContext? _originalAnimationContext = null;
+    private bool _baseOverrideUsesAnimationContext;
     private ushort _configuredAnimationTimeline;
     private ActionTimelineContext? _configuredAnimationContext;
     private bool _crossRaceAnimationEmulationEnabled;
+    private int _timelinePlaybackGeneration;
+    private bool _isDisposed;
     private bool _slotsDirty = false;
 
     public bool HasAnimationContextOverride => _originalAnimationContext.HasValue;
@@ -67,7 +70,17 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
             _crossRaceAnimationEmulationEnabled = value;
             if(!value)
+            {
+                // Restoring RaceSexId while a foreign-race base override keeps
+                // running creates the same mixed animation state that facial
+                // playback must avoid. Stop that override as part of disabling
+                // emulation, regardless of whether the user or a safety guard
+                // disabled it.
+                if(_baseOverrideUsesAnimationContext && HasBaseOverride)
+                    ResetBaseOverride();
+
                 ClearConfiguredAnimationContext();
+            }
         }
     }
 
@@ -104,6 +117,20 @@ public class ActionTimelineCapability : ActorCharacterCapability
     {
         var timeline = Character.Native()->Timeline.TimelineSequencer.TimelineIds[(int)slot];
         return new ActionTimelineId(timeline);
+    }
+
+    public unsafe bool TryReadActiveTimelineIds(Span<ushort> destination)
+    {
+        var character = Character;
+        if(!character.IsValid()
+            || character.Address == nint.Zero
+            || character.Address != Actor.ObjectAddress
+            || character.ObjectIndex != ActorObjectIndex)
+            return false;
+
+        // Read raw IDs, including timelines absent from our action database.
+        // Reading must never configure or replay the actor's animation.
+        return character.Native()->Timeline.TimelineSequencer.TimelineIds.TryCopyTo(destination);
     }
 
     public unsafe float GetSlotSpeed(ActionTimelineSlots slot)
@@ -143,6 +170,7 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
         chara->SetMode(CharacterModes.AnimLock, 0);
         chara->Timeline.BaseOverride = actionTimeline;
+        _baseOverrideUsesAnimationContext = HasAnimationContextOverride;
 
         if(interrupt)
             BlendTimeline(actionTimeline);
@@ -218,6 +246,8 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public unsafe void ResetBaseOverride()
     {
+        _timelinePlaybackGeneration++;
+
         var resetTimeline = false;
         if(_originalBaseAnimation is OriginalBaseAnimation original)
         {
@@ -230,6 +260,7 @@ public class ActionTimelineCapability : ActorCharacterCapability
             _originalBaseAnimation = null;
             resetTimeline = true;
         }
+        _baseOverrideUsesAnimationContext = false;
 
         RestoreAnimationContext();
 
@@ -241,12 +272,73 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public unsafe void BlendTimeline(ushort actionTimeline)
     {
+        _timelinePlaybackGeneration++;
+
+        if(TryStageFacialTimeline(actionTimeline))
+            return;
+
         // Some callers (most notably Dynamic Face Control) play timelines
         // directly instead of going through ActionTimelineEditor. Always
         // reconcile the emulated animation context here so those paths can not
         // leave a spoofed RaceSexId active while loading a facial timeline.
         PrepareAnimationContext(actionTimeline);
-        Character.Native()->Timeline.TimelineSequencer.PlayTimeline(actionTimeline);
+        PlayTimelineNow(actionTimeline);
+    }
+
+    private bool TryStageFacialTimeline(ushort timelineId)
+    {
+        if(!IsFacialTimeline(timelineId))
+            return false;
+
+        var hadActiveCrossRacePlayback = HasAnimationContextOverride
+            || (_baseOverrideUsesAnimationContext && HasBaseOverride);
+        var wasEmulating = CrossRaceAnimationEmulationEnabled || hadActiveCrossRacePlayback;
+
+        // Disabling emulation also restores the original base override before
+        // restoring the actor's native animation context. This order prevents
+        // a foreign base timeline from surviving under the native RaceSexId.
+        CrossRaceAnimationEmulationEnabled = false;
+        ClearConfiguredAnimationContext();
+
+        if(!hadActiveCrossRacePlayback)
+        {
+            if(wasEmulating)
+                Brio.Log.Warning($"Disabled cross-race animation emulation before playing facial timeline {timelineId}.");
+
+            return false;
+        }
+
+        // Replace any pending foreign animation resources with a native idle,
+        // then give the renderer two framework ticks to settle before loading
+        // the race-specific facial PAP. The delayed callback is invalidated by
+        // any newer playback/reset request.
+        PlayTimelineNow(3);
+        var playbackGeneration = _timelinePlaybackGeneration;
+        _ = _framework.RunOnTick(() =>
+        {
+            if(_isDisposed
+                || playbackGeneration != _timelinePlaybackGeneration
+                || Character.Address == nint.Zero)
+                return;
+
+            PlayTimelineNow(timelineId);
+
+            if(_actionTimelineSlotSpeedOverrides.TryGetValue(ActionTimelineSlots.Facial, out var speed))
+                SetFacialSlotSpeed(speed);
+        }, delayTicks: 2);
+
+        Brio.Log.Warning($"Stopped cross-race animation playback and deferred facial timeline {timelineId} until native animation resources settle.");
+        return true;
+    }
+
+    private unsafe void PlayTimelineNow(ushort timelineId)
+    {
+        Character.Native()->Timeline.TimelineSequencer.PlayTimeline(timelineId);
+    }
+
+    private unsafe void SetFacialSlotSpeed(float speed)
+    {
+        Character.Native()->Timeline.TimelineSequencer.SetSlotSpeed((uint)ActionTimelineSlots.Facial, speed);
     }
 
     private static bool IsFacialTimeline(ushort timelineId)
@@ -257,6 +349,8 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public void Stop()
     {
+        _timelinePlaybackGeneration++;
+
         if(HasBaseOverride)
         {
             ResetBaseOverride();
@@ -268,6 +362,7 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public void Reset()
     {
+        _timelinePlaybackGeneration++;
         DoBaseInterrupt = true;
 
         SlotedBaseAnimation = 0;
@@ -283,11 +378,13 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public override void Dispose()
     {
+        _timelinePlaybackGeneration++;
         _gPoseService.OnGPoseStateChange -= OnGPoseStateChange;
         SpeedMultiplierOverride = null;
         _actionTimelineSlotSpeedOverrides.Clear();
         ResetBaseOverride();
         ClearConfiguredAnimationContext();
+        _isDisposed = true;
 
         base.Dispose();
     }
