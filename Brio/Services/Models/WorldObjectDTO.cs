@@ -5,6 +5,7 @@ using Brio.Game.WorldObjects.Objects;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 using MessagePack;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Brio.Services.Models;
@@ -27,7 +28,10 @@ public class WorldObjectDTO
         };
 
         if(gameObject is BrioPropObject prop)
+        {
             dto.PropModel = PropModelDTO.ToDTO(prop.WeaponInfo);
+            dto.PropBones = new(prop.BoneTransforms);
+        }
 
         if(gameObject is StaticVfxObject vfx)
         {
@@ -50,6 +54,7 @@ public class WorldObjectDTO
     public string Path { get; set; } = string.Empty;
 
     public PropModelDTO? PropModel { get; set; }
+    public Dictionary<string, Transform>? PropBones { get; set; }
     public Transform Transform { get; set; }
     public Vector3 RelativePosition { get; set; }
 

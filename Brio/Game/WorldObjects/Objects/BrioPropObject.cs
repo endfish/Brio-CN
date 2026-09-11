@@ -4,6 +4,7 @@ using Brio.Resources;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 using System;
+using System.Collections.Generic;
 
 using CSObject = FFXIVClientStructs.FFXIV.Client.Graphics.Scene.Object;
 using CSWeapon = FFXIVClientStructs.FFXIV.Client.Graphics.Scene.Weapon;
@@ -15,6 +16,15 @@ public unsafe class BrioPropObject : WorldObject
 {
     private CSWeapon* Weapon;
     public WeaponCreateInfo WeaponInfo { get; set { field = value; IsDirty = true; } }
+    public Dictionary<string, Transform> BoneTransforms { get; private set; } = [];
+    public int SkeletonGeneration { get; private set; }
+    private (ushort Id, ushort Type, ushort Variant, byte Animation) _loadedModel;
+
+    public void RestoreBoneTransforms(Dictionary<string, Transform>? transforms)
+        => BoneTransforms = transforms is null ? [] : new(transforms);
+
+    private static (ushort, ushort, ushort, byte) GetModelKey(WeaponCreateInfo info)
+        => (info.WeaponModelId.Id, info.WeaponModelId.Type, info.WeaponModelId.Variant, info.AnimationVariant);
 
     public ushort ModelSetId { get => Weapon->ModelSetId; set => Weapon->ModelSetId = value; }
     public ushort SecondaryId { get => Weapon->SecondaryId; set => Weapon->SecondaryId = value; }
@@ -27,7 +37,11 @@ public unsafe class BrioPropObject : WorldObject
     //
 
     public override WorldObjectType ObjectType => WorldObjectType.Prop;
-    public override string FriendlyName { get; protected set; } = "Weapon | Prop";
+    public override string FriendlyName
+    {
+        get => string.IsNullOrWhiteSpace(field) ? Localize.Text("Weapon | Prop") : field;
+        protected set;
+    } = string.Empty;
 
     public override string FriendlyPath
     {
@@ -72,6 +86,7 @@ public unsafe class BrioPropObject : WorldObject
 
     private void Create(WeaponCreateInfo model)
     {
+        _loadedModel = GetModelKey(model);
         Weapon = CSWeapon.Create(&model);
         if(Weapon is null)
             return;
@@ -89,6 +104,12 @@ public unsafe class BrioPropObject : WorldObject
         Brio.Log.Verbose($"Reloading Prop Object {FriendlyName} (Address: {Address:X})");
 
         IsDirty = false;
+
+        SkeletonGeneration++;
+        var modelKey = GetModelKey(WeaponInfo);
+        if(modelKey != _loadedModel)
+            BoneTransforms.Clear();
+        _loadedModel = modelKey;
 
         Weapon->CleanupRender();
 

@@ -95,7 +95,7 @@ public class PosingTransformEditor
                 using(ImRaii.Disabled(parentBone is null))
                 {
                     if(ImBrio.FontIconButton(FontAwesomeIcon.LevelUpAlt))
-                        posingCapability.SetBoneSelection(new BonePoseInfoId(parentBone!.Name, parentBone!.PartialId, PoseInfoSlot.Character), false);
+                        posingCapability.SetBoneSelection(new BonePoseInfoId(parentBone!.Name, parentBone!.PartialId, selectedIsBone!.Value.Slot), false);
                 }
                 ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Select Parent"));
             }

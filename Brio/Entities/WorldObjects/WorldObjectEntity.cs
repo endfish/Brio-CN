@@ -3,6 +3,7 @@ using Brio.Capabilities.WorldObjects;
 using Brio.Core;
 using Brio.Entities.Core;
 using Brio.Game.WorldObjects;
+using Brio.Game.WorldObjects.Objects;
 using Brio.UI;
 using Brio.UI.Controls.Stateless;
 using Brio.UI.Theming;
@@ -69,6 +70,9 @@ public class WorldObjectEntity(IWorldObject worldObject, IServiceProvider provid
         AddCapability(ActivatorUtilities.CreateInstance<WorldObjectLifetimeCapability>(_serviceProvider, this));
 
         AddTransformable<WorldObjectTransformCapability>();
+
+        if(worldObject is BrioPropObject)
+            AddCapability(ActivatorUtilities.CreateInstance<PropSkeletonCapability>(_serviceProvider, this));
 
         AddCapability(ActivatorUtilities.CreateInstance<DebugWorldObjectCapability>(_serviceProvider, this));
 

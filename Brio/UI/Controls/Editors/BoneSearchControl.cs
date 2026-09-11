@@ -78,7 +78,7 @@ public class BoneSearchControl
                                 {
                                     if(skeleton.Success)
                                     {
-                                        DrawBone(posing.SkeletonPosing.PropSkeleton.RootBone, posing, PoseInfoSlot.OffHand);
+                                        DrawBone(posing.SkeletonPosing.PropSkeleton.RootBone, posing, PoseInfoSlot.Prop);
                                     }
                                 }
                             }
@@ -89,7 +89,7 @@ public class BoneSearchControl
                                 {
                                     if(skeleton.Success)
                                     {
-                                        DrawBone(posing.SkeletonPosing.OrnamentSkeleton.RootBone, posing, PoseInfoSlot.OffHand);
+                                        DrawBone(posing.SkeletonPosing.OrnamentSkeleton.RootBone, posing, PoseInfoSlot.Ornament);
                                     }
                                 }
                             }

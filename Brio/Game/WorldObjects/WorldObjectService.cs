@@ -262,6 +262,7 @@ public unsafe class WorldObjectService : MediatorSubscriberBase
                 _framework.RunOnFrameworkThread(() =>
                 {
                     var worldObj = SpawnPropInternal(dto.PropModel.ToWeaponCreateInfo());
+                    worldObj?.RestoreBoneTransforms(dto.PropBones);
                     worldObj?.SetTransform(transform);
                     MoveToFolder(worldObj, folder);
                 });
@@ -326,6 +327,7 @@ public unsafe class WorldObjectService : MediatorSubscriberBase
                 {
                     var wci = (obj as BrioPropObject)!.WeaponInfo;
                     var worldObj = SpawnPropInternal(wci);
+                    worldObj?.RestoreBoneTransforms(((BrioPropObject)obj).BoneTransforms);
                     worldObj?.SetTransform(currentTransform);
                 });
                 break;

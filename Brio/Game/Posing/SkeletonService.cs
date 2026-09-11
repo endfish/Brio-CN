@@ -85,6 +85,45 @@ public unsafe class SkeletonService : IDisposable
         return _skeletons.FirstOrDefault(x => x!.GameSkeleton == skeleton, null);
     }
 
+    public Skeleton? GetOrCacheStandaloneSkeleton(BrioCharacterBase* characterBase)
+    {
+        if(characterBase == null || characterBase->CharacterBase.Skeleton == null)
+            return null;
+
+        var cached = GetSkeleton(characterBase);
+        if(cached?.IsValid == true && cached.Bones.Count > 0
+            && cached.GameSkeleton == characterBase->CharacterBase.Skeleton)
+            return cached;
+
+        // Standalone props are not in the character object table used by a
+        // full cache refresh. Re-add their live skeleton on demand.
+        var gameSkeleton = characterBase->CharacterBase.Skeleton;
+        if(gameSkeleton->PartialSkeletonCount == 0 || gameSkeleton->PartialSkeletons == null)
+            return null;
+
+        var hasPose = false;
+        for(var partialIndex = 0; partialIndex < gameSkeleton->PartialSkeletonCount; partialIndex++)
+        {
+            var partial = &gameSkeleton->PartialSkeletons[partialIndex];
+            for(var poseIndex = 0; poseIndex < PoseCount; poseIndex++)
+            {
+                var pose = partial->GetHavokPose(poseIndex);
+                if(pose == null)
+                    continue;
+                if(pose->Skeleton == null || pose->Skeleton->Bones.Length == 0
+                    || pose->Skeleton->Bones.Data == null || pose->Skeleton->ParentIndices.Data == null
+                    || pose->Skeleton->ParentIndices.Length < pose->Skeleton->Bones.Length)
+                    return null;
+                hasPose = true;
+            }
+        }
+        if(!hasPose)
+            return null;
+
+        CacheSkeleton(characterBase);
+        return GetSkeleton(characterBase);
+    }
+
     private void ApplyBrioTransforms(Skeleton skeleton, SkeletonPosingCapability posingCapability)
     {
         for(int partialIdx = 0; partialIdx < skeleton.Partials.Count; ++partialIdx)
