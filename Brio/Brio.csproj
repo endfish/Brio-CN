@@ -11,7 +11,7 @@
 		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<Version>1.0.8.0</Version>
+		<Version>1.0.9.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
