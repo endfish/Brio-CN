@@ -98,7 +98,9 @@ public static class Localize
                 }
                 break;
             default:
-                _stringDb[currentKey.TrimEnd('.')] = element.ToString();
+                // Remove only the separator appended by recursion, preserving
+                // punctuation that is part of the translation key itself.
+                _stringDb[currentKey[..^1]] = element.ToString();
                 break;
         }
     }
