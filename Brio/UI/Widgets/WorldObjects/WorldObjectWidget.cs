@@ -131,7 +131,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
             ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Prop Properties"));
             ImBrio.VerticalPadding(5);
 
-            ImBrio.ButtonSelectorStrip("importTypeStrip", new(ImBrio.GetRemainingWidth(), 25), ref _selector, ["Prop", "Weapon"]);
+            ImBrio.ButtonSelectorStrip("importTypeStrip", new(ImBrio.GetRemainingWidth(), 25), ref _selector, [Localize.Text("Prop"), Localize.Text("Weapon")]);
 
             var equip = new WeaponModelId { Id = propObject.ModelSetId, Type = propObject.SecondaryId, Variant = propObject.Variant, Stain0 = propObject.PrimaryDye, Stain1 = propObject.SecondaryDye };
 
@@ -279,7 +279,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
 
         using(ImRaii.PushId("DrawPropSlot"))
         {
-            ImGui.Text($"{model?.Name ?? "Unknown"}");
+            ImGui.TextUnformatted(model?.Name ?? Localize.Text("Unknown"));
 
             if(ImBrio.BorderedGameIcon("##icon", model?.Icon ?? 0, fallback, size: IconSize))
             {
@@ -365,7 +365,7 @@ public class WorldObjectWidget(WorldObjectTransformCapability worldcap) : Widget
 
         using(ImRaii.PushId(slot.ToString()))
         {
-            ImGui.Text($"{model?.Name ?? "Unknown"}");
+            ImGui.TextUnformatted(model?.Name ?? Localize.Text("Unknown"));
 
             if(ImBrio.BorderedGameIcon("##icon", model?.Icon ?? 0, fallback, size: IconSize))
             {

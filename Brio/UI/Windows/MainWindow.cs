@@ -52,7 +52,7 @@ public class MainWindow : Window, IDisposable
         EntitySectionWindow entitySectionWindow,
         ProjectSystem projectSystem
         )
-        : base($" {Brio.Name} [{configService.Version}]###brio_main_window", ImGuiWindowFlags.AlwaysAutoResize)
+        : base($" {Brio.Name} [{configService.Version}]###brio_main_window", ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.AlwaysVerticalScrollbar)
     //: base($" {Brio.Name} [0.8.0.0]###brio_main_window", ImGuiWindowFlags.AlwaysAutoResize)
     {
         Namespace = "brio_main_namespace";
@@ -81,29 +81,23 @@ public class MainWindow : Window, IDisposable
         };
     }
 
+    public override void PreDraw()
+    {
+        // Keep a fixed scrollbar gutter. Depending on last frame's scrollbar
+        // to choose this frame's width creates a resize/wrap/scrollbar loop in
+        // an auto-sized window, especially with tall prop editors.
+        var width = 280 + ImGui.GetStyle().ScrollbarSize;
+        SizeConstraints = new WindowSizeConstraints
+        {
+            MaximumSize = new Vector2(width, MaxHeight),
+            MinimumSize = new Vector2(width, 200)
+        };
+        base.PreDraw();
+    }
+
     public override void Draw()
     {
         ImBrio.BlurWindow(ImGuiWindowFlags.None);
-
-        bool hasScrollbar = ImGui.GetScrollMaxY() > 0;
-        if(hasScrollbar)
-        {
-            var style = ImGui.GetStyle();
-
-            SizeConstraints = new WindowSizeConstraints
-            {
-                MaximumSize = new Vector2(280 + style.ScrollbarSize, MaxHeight),
-                MinimumSize = new Vector2(280 + style.ScrollbarSize, 200)
-            };
-        }
-        else if(hasScrollbar is false)
-        {
-            SizeConstraints = new WindowSizeConstraints
-            {
-                MaximumSize = new Vector2(280, MaxHeight),
-                MinimumSize = new Vector2(280, 200)
-            };
-        }
 
         //
 
