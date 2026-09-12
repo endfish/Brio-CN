@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Collections.Generic;
 using Brio.Game.Types;
 using Brio.Resources;
 using Brio.UI.Controls.Stateless;
@@ -32,7 +33,8 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
         foreach(var row in gameDataProvider.FilteredBNpcBases)
         {
             var name = gameDataProvider.GetBNpcNameByBase(row.RowId);
-            AddItem(new NpcSelectorEntry(name, 0, row, GetTexToolsModelId(row.ModelChara.ValueNullable)));
+            AddItem(new NpcSelectorEntry(name, 0, row, GetTexToolsModelId(row.ModelChara.ValueNullable),
+                Names: gameDataProvider.GetBNpcNamesByBase(row.RowId)));
         }
 
         foreach(var row in gameDataProvider.FilteredENpcBases)
@@ -146,6 +148,17 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
 
     protected override void DrawTooltip(NpcSelectorEntry item)
     {
+        if(item.Names is { Count: > 1 })
+        {
+            ImGui.BeginTooltip();
+            ImGui.PushTextWrapPos(ImGui.GetFontSize() * 28);
+            ImGui.TextUnformatted(global::Brio.Resources.Localize.Text("All searchable names:"));
+            ImGui.TextWrapped(string.Join("\n", item.Names));
+            ImGui.PopTextWrapPos();
+            ImGui.EndTooltip();
+            return;
+        }
+
         if(!string.IsNullOrWhiteSpace(item.ModelPath))
         {
             var pathLabel = global::Brio.Resources.Localize.Text("Path");
@@ -178,7 +191,7 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
             none => ""
         );
 
-        searchTerm = $"{searchTerm} {item.TexToolsModelId} {item.ModelPath}";
+        searchTerm = $"{searchTerm} {item.TexToolsModelId} {item.ModelPath} {item.SearchNames}";
 
         return searchTerm.Contains(search, StringComparison.InvariantCultureIgnoreCase);
     }
@@ -288,5 +301,9 @@ public class NpcSelector(string id) : Selector<NpcSelectorEntry>(id)
         uint Icon,
         ActorAppearanceUnion Appearance,
         string? TexToolsModelId,
-        string? ModelPath = null);
+        string? ModelPath = null,
+        IReadOnlyList<string>? Names = null)
+    {
+        public string SearchNames { get; } = Names is null ? string.Empty : string.Join(" ", Names);
+    }
 }

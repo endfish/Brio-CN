@@ -18,7 +18,8 @@ public class GameDataNpcSource : GameDataAppearanceSourceBase
         foreach(var row in Lumina.FilteredBNpcBases)
         {
             var hasName = Lumina.TryGetBNpcNameByBase(row.RowId, out var name);
-            var entry = new GameDataAppearanceEntry(this, EntityManager, row.RowId, name, 0, row, $"B{row.RowId}");
+            var entry = new GameDataAppearanceEntry(this, EntityManager, row.RowId, name, 0, row, $"B{row.RowId}",
+                Lumina.GetBNpcNamesByBase(row.RowId));
 
             entry.Tags.Add("NPC");
 

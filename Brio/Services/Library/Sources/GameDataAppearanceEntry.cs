@@ -8,6 +8,7 @@ using Brio.UI;
 using Brio.UI.Controls.Stateless;
 using Dalamud.Interface.Textures.TextureWraps;
 using System;
+using System.Collections.Generic;
 
 namespace Brio.Library.Sources;
 
@@ -19,8 +20,11 @@ public class GameDataAppearanceEntry : ItemEntryBase
     private uint _rowId;
     private string _id;
     private EntityManager _entityManager;
+    private readonly IReadOnlyList<string>? _names;
+    private readonly string _searchNames;
 
-    public GameDataAppearanceEntry(SourceBase source, EntityManager entityManager, uint rowId, string name, uint icon, ActorAppearanceUnion appearance, string id)
+    public GameDataAppearanceEntry(SourceBase source, EntityManager entityManager, uint rowId, string name, uint icon, ActorAppearanceUnion appearance, string id,
+        IReadOnlyList<string>? names = null)
         : base(source)
     {
         _name = name;
@@ -29,6 +33,8 @@ public class GameDataAppearanceEntry : ItemEntryBase
         _rowId = rowId;
         _id = id;
         _entityManager = entityManager;
+        _names = names;
+        _searchNames = names is null ? string.Empty : string.Join(" ", names);
 
         ActorAppearance app = _appearance;
 
@@ -52,6 +58,9 @@ public class GameDataAppearanceEntry : ItemEntryBase
     }
 
     public override string Name => _name;
+    public override string? Description => _names is { Count: > 1 }
+        ? $"{Localize.Text("All searchable names:")}\n{string.Join("\n", _names)}"
+        : null;
     public override string? Author => "Square Enix";
     public override Type LoadsType => typeof(ActorAppearanceUnion);
 
@@ -88,6 +97,7 @@ public class GameDataAppearanceEntry : ItemEntryBase
     {
         bool match = base.Search(query);
         match |= SearchUtility.Matches(this._rowId, query);
+        match |= SearchUtility.Matches(_searchNames, query);
         return match;
     }
 
