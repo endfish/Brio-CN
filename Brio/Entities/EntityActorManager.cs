@@ -98,7 +98,7 @@ public unsafe class EntityActorManager : IDisposable
             {
                 if(character.HasSpawnedCompanion())
                 {
-                    var companion = character.Native()->CompanionObject;
+                    var companion = character.Native()->ChildObject;
                     if(companion != null)
                     {
                         var companionObject = _objects.CreateObjectReference((nint)companion);
