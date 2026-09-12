@@ -290,7 +290,7 @@ public class ActorSpawnService : MediatorSubscriberBase
             (ready) =>
             {
                 companionNative->EnableDraw();
-                var companion = _objectTable.CreateObjectReference((nint)character.Native()->CompanionObject);
+                var companion = _objectTable.CreateObjectReference((nint)character.Native()->ChildObject);
                 if(companion != null)
                     _ = _actorRedrawService.DrawWhenReady(companion);
             },
