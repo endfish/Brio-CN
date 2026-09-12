@@ -84,12 +84,13 @@ public class CameraLifetimeWidget(CameraLifetimeCapability capability) : Widget<
         }
 
         var lockLabel = Capability.Entity.IsLocked ? "Unlock" : "Lock";
-        if(ImGui.MenuItem($"{lockLabel}###CameraLifetime_lock"))
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text($"{lockLabel}###CameraLifetime_lock")))
         {
             Capability.Entity.IsLocked = !Capability.Entity.IsLocked;
         }
 
-        if(ImGui.MenuItem("Open Camera Editor###CameraLifetime_editor_open")) {
+        if(ImGui.MenuItem(global::Brio.Resources.Localize.Text("Open Camera Editor###CameraLifetime_editor_open")))
+        {
             Capability.OpenCameraWindow();
         }
 
