@@ -1936,6 +1936,9 @@
     "Fixed an issue where sometimes images would not load properly in the library": "修复素材库图片偶尔无法正确加载的问题。",
     "Fixed an issue that would stop Brio from loading on Linux": "修复 Brio 在 Linux 上无法加载的问题。",
     "Fixed a crash when loading Brio": "修复加载 Brio 时的一处崩溃。",
-    "Change the text in a few places to make more sense": "调整部分界面文字，使说明更清晰。"
+    "Change the text in a few places to make more sense": "调整部分界面文字，使说明更清晰。",
+    "isParticleSystemEnabled": "粒子系统已启用",
+    "IsEnvironmentOverride": "覆盖环境设置",
+    "customParticlesEnabled": "自定义粒子已启用"
   }
 }
