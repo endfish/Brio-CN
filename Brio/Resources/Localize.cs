@@ -35,7 +35,9 @@ public static class Localize
         if(visibleText.Length == 0)
             return source;
 
-        var localized = Get($"text.{visibleText}", visibleText);
+        // C# raw strings inherit the source file's line endings; JSON keys do not.
+        var lookupText = visibleText.Replace("\r\n", "\n", System.StringComparison.Ordinal);
+        var localized = Get($"text.{lookupText}", visibleText);
         return idIndex >= 0 ? $"{localized}{source[idIndex..]}" : localized;
     }
 
