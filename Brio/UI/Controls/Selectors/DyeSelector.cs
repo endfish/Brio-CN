@@ -28,7 +28,7 @@ public class DyeSelector(string id) : Selector<DyeUnion>(id)
     {
         var (id, name, color) = item.Match(
             stain => ((byte)stain.RowId, stain.Name, (uint)ImBrio.ARGBToABGR(stain.Color)),
-            none => ((byte)0, "None", (uint)0)
+            none => ((byte)0, global::Brio.Resources.Localize.Text("None"), (uint)0)
         );
         string label = $"{name} ({id})";
         var size = new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetTextLineHeight() * 1.1f);
@@ -61,7 +61,7 @@ public class DyeSelector(string id) : Selector<DyeUnion>(id)
 
         string match = item.Match(
             stain => $"{stain.Name} {stain.RowId}",
-            none => "None 0"
+            none => $"None 0 {Localize.Text("None")}"
         );
 
         if(!match.Contains(search, System.StringComparison.InvariantCultureIgnoreCase))

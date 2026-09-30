@@ -217,7 +217,7 @@ public class TimelineSequencerEditor(TimelineService timelineService, Configurat
         var keyframe = selected[0];
         var changed = false;
 
-        ImBrio.SeparatorText(selected.Count == 1 ? $"Keyframe at frame {keyframe.Frame}" : $"{selected.Count} Keyframes selected");
+        ImBrio.SeparatorText(selected.Count == 1 ? global::Brio.Resources.Localize.Format("Keyframe at frame {0}", keyframe.Frame) : global::Brio.Resources.Localize.Format("{0} Keyframes selected", selected.Count));
         ImBrio.VerticalSeparator(5);
 
         ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Components"));

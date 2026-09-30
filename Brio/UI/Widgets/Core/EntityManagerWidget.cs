@@ -25,7 +25,7 @@ public class EntityManagerWidget(EntitManagerCapability capability) : Widget<Ent
 
             ImGui.AlignTextToFramePadding();
             using(ImRaii.PushColor(ImGuiCol.Text, ThemeManager.CurrentTheme.Accent.AccentColor))
-                ImGui.Text($"{Capability.Entity.EntityManager.SelectedEntities.Count} Selected");
+                ImGui.Text(global::Brio.Resources.Localize.Format("{0} Selected", Capability.Entity.EntityManager.SelectedEntities.Count));
 
             ImBrio.VerticalPadding(7);
 

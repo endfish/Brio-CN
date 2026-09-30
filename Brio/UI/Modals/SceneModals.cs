@@ -29,13 +29,13 @@ public class ExportSceneModal : Modal
 
     public override void DrawContent()
     {
-        ImBrio.SeparatorText($" Export Scene ");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text(" Export Scene "));
 
-        ImBrio.SeparatorText($" Author ");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text(" Author "));
         ImGui.SetNextItemWidth(-float.Epsilon);
         ImGui.InputText(global::Brio.Resources.Localize.Text("###export_author"), ref _author, 100);
 
-        ImBrio.SeparatorText($" Description ");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text(" Description "));
         ImGui.SetNextItemWidth(-float.Epsilon);
         ImGui.InputText(global::Brio.Resources.Localize.Text("###export_description"), ref _description, 250);
 
@@ -74,13 +74,13 @@ public class SaveProjectModal : Modal
 
     public override void DrawContent()
     {
-        ImBrio.SeparatorText($" Save New Project ");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text(" Save New Project "));
 
-        ImBrio.SeparatorText($" Name ");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text(" Name "));
         ImGui.SetNextItemWidth(-float.Epsilon);
         ImGui.InputText(global::Brio.Resources.Localize.Text("###save_project_name"), ref _name, 100);
 
-        ImBrio.SeparatorText($" Description ");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text(" Description "));
         ImGui.SetNextItemWidth(-float.Epsilon);
         ImGui.InputText(global::Brio.Resources.Localize.Text("###save_project_description"), ref _description, 250);
 
@@ -119,7 +119,7 @@ public class ImportSceneModal : Modal
 
     public override void DrawContent()
     {
-        ImBrio.SeparatorText($" Import Scene ");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Text(" Import Scene "));
 
         ImGui.SameLine();
 

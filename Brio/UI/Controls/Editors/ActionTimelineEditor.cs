@@ -408,7 +408,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
     {
         var lipsOverride = _capability.LipsOverride;
 
-        string preview = "None";
+        string preview = global::Brio.Resources.Localize.Text("None");
         if(lipsOverride != 0)
             preview = GameDataProvider.Instance.ActionTimelines[lipsOverride].Key.ToString();
 
@@ -563,10 +563,10 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
     {
         var actionInfo = _capability.GetSlotAction(slot).Match(
                    action => $"{action.RowId} ({action.Key})",
-                   none => "None"
+                   none => global::Brio.Resources.Localize.Text("None")
                );
 
-        var slotDescription = $"{slot} ({(int)slot}): {actionInfo}";
+        var slotDescription = $"{Localize.Text(slot.ToString())} ({(int)slot}): {actionInfo}";
 
         using(ImRaii.PushId($"slot_{slot}"))
         {
@@ -646,7 +646,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
         if(ImGui.Button(global::Brio.Resources.Localize.Text("Browse")))
         {
-            UIManager.Instance.FileDialogManager.OpenFileDialog("Browse for XAT Camera File", "XAT Camera File {.xcp}",
+            UIManager.Instance.FileDialogManager.OpenFileDialog(global::Brio.Resources.Localize.Text("Browse for XAT Camera File"), global::Brio.Resources.Localize.Text("XAT Camera File {.xcp}"),
                 (success, path) =>
                 {
                     if(success)

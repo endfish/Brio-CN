@@ -490,13 +490,13 @@ public static partial class ImBrio
                         var splitText = text.Split(TooltipSeparator, StringSplitOptions.RemoveEmptyEntries);
                         for(int i = 0; i < splitText.Length; i++)
                         {
-                            ImGui.TextUnformatted(splitText[i]);
+                            ImGui.TextUnformatted(Localize.Text(splitText[i]));
                             if(i != splitText.Length - 1) ImGui.Separator();
                         }
                     }
                     else
                     {
-                        ImGui.TextUnformatted(text);
+                        ImGui.TextUnformatted(Localize.Text(text));
                     }
                     ImGui.PopTextWrapPos();
                 }
@@ -564,6 +564,7 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void SeparatorText(string label)
     {
+        label = Localize.Text(label);
         var style = ImGui.GetStyle();
         var drawList = ImGui.GetWindowDrawList();
         var screenPos = ImGui.GetCursorScreenPos();
@@ -712,9 +713,9 @@ public static partial class ImBrio
         bool changed = false;
         string preview = selected.Count switch
         {
-            0 => allPreviewText,
-            1 => $"{selected.First()}",
-            _ => $"{selected.Count} selected"
+            0 => Localize.Text(allPreviewText),
+            1 => Localize.Text($"{selected.First()}"),
+            _ => Localize.Format("{0} selected", selected.Count)
         };
 
         ImGui.SetNextItemWidth(width);
@@ -730,7 +731,7 @@ public static partial class ImBrio
             foreach(var opt in options)
             {
                 bool on = selected.Contains(opt);
-                if(ImGui.Checkbox($"{opt}###{id}_{opt}", ref on))
+                if(ImGui.Checkbox($"{Localize.Text($"{opt}")}###{id}_{opt}", ref on))
                 {
                     if(on) selected.Add(opt);
                     else selected.Remove(opt);

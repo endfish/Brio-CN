@@ -10,10 +10,10 @@ public static partial class ImBrio
     public static bool BorderedGameIcon(string id, CompanionRowUnion union, bool showText = true, ImGuiButtonFlags flags = ImGuiButtonFlags.MouseButtonLeft, Vector2? size = null)
     {
         var (description, icon) = union.Match(
-           companion => ($"{GameDataProvider.Instance.GetCompanionName(companion.RowId)}\n{companion.RowId}\nModel: {companion.Model.RowId}", companion.Icon),
-           mount => ($"{GameDataProvider.Instance.GetMountName(mount.RowId)}\n{mount.RowId}\nModel: {mount.ModelChara.RowId}", mount.Icon),
-           ornament => ($"{GameDataProvider.Instance.GetOrnamentName(ornament.RowId)}\n{ornament.RowId}\nModel: {ornament.Model}", ornament.Icon),
-           none => ("None", (uint)0)
+           companion => (Localize.Format("{0}\n{1}\nModel: {2}", GameDataProvider.Instance.GetCompanionName(companion.RowId), companion.RowId, companion.Model.RowId), companion.Icon),
+           mount => (Localize.Format("{0}\n{1}\nModel: {2}", GameDataProvider.Instance.GetMountName(mount.RowId), mount.RowId, mount.ModelChara.RowId), mount.Icon),
+           ornament => (Localize.Format("{0}\n{1}\nModel: {2}", GameDataProvider.Instance.GetOrnamentName(ornament.RowId), ornament.RowId, ornament.Model), ornament.Icon),
+           none => (global::Brio.Resources.Localize.Text("None"), (uint)0)
        );
 
         bool wasClicked = false;

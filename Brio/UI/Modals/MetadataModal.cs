@@ -88,11 +88,11 @@ public class MetadataModal : Modal
         bool editing = _fileEntry != null;
 
         if(editing)
-            ImBrio.SeparatorText($"Editing Metadata [{_fileEntry!.Name}]");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Format("Editing Metadata [{0}]", _fileEntry!.Name));
         else
-            ImBrio.SeparatorText($"Saving Pose with Metadata [{_capability?.Actor.FriendlyName} -> {Path.GetFileNameWithoutExtension(_path)}.pose]");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Format("Saving Pose with Metadata [{0} -> {1}.pose]", _capability?.Actor.FriendlyName, Path.GetFileNameWithoutExtension(_path)));
 
-        float labelColumnWidth = ImGui.CalcTextSize("Description:").X + ImGui.GetStyle().ItemSpacing.X;
+        float labelColumnWidth = ImGui.CalcTextSize(global::Brio.Resources.Localize.Text("Description:")).X + ImGui.GetStyle().ItemSpacing.X;
 
         // I hate this. I hate imgui, I hate imgui, I hate imgui - darkarchon
         using(ImRaii.Table("##export_pose_fields", 2, ImGuiTableFlags.None))
@@ -100,14 +100,14 @@ public class MetadataModal : Modal
             ImGui.TableSetupColumn("##label", ImGuiTableColumnFlags.WidthFixed, labelColumnWidth);
             ImGui.TableSetupColumn("##input", ImGuiTableColumnFlags.WidthStretch);
 
-            Row("Author:", () => ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_author"), ref _author, 100));
-            Row("Version:", () => ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_version"), ref _version, 32));
-            Row("Tags:", () =>
+            Row(global::Brio.Resources.Localize.Text("Author:"), () => ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_author"), ref _author, 100));
+            Row(global::Brio.Resources.Localize.Text("Version:"), () => ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_version"), ref _version, 32));
+            Row(global::Brio.Resources.Localize.Text("Tags:"), () =>
             {
                 ImGui.InputText(global::Brio.Resources.Localize.Text("###export_pose_tags"), ref _tags, 250);
                 ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Comma separated list of tags"));
             });
-            Row("Description:", () => ImGui.InputTextMultiline(global::Brio.Resources.Localize.Text("###xport_pose_description"), ref _description, 1024, new Vector2(-1, 5 * ImGui.GetTextLineHeight())));
+            Row(global::Brio.Resources.Localize.Text("Description:"), () => ImGui.InputTextMultiline(global::Brio.Resources.Localize.Text("###xport_pose_description"), ref _description, 1024, new Vector2(-1, 5 * ImGui.GetTextLineHeight())));
 
             static void Row(string label, Action input)
             {
@@ -123,7 +123,7 @@ public class MetadataModal : Modal
 
         ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Preview Image"));
 
-        if(ImGui.Button(_previewImage == null ? "Add##export_pose_preview" : "Replace##export_pose_preview"))
+        if(ImGui.Button(_previewImage == null ? global::Brio.Resources.Localize.Text("Add##export_pose_preview") : global::Brio.Resources.Localize.Text("Replace##export_pose_preview")))
         {
             _pickingImage = true;
             Close();

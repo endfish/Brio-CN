@@ -38,7 +38,7 @@ public class CommandHandlerService : IDisposable
         });
         _commandManager.AddHandler(MCDFCommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Toggles Brio's MCDF window.",
+            HelpMessage = Localize.Text("Toggles Brio's MCDF window."),
             ShowInHelp = false,
         });
         _commandManager.AddHandler(MapModelsCommandName, new CommandInfo(OnCommand)
@@ -110,13 +110,13 @@ public class CommandHandlerService : IDisposable
 
     private void PrintHelp()
     {
-        _chatGui.Print("Valid Brio Commands Are:");
-        _chatGui.Print("<none> - Toggle main Brio window");
-        _chatGui.Print("window - Toggle main Brio window");
-        _chatGui.Print("settings - Toggle Brio settings window");
+        _chatGui.Print(Localize.Text("Valid Brio Commands Are:"));
+        _chatGui.Print(Localize.Text("<none> - Toggle main Brio window"));
+        _chatGui.Print(Localize.Text("window - Toggle main Brio window"));
+        _chatGui.Print(Localize.Text("settings - Toggle Brio settings window"));
         _chatGui.Print($"models - {Localize.Get("ui.mapModelInspector.commandSubHelp", "Toggle the on-demand map model inspector")}");
-        _chatGui.Print("about - Toggle Brio info window");
-        _chatGui.Print("help - Print this help prompt");
+        _chatGui.Print(Localize.Text("about - Toggle Brio info window"));
+        _chatGui.Print(Localize.Text("help - Print this help prompt"));
     }
 
     public void Dispose()

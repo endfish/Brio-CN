@@ -256,12 +256,12 @@ public class UIManager : IDisposable
 
     public void NotifyError(string message)
     {
-        _toastGui.ShowError(message);
+        _toastGui.ShowError(global::Brio.Resources.Localize.Text(message));
     }
 
     public void NotifyInfo(string message)
     {
-        _toastGui.ShowNormal(message);
+        _toastGui.ShowNormal(global::Brio.Resources.Localize.Text(message));
     }
 
     public void ToggleMainWindow() => _mainWindow.IsOpen = !_mainWindow.IsOpen;

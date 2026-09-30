@@ -33,7 +33,7 @@ public class AutoSaveWindow : Window, IDisposable
     private AutoSaveEntry? _selectedEntry;
     private int _selectedActorIndex = 0;
 
-    public AutoSaveWindow(ConfigurationService configurationService, GPoseService gPoseService, AutoSaveService autoSaveService, EntityManager entityManager) : base($"{Brio.Name} AUTO-SAVE###brio_autosaves_window", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize)
+    public AutoSaveWindow(ConfigurationService configurationService, GPoseService gPoseService, AutoSaveService autoSaveService, EntityManager entityManager) : base(global::Brio.Resources.Localize.Format("{0} AUTO-SAVE###brio_autosaves_window", Brio.Name), ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoResize)
     {
         Namespace = "brio_autosaves_window";
 
@@ -178,7 +178,7 @@ public class AutoSaveWindow : Window, IDisposable
 
                 var actors = _entityManager.TryGetAllActors().ToList();
                 _selectedActorIndex = Math.Clamp(_selectedActorIndex, 0, actors.Count);
-                string comboPreview = _selectedActorIndex == 0 ? "Selected Actor" : actors[_selectedActorIndex - 1].FriendlyName;
+                string comboPreview = _selectedActorIndex == 0 ? global::Brio.Resources.Localize.Text("Selected Actor") : actors[_selectedActorIndex - 1].FriendlyName;
 
                 ImGui.SetNextItemWidth(ImBrio.GetRemainingWidth());
                 if(ImGui.BeginCombo(global::Brio.Resources.Localize.Text("###actor_combo"), comboPreview))
@@ -225,7 +225,7 @@ public class AutoSaveWindow : Window, IDisposable
             if(actor.TryGetCapability<PosingCapability>(out var cap))
                 _autoSaveService.LoadPoseOnActor(_selectedPoseEntry, cap);
             else
-                Brio.NotifyError($"'{actor.FriendlyName}' cannot be posed.");
+                Brio.NotifyError(global::Brio.Resources.Localize.Format("'{0}' cannot be posed.", actor.FriendlyName));
         }
     }
 
@@ -252,7 +252,7 @@ public class AutoSaveWindow : Window, IDisposable
         ImGui.TextUnformatted(entry.DisplayName);
 
         string metaData = entry.PoseCount > 0
-            ? $"{entry.PoseCount} pose{(entry.PoseCount == 1 ? "" : "s")}  -  {entry.SavedAtDelta}"
+            ? global::Brio.Resources.Localize.Format("{0} poses - {1}", entry.PoseCount, entry.SavedAtDelta)
             : entry.SavedAtDelta;
         float metaWidth = ImGui.CalcTextSize(metaData).X;
 

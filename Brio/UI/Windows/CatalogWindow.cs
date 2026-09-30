@@ -103,7 +103,7 @@ public class CatalogWindow : Window, IDisposable
     private int _metaJumpIndex = 1;
     private bool _metaScrollToSelected;
 
-    public CatalogWindow(GPoseService gPoseService, WorldObjectService worldObjectService, ConfigurationService configurationService, QuickAccessService quickAccess, PathMetadataService pathMetadata, IClientState clientState) : base($"{Brio.Name} - CATALOG###brio_furniture_catalog_window")
+    public CatalogWindow(GPoseService gPoseService, WorldObjectService worldObjectService, ConfigurationService configurationService, QuickAccessService quickAccess, PathMetadataService pathMetadata, IClientState clientState) : base(global::Brio.Resources.Localize.Format("{0} - CATALOG###brio_furniture_catalog_window", Brio.Name))
     {
         Namespace = "brio_furniture_catalog_namespace";
 
@@ -223,7 +223,7 @@ public class CatalogWindow : Window, IDisposable
                 return;
             }
             else if(!string.IsNullOrEmpty(_pathsError))
-                ImGui.TextColored(new Vector4(1f, 0.3f, 0.3f, 1f), _pathsError);
+                ImGui.TextColored(new Vector4(1f, 0.3f, 0.3f, 1f), Localize.Format("Error: {0}", _pathsError));
 
             LoadPathsAsync();
         }
@@ -700,7 +700,7 @@ public class CatalogWindow : Window, IDisposable
     private void ExportMetadata()
     {
         UIManager.Instance.FileDialogManager.SaveFileDialog(
-            "Export Path Metadata###export_path_meta", "Brio Path DB (*.briopdb){.briopdb}", "paths", ".briopdb",
+            global::Brio.Resources.Localize.Text("Export Path Metadata###export_path_meta"), global::Brio.Resources.Localize.Text("Brio Path DB (*.briopdb){.briopdb}"), "paths", ".briopdb",
             (success, path) =>
             {
                 if(!success)
@@ -726,7 +726,7 @@ public class CatalogWindow : Window, IDisposable
     private void ImportMetadata()
     {
         UIManager.Instance.FileDialogManager.OpenFileDialog(
-            "Import Path Metadata###import_path_meta", "Brio Path DB (*.briopdb){.briopdb}",
+            global::Brio.Resources.Localize.Text("Import Path Metadata###import_path_meta"), global::Brio.Resources.Localize.Text("Brio Path DB (*.briopdb){.briopdb}"),
             (success, path) =>
             {
                 if(!success)
@@ -735,7 +735,7 @@ public class CatalogWindow : Window, IDisposable
                 try
                 {
                     var result = _pathMetadata.Import(_metaTarget, path);
-                    Brio.NotifyInfo($"Imported path metadata ({result}).");
+                    Brio.NotifyInfo(Localize.Format("Imported path metadata ({0}).", result));
                     if(!string.IsNullOrEmpty(_metaSelectedPath))
                         LoadMetaEditing(_metaSelectedPath, _metaSelectedInfo);
                 }
@@ -1439,7 +1439,7 @@ public class CatalogWindow : Window, IDisposable
         }
         catch(Exception e)
         {
-            _pathsError = $"Error: {e.Message}";
+            _pathsError = e.Message;
             Brio.Log.Error(e, "Failed to load paths catalog");
         }
         finally

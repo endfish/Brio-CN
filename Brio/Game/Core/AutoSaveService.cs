@@ -19,12 +19,26 @@ namespace Brio.Game.Core;
 public record class AutoSaveEntry
 {
     public required string FolderPath { get; init; }
-    public required string DisplayName { get; init; }
+    public required DateTime SavedAt { get; init; }
+    public string DisplayName => Localize.Format("Auto-Save {0:g}", SavedAt);
 
     public required bool HasPoses { get; init; }
     public required int PoseCount { get; init; }
 
-    public required string SavedAtDelta { get; init; }
+    public string SavedAtDelta
+    {
+        get
+        {
+            var elapsed = DateTime.Now - SavedAt;
+            if(elapsed.TotalSeconds < 60)
+                return Localize.Format("{0}s ago", Math.Max(0, (int)elapsed.TotalSeconds));
+            if(elapsed.TotalMinutes < 60)
+                return Localize.Format("{0}m {1}s ago", (int)elapsed.TotalMinutes, elapsed.Seconds);
+            if(elapsed.TotalHours < 24)
+                return Localize.Format("{0}h {1}m ago", (int)elapsed.TotalHours, elapsed.Minutes);
+            return Localize.Format("{0}d {1}h ago", (int)elapsed.TotalDays, elapsed.Hours);
+        }
+    }
 
     public string BrioSavePath => Path.Combine(FolderPath, "SceneAutoSave.brioautosave");
     public bool IsValid => File.Exists(BrioSavePath);
@@ -195,22 +209,10 @@ public class AutoSaveService : MediatorSubscriberBase, IDisposable
                     : 0;
 
 
-                var timeDelta = DateTime.Now - d.LastWriteTime;
-                var savedAt = string.Empty;
-                if(timeDelta.TotalSeconds < 60)
-                    savedAt = $"{(int)timeDelta.TotalSeconds}s ago";
-                if(timeDelta.TotalMinutes < 60)
-                    savedAt = $"{(int)timeDelta.TotalMinutes}m {timeDelta.Seconds}s ago";
-                if(timeDelta.TotalHours < 24)
-                    savedAt = $"{(int)timeDelta.TotalHours}h {timeDelta.Minutes}m ago";
-                else
-                    savedAt = $"{(int)timeDelta.TotalDays}d {timeDelta.Hours}h ago";
-
                 return new AutoSaveEntry
                 {
                     FolderPath = d.FullName,
-                    DisplayName = $"Auto-Save {d.LastWriteTime:g}",
-                    SavedAtDelta = savedAt,
+                    SavedAt = d.LastWriteTime,
                     HasPoses = hasPoses,
                     PoseCount = poseCount
                 };

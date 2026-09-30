@@ -186,7 +186,7 @@ public class FileUIHelpers
 
         var buttonSize = new Vector2(MenuWidth * ImGuiHelpers.GlobalScale, 0);
 
-        ImBrio.SeparatorText($"Presets - [{entity.FriendlyName}]");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Format("Presets - [{0}]", entity.FriendlyName));
 
         ImBrio.ButtonSelectorStrip($"preset_mode", new Vector2(buttonSize.X, ImBrio.GetLineHeight()), ref state.Mode, ["Save", "Load"]);
 
@@ -211,7 +211,7 @@ public class FileUIHelpers
                 }
             }
 
-            ImBrio.SeparatorText($"Name");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Text("Name"));
             ImGui.SetNextItemWidth(buttonSize.X);
             ImGui.InputText($"###preset_name", ref state.Name, 64);
 
@@ -256,10 +256,12 @@ public class FileUIHelpers
 
             bool isLegacyPreset = state.Selected is not null && !state.Selected.SupportsRelativePositions;
             using(ImRaii.Disabled(isLegacyPreset))
-                ImGui.Checkbox("Load relative positions", ref state.LoadRelativePositions);
+                ImGui.Checkbox(global::Brio.Resources.Localize.Text("Load relative positions"), ref state.LoadRelativePositions);
 
             if(isLegacyPreset)
-                ImBrio.AttachToolTip("This preset does not contain relative position data and will load at its saved world position.");
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("This preset does not contain relative position data and will load at its saved world position."));
+            else
+                ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Load camera and light positions relative to your own character's current position, not the selected actor."));
 
             var size = new Vector2(buttonSize.X / 2, 0);
             using(ImRaii.Disabled(state.Selected is null))
@@ -919,7 +921,7 @@ public class FileUIHelpers
 
     public static void ShowExportCharacterModal(ActorAppearanceCapability capability)
     {
-        UIManager.Instance.FileDialogManager.SaveFileDialog("Export Character File###export_character_window", "Character File (*.chara){.chara}", "brio", "{.chara}",
+        UIManager.Instance.FileDialogManager.SaveFileDialog(global::Brio.Resources.Localize.Text("Export Character File###export_character_window"), global::Brio.Resources.Localize.Text("Character File (*.chara){.chara}"), "brio", "{.chara}",
                 (success, path) =>
                 {
                     if(success)
@@ -942,7 +944,7 @@ public class FileUIHelpers
 
     public static void ShowImportMCDFModal(ActorAppearanceCapability capability)
     {
-        UIManager.Instance.FileDialogManager.OpenFileDialog("Import MCDF File###import_mcdf_window", "Mare Character Data File (*.mcdf){.mcdf}",
+        UIManager.Instance.FileDialogManager.OpenFileDialog(global::Brio.Resources.Localize.Text("Import MCDF File###import_mcdf_window"), global::Brio.Resources.Localize.Text("Mare Character Data File (*.mcdf){.mcdf}"),
                  (success, paths) =>
                  {
                      if(success && paths.Count == 1)
@@ -961,7 +963,7 @@ public class FileUIHelpers
 
     public static void ShowExportMCDFModal(ActorAppearanceCapability capability)
     {
-        UIManager.Instance.FileDialogManager.SaveFileDialog("Export MCDF File###export_mcdf_window", "Mare Character Data File (*.mcdf){.mcdf}", "mcdf", "{.mcdf}",
+        UIManager.Instance.FileDialogManager.SaveFileDialog(global::Brio.Resources.Localize.Text("Export MCDF File###export_mcdf_window"), global::Brio.Resources.Localize.Text("Mare Character Data File (*.mcdf){.mcdf}"), "mcdf", "{.mcdf}",
                  (success, path) =>
                  {
                      if(success && !path.IsNullOrEmpty())
@@ -984,7 +986,7 @@ public class FileUIHelpers
 
     public static void ShowExportSceneModal(SceneService sceneService, string? author, string? description)
     {
-        UIManager.Instance.FileDialogManager.SaveFileDialog("Export Scene File###export_scene_window", "Brio Scene File (*.brioscn){.brioscn}", "brioscn", "{.brioscn}",
+        UIManager.Instance.FileDialogManager.SaveFileDialog(global::Brio.Resources.Localize.Text("Export Scene File###export_scene_window"), global::Brio.Resources.Localize.Text("Brio Scene File (*.brioscn){.brioscn}"), "brioscn", "{.brioscn}",
             (success, path) =>
             {
                 if(success)
@@ -1035,8 +1037,8 @@ public class FileUIHelpers
     public static void ShowImportPreviewImageModal(Action<string> onImageSelected, Action? onDialogClosed = null)
     {
         UIManager.Instance.FileDialogManager.OpenFileDialog(
-            "Import Image File###import_preview_image_window",
-            "Image Files (*.png | *.jpg | *.jpeg){.png,.jpg,.jpeg}",
+            global::Brio.Resources.Localize.Text("Import Image File###import_preview_image_window"),
+            global::Brio.Resources.Localize.Text("Image Files (*.png | *.jpg | *.jpeg){.png,.jpg,.jpeg}"),
             (success, paths) =>
             {
                 if(success && paths.Count == 1)

@@ -57,14 +57,15 @@ public abstract class Modal
         if(_isOpen == false)
             return;
 
-        ImGui.OpenPopup(_id);
+        var localizedId = global::Brio.Resources.Localize.Text(_id);
+        ImGui.OpenPopup(localizedId);
 
         ImGui.SetNextWindowSizeConstraints(MinimumSize, MaximumSize);
 
         if(KeepCentered)
             ImGui.SetNextWindowPos(new Vector2((ImGui.GetIO().DisplaySize.X / 2) - (MinimumSize.X / 2), (ImGui.GetIO().DisplaySize.Y / 2) - (MinimumSize.Y / 2)));
 
-        using var popup = ImRaii.PopupModal(_id, ref _isOpen, Flags);
+        using var popup = ImRaii.PopupModal(localizedId, ref _isOpen, Flags);
         if(popup.Success == false)
             return;
 

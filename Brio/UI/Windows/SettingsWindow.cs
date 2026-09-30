@@ -42,7 +42,7 @@ public class SettingsWindow : Window
         WebService webService,
         CustomizePlusService customizePlusService,
         PosingService posingService,
-        MapModelInspectorWindow mapModelInspectorWindow) : base($"{Brio.Name} SETTINGS###brio_settings_window", ImGuiWindowFlags.NoResize)
+        MapModelInspectorWindow mapModelInspectorWindow) : base(global::Brio.Resources.Localize.Format("{0} SETTINGS###brio_settings_window", Brio.Name), ImGuiWindowFlags.NoResize)
     {
         Namespace = "brio_settings_namespace";
 
@@ -268,13 +268,13 @@ public class SettingsWindow : Window
         var currentThemeName = _configurationService.Configuration.Appearance.Theme;
         var themeLabel = Localize.Text("Theme");
         ImGui.SetNextItemWidth(-ImGui.CalcTextSize(themeLabel).X - 15);
-        using(var combo = ImRaii.Combo(themeLabel, currentThemeName))
+        using(var combo = ImRaii.Combo(themeLabel, Localize.Text(currentThemeName)))
         {
             if(combo.Success)
             {
                 foreach(var theme in ThemeManager.Themes)
                 {
-                    if(ImGui.Selectable(theme.Name, theme.Name == currentThemeName))
+                    if(ImGui.Selectable($"{Localize.Text(theme.Name)}##theme_{theme.Name}", theme.Name == currentThemeName))
                     {
                         _configurationService.Configuration.Appearance.Theme = theme.Name;
                         ThemeManager.CurrentTheme = theme;
@@ -796,7 +796,7 @@ public class SettingsWindow : Window
 
     private void DrawBoneOverlayOffsets()
     {
-        ImGui.TextDisabled("Offsets a given bone's selection `dot` in the overlay");
+        ImGui.TextDisabled(global::Brio.Resources.Localize.Text("Offsets a given bone's selection `dot` in the overlay"));
     
         bool useOverlayOffset = _configurationService.Configuration.Posing.UseOverlayOffset;
         if(ImGui.Checkbox(global::Brio.Resources.Localize.Text("Enable Overlay Offsets"), ref useOverlayOffset))

@@ -44,7 +44,7 @@ public class PosingOverlayToolbarWindow : Window
     private readonly IFramework _framework;
 
     private bool _pushedStyle = false;
-    public PosingOverlayToolbarWindow(PosingOverlayWindow overlayWindow, IFramework framework, GPoseService gPoseService, LightWindow lightWindow, GameInputService gameInputService, EntityManager entityManager, PosingTransformWindow overlayTransformWindow, PosingService posingService, ConfigurationService configurationService) : base($"{Brio.Name} OVERLAY###brio_PosingOverlayToolbar", 
+    public PosingOverlayToolbarWindow(PosingOverlayWindow overlayWindow, IFramework framework, GPoseService gPoseService, LightWindow lightWindow, GameInputService gameInputService, EntityManager entityManager, PosingTransformWindow overlayTransformWindow, PosingService posingService, ConfigurationService configurationService) : base(global::Brio.Resources.Localize.Format("{0} OVERLAY###brio_PosingOverlayToolbar", Brio.Name),
         ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)
     {
         Namespace = "brio_posing_overlay_toolbar_namespace";

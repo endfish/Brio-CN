@@ -25,7 +25,7 @@ public class PosingTransformWindow : Window
 
     private Matrix4x4? _trackingMatrix;
 
-    public PosingTransformWindow(EntityManager entityManager, CameraService cameraService, PosingService posingService) : base($"{Brio.Name} - TRANSFORM###brio_transform_window", ImGuiWindowFlags.AlwaysVerticalScrollbar)
+    public PosingTransformWindow(EntityManager entityManager, CameraService cameraService, PosingService posingService) : base(global::Brio.Resources.Localize.Format("{0} - TRANSFORM###brio_transform_window", Brio.Name), ImGuiWindowFlags.AlwaysVerticalScrollbar)
     {
         Namespace = "brio_transform_namespace";
 
@@ -59,7 +59,7 @@ public class PosingTransformWindow : Window
 
         if(_entityManager.TryGetCapabilityFromSelectedEntity<PosingCapability>(out var posing))
         {
-            WindowName = $"TRANSFORM - {posing.Entity.FriendlyName}###brio_transform_window";
+            WindowName = global::Brio.Resources.Localize.Format("TRANSFORM - {0}###brio_transform_window", posing.Entity.FriendlyName);
 
             PosingEditorCommon.DrawSelectionName(posing);
 
@@ -72,7 +72,7 @@ public class PosingTransformWindow : Window
         }
         else
         {
-            WindowName = $"TRANSFORM - {transformableEntity.FriendlyName}###brio_transform_window";
+            WindowName = global::Brio.Resources.Localize.Format("TRANSFORM - {0}###brio_transform_window", transformableEntity.FriendlyName);
 
             DrawGizmo(null);
             ImGui.Separator();
@@ -199,7 +199,7 @@ public class PosingTransformWindow : Window
         if(isMultiEntitySelection)
         {
             ImGui.SameLine();
-            ImGui.TextColored(new Vector4(0.3f, 0.8f, 1f, 1), $"({allTransformables.Count} entities)");
+            ImGui.TextColored(new Vector4(0.3f, 0.8f, 1f, 1), global::Brio.Resources.Localize.Format("({0} entities)", allTransformables.Count));
         }
 
         Vector2 gizmoSize = new(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().X);

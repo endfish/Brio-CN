@@ -22,7 +22,7 @@ public class TimelineWindow : Window, IDisposable
     private readonly TimelineService _timelineService;
     private readonly TimelineSequencerEditor _editor;
 
-    public TimelineWindow(GPoseService gPoseService, ConfigurationService configurationService, TimelineService timelineService) : base($"{Brio.Name} - VIVACITY TIMELINE BETA ###brio_timeline_window")
+    public TimelineWindow(GPoseService gPoseService, ConfigurationService configurationService, TimelineService timelineService) : base(global::Brio.Resources.Localize.Format("{0} - VIVACITY TIMELINE BETA ###brio_timeline_window", Brio.Name))
     {
         Namespace = "brio_timeline_namespace";
 
@@ -98,9 +98,9 @@ public class TimelineWindow : Window, IDisposable
         var buttonWidth = 25f * ImGuiHelpers.GlobalScale;
         var centerWidth = (buttonWidth * 6) + (style.ItemSpacing.X * 5);
 
-        var loopWidth = ImGui.GetFrameHeight() + style.ItemInnerSpacing.X + ImGui.CalcTextSize("Loop").X;
+        var loopWidth = ImGui.GetFrameHeight() + style.ItemInnerSpacing.X + ImGui.CalcTextSize(global::Brio.Resources.Localize.Text("Loop")).X;
         var resetWidth = 25f * ImGuiHelpers.GlobalScale;
-        var fpsWidth = (65f * ImGuiHelpers.GlobalScale) + style.ItemInnerSpacing.X + ImGui.CalcTextSize("FPS").X;
+        var fpsWidth = (65f * ImGuiHelpers.GlobalScale) + style.ItemInnerSpacing.X + ImGui.CalcTextSize(global::Brio.Resources.Localize.Text("FPS")).X;
         var rightWidth = loopWidth + style.ItemSpacing.X + resetWidth + style.ItemSpacing.X + fpsWidth;
 
         ImGui.SameLine();

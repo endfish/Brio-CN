@@ -9,8 +9,8 @@ public static partial class ImBrio
     public static bool BorderedWeatherGameIcon(string id, WeatherUnion union, bool showText = true, ImGuiButtonFlags flags = ImGuiButtonFlags.MouseButtonLeft, Vector2? size = null)
     {
         var (description, icon) = union.Match(
-           weather => ($"{weather.Name}\n{weather.RowId}\nType: {weather.Description}", (uint)weather.Icon),
-           none => ("None", (byte)0)
+           weather => (global::Brio.Resources.Localize.Format("{0}\n{1}\nType: {2}", weather.Name, weather.RowId, weather.Description), (uint)weather.Icon),
+           none => (global::Brio.Resources.Localize.Text("None"), (byte)0)
         );
 
         if(!showText)

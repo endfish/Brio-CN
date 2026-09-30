@@ -23,7 +23,7 @@ public class LightWindow : Window, IDisposable
     private readonly ConfigurationService _configService;
     private readonly LightingService _lightingService;
 
-    public LightWindow(EntityManager entityManager, LightingService lightingService, GPoseService gPoseService, ConfigurationService configService) : base($"{Brio.Name} - LIGHT###brio_light_window")
+    public LightWindow(EntityManager entityManager, LightingService lightingService, GPoseService gPoseService, ConfigurationService configService) : base(global::Brio.Resources.Localize.Format("{0} - LIGHT###brio_light_window", Brio.Name))
     {
         Namespace = "brio_light_namespace";
 
@@ -84,7 +84,7 @@ public class LightWindow : Window, IDisposable
                 ImGui.EndCombo();
             }
             else
-                WindowName = $"{Brio.Name} - LIGHT###brio_light_window";
+                WindowName = global::Brio.Resources.Localize.Format("{0} - LIGHT###brio_light_window", Brio.Name);
 
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text("Current Light"));
 
@@ -111,10 +111,10 @@ public class LightWindow : Window, IDisposable
 
         LightLifetimeCapability? light = null;
         if(!_lightingService.SelectedLightEntity?.TryGetCapability<LightLifetimeCapability>(out light) ?? false)
-            WindowName = $"{Brio.Name} - LIGHT###brio_light_window";
+            WindowName = global::Brio.Resources.Localize.Format("{0} - LIGHT###brio_light_window", Brio.Name);
         else
 
-            WindowName = $"{Brio.Name} - LIGHT - {light?.Entity.FriendlyName}###brio_light_window";
+            WindowName = global::Brio.Resources.Localize.Format("{0} - LIGHT - {1}###brio_light_window", Brio.Name, light?.Entity.FriendlyName);
 
         using(ImRaii.Disabled(_lightingService!.SelectedLightEntity is null))
         {
