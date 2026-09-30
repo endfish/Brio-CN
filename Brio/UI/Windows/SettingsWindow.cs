@@ -726,11 +726,12 @@ public class SettingsWindow : Window
                             categoryColors[category.Id] = ImGui.ColorConvertFloat4ToU32(catColor);
                             _configurationService.ApplyChange();
                         }
+                        ImBrio.AttachToolTip(category.Name);
                     }
                 }
             }
 
-            ImBrio.SeparatorText("Dot Offsets");
+            ImBrio.SeparatorText("Bone Offsets");
             DrawBoneOverlayOffsets();
         }
     }
@@ -742,14 +743,14 @@ public class SettingsWindow : Window
 
     private void DrawBoneOverlayOffsets()
     {
+        ImGui.TextDisabled("Offsets a given bone's selection `dot` in the overlay");
+    
         bool useOverlayOffset = _configurationService.Configuration.Posing.UseOverlayOffset;
         if(ImGui.Checkbox("Enable Overlay Offsets", ref useOverlayOffset))
         {
             _configurationService.Configuration.Posing.UseOverlayOffset = useOverlayOffset;
             _configurationService.ApplyChange();
         }
-
-        ImGui.TextDisabled("Offsets the bone's dots in the overlay");
 
         ImBrio.VerticalPadding(5);
 
@@ -780,7 +781,7 @@ public class SettingsWindow : Window
         if(!table.Success)
             return;
 
-        ImGui.TableSetupColumn("###bone", ImGuiTableColumnFlags.WidthFixed, 150 * ImGuiHelpers.GlobalScale);
+        ImGui.TableSetupColumn("###bone", ImGuiTableColumnFlags.WidthFixed, 180 * ImGuiHelpers.GlobalScale);
         ImGui.TableSetupColumn("###offset", ImGuiTableColumnFlags.WidthStretch);
         ImGui.TableSetupColumn("###button", ImGuiTableColumnFlags.WidthFixed, 28 * ImGuiHelpers.GlobalScale);
 
@@ -790,20 +791,21 @@ public class SettingsWindow : Window
             using var id = ImRaii.PushId(bone.Key);
 
             ImGui.TableNextRow();
-
             ImGui.TableNextColumn();
+         
             ImGui.AlignTextToFramePadding();
+     
             bool known = IsKnownBone(bone.Key);
             var friendlyName = Localize.Get($"bones.{bone.Key}", bone.Key);
             if(known)
             {
                 ImGui.Text(friendlyName);
+                ImBrio.AttachToolTip(friendlyName);
             }
             else
             {
                 ImGui.TextDisabled(friendlyName);
-                if(ImGui.IsItemHovered())
-                    ImGui.SetTooltip("Custom bone (not in catalog)");
+                ImBrio.AttachToolTip(friendlyName);
             }
 
             ImGui.TableNextColumn();
@@ -814,9 +816,10 @@ public class SettingsWindow : Window
                 boneOffsets[bone.Key] = offset;
                 _configurationService.ApplyChange();
             }
+            ImBrio.AttachToolTip($"{friendlyName}'s offset");
 
             ImGui.TableNextColumn();
-            if(ImBrio.FontIconButton("###delButton", FontAwesomeIcon.Trash, $"Remove offset for '{bone.Key}'"))
+            if(ImBrio.FontIconButton("###delButton", FontAwesomeIcon.Trash, $"Remove offset for: {friendlyName} ('{bone.Key}')"))
                 toRemove = bone.Key;
         }
 

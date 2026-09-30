@@ -1,4 +1,4 @@
-﻿using Brio.Config;
+using Brio.Config;
 using Brio.Core;
 using Brio.IPC;
 using System;
@@ -53,9 +53,16 @@ public class FileCacheService : IDisposable
     }
     public void ClearTemp()
     {
-        if(Directory.Exists(TempPath) is false)
+        try
         {
-            Directory.Delete(TempPath, true);
+            if(Directory.Exists(TempPath))
+            {
+                Directory.Delete(TempPath, true);
+            }
+        }
+        catch(Exception ex)
+        {
+            Brio.Log.Error(ex, "Failed to clear temporary files");
         }
     }
 
