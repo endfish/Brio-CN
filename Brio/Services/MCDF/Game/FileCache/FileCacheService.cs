@@ -25,7 +25,8 @@ public class FileCacheService : IDisposable
     private readonly object _fileWriteLock = new();
     private readonly string _csvPath;
 
-    public string TempPath => Path.Join(Path.GetTempPath(), "Brio");
+    // Keep cleanup isolated from the original Brio plugin's temporary files.
+    public string TempPath => Path.Join(Path.GetTempPath(), "Brio-CN");
 
     public string CacheFolder => GetTempPath(); //_configurationService.Configuration.MCDF.CacheFolder;
 
