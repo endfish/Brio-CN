@@ -19,7 +19,7 @@ public class ActionTimelineWindow : Window, IDisposable
     private readonly GPoseService _gPoseService;
     private readonly CutsceneManager _cutsceneManager;
 
-    public ActionTimelineWindow(EntityManager entityManager, CutsceneManager cutsceneManager, GPoseService gPoseService, PhysicsService physicsService, ConfigurationService configurationService) : base($"{Brio.Name} - ANIMATION CONTROL###brio_action_timelines_window")
+    public ActionTimelineWindow(EntityManager entityManager, CutsceneManager cutsceneManager, GPoseService gPoseService, PhysicsService physicsService, ConfigurationService configurationService) : base(global::Brio.Resources.Localize.Format("{0} - ANIMATION CONTROL###brio_action_timelines_window", Brio.Name))
     {
         Namespace = "brio_action_timelines_namespace";
 
@@ -60,7 +60,7 @@ public class ActionTimelineWindow : Window, IDisposable
             return;
         }
 
-        WindowName = $"{Brio.Name} - Animation Control - {capability.Entity.FriendlyName}###brio_action_timelines_window";
+        WindowName = global::Brio.Resources.Localize.Format("{0} - Animation Control - {1}###brio_action_timelines_window", Brio.Name, capability.Entity.FriendlyName);
 
         _editor.Draw(true, capability);
     }

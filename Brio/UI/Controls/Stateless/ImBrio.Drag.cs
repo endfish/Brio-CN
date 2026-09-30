@@ -25,7 +25,7 @@ public static partial class ImBrio
 
         if(icon == FontAwesomeIcon.None)
         {
-            ImGui.Text(label);
+            ImGui.Text(global::Brio.Resources.Localize.Text(label));
 
             if(string.IsNullOrEmpty(tooltip) is false)
                 AttachToolTip(tooltip);

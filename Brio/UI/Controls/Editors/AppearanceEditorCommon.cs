@@ -202,7 +202,8 @@ public static class AppearanceEditorCommon
         }
 
         using(ImRaii.Disabled(capability.HasMCDF))
-        using(var combo = ImRaii.Combo(_collectionLabelProfile, capability.SelectedDesign.name!))
+        using(var combo = ImRaii.Combo(global::Brio.Resources.Localize.Text(_collectionLabelProfile), capability.SelectedDesign.id is null
+            ? global::Brio.Resources.Localize.Text("None") : capability.SelectedDesign.name!))
         {
             if(combo.Success)
             {
@@ -222,7 +223,8 @@ public static class AppearanceEditorCommon
                     _profiles = [.. capability.CustomizePlusService.GetProfiles()];
                     _profiles.Add(new IPCProfileDataTuple { Name = "None", UniqueId = Guid.Empty });
 
-                    _profiles = [.. _profiles.Where(profile => profile.Name.Contains(_search, StringComparison.OrdinalIgnoreCase))];
+                    _profiles = [.. _profiles.Where(profile => (profile.UniqueId == Guid.Empty
+                        ? global::Brio.Resources.Localize.Text("None") : profile.Name).Contains(_search, StringComparison.OrdinalIgnoreCase))];
 
                     if(capability.SelectedDesign.id is null)
                         capability.SetSelectedProfile();
@@ -233,7 +235,8 @@ public static class AppearanceEditorCommon
                     foreach(IPCProfileDataTuple collection in from col in _profiles orderby col.Name ascending select col)
                     {
                         bool isSelected = collection.UniqueId.Equals(capability.CurrentProfile.id);
-                        if(ImGui.Selectable(collection.Name, isSelected))
+                        if(ImGui.Selectable(collection.UniqueId == Guid.Empty
+                            ? global::Brio.Resources.Localize.Text("None") : collection.Name, isSelected))
                         {
                             capability.ResetProfile();
                             var (_, data) = capability.CustomizePlusService.GetProfile(collection.UniqueId);

@@ -116,7 +116,7 @@ public class SpawnMenu
 
                         var distanceText = $" [{Vector3.Distance(playerPosition, actor.Position):0.0}]";
 
-                        if(ImGui.MenuItem(string.IsNullOrWhiteSpace(actor?.Name.ToString()) ? $"Unknown {distanceText}##actor_{actor!.GameObjectId}" : $"{actor.Name} {distanceText}##actor_{actor.GameObjectId}"))
+                        if(ImGui.MenuItem(string.IsNullOrWhiteSpace(actor?.Name.ToString()) ? $"{(global::Brio.Resources.Localize.Text("Unknown"))} {distanceText}##actor_{actor!.GameObjectId}" : $"{actor.Name} {distanceText}##actor_{actor.GameObjectId}"))
                         {
                             _actorSpawnService.AddFromWorld(actor!);
                             ImGui.CloseCurrentPopup();
@@ -270,8 +270,8 @@ public class SpawnMenu
                 ImGui.CloseCurrentPopup();
 
                 UIManager.Instance.FileDialogManager.OpenFileDialog(
-                    "Select Reference Image###ref_img_picker",
-                    "Images{.png,.jpg,.jpeg}",
+                    global::Brio.Resources.Localize.Text("Select Reference Image###ref_img_picker"),
+                    global::Brio.Resources.Localize.Text("Images{.png,.jpg,.jpeg}"),
                     (success, path) =>
                     {
                         if(success)

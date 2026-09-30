@@ -516,7 +516,7 @@ public class SceneService(EntityManager _entityManager, GlamourerService _glamou
                 if(actorFile.WasMCDF)
                 {
                     Brio.Log.Info($"Actor {actorFile.Name} - m:{actorFile.WasMCDF} - s:{wasSync} was locked at the time of saving. Appearance will not be imported.");
-                    Brio.PopToast($"Actor {actorFile.Name} was locked at the time of saving. Appearance will not be imported.", "Brio Scene Import", NotificationType.Warning);
+                    Brio.PopToast(global::Brio.Resources.Localize.Format("Actor {0} was locked at the time of saving. Appearance will not be imported.", actorFile.Name), "Brio Scene Import", NotificationType.Warning);
                 }
 
                 //else

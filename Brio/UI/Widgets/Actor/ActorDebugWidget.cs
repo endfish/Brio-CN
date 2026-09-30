@@ -24,7 +24,7 @@ public class ActorDebugWidget(ActorDebugCapability capability) : Widget<ActorDeb
         using var tabBar = ImRaii.TabBar("###debug_tabs");
         if(tabBar.Success)
         {
-            using(var infoTab = ImRaii.TabItem("Info"))
+            using(var infoTab = ImRaii.TabItem(global::Brio.Resources.Localize.Text("Info")))
             {
                 if(infoTab.Success)
                 {
@@ -37,8 +37,8 @@ public class ActorDebugWidget(ActorDebugCapability capability) : Widget<ActorDeb
                     else
                     {
                         string addr = Capability.GameObject.Address.ToString("X");
-                        ImGui.SetNextItemWidth(-ImGui.CalcTextSize("Address").X);
-                        ImGui.InputText("Address", ref addr, 256, ImGuiInputTextFlags.ReadOnly);
+                        ImGui.SetNextItemWidth(-ImGui.CalcTextSize(global::Brio.Resources.Localize.Text("Address")).X);
+                        ImGui.InputText(global::Brio.Resources.Localize.Text("Address"), ref addr, 256, ImGuiInputTextFlags.ReadOnly);
                     }
 
                     var charaBase = Capability.Character.GetCharacterBase();
@@ -53,8 +53,8 @@ public class ActorDebugWidget(ActorDebugCapability capability) : Widget<ActorDeb
                         else
                         {
                             var addr = ((nint)charaBase).ToString("X");
-                            ImGui.SetNextItemWidth(-ImGui.CalcTextSize("DrawObject").X - 10);
-                            ImGui.InputText("DrawObject", ref addr, 256, ImGuiInputTextFlags.ReadOnly);
+                            ImGui.SetNextItemWidth(-ImGui.CalcTextSize(global::Brio.Resources.Localize.Text("DrawObject")).X - 10);
+                            ImGui.InputText(global::Brio.Resources.Localize.Text("DrawObject"), ref addr, 256, ImGuiInputTextFlags.ReadOnly);
                         }
 
                         var skele = charaBase->CharacterBase.Skeleton;
@@ -67,8 +67,8 @@ public class ActorDebugWidget(ActorDebugCapability capability) : Widget<ActorDeb
                         else
                         {
                             var addr = ((nint)skele).ToString("X");
-                            ImGui.SetNextItemWidth(-ImGui.CalcTextSize("Skeleton").X - 10);
-                            ImGui.InputText("Skeleton", ref addr, 256, ImGuiInputTextFlags.ReadOnly);
+                            ImGui.SetNextItemWidth(-ImGui.CalcTextSize(global::Brio.Resources.Localize.Text("Skeleton")).X - 10);
+                            ImGui.InputText(global::Brio.Resources.Localize.Text("Skeleton"), ref addr, 256, ImGuiInputTextFlags.ReadOnly);
                         }
 
                         var shaders = Capability.Character.GetShaderParams();
@@ -81,14 +81,14 @@ public class ActorDebugWidget(ActorDebugCapability capability) : Widget<ActorDeb
                         else
                         {
                             var addr = ((nint)shaders).ToString("X");
-                            ImGui.SetNextItemWidth(-ImGui.CalcTextSize("Shaders").X - 10);
-                            ImGui.InputText("Shaders", ref addr, 256, ImGuiInputTextFlags.ReadOnly);
+                            ImGui.SetNextItemWidth(-ImGui.CalcTextSize(global::Brio.Resources.Localize.Text("Shaders")).X - 10);
+                            ImGui.InputText(global::Brio.Resources.Localize.Text("Shaders"), ref addr, 256, ImGuiInputTextFlags.ReadOnly);
                         }
                     }
                 }
             }
 
-            using(var infoTab = ImRaii.TabItem("Skeleton"))
+            using(var infoTab = ImRaii.TabItem(global::Brio.Resources.Localize.Text("Skeleton")))
             {
                 if(infoTab.Success)
                 {
@@ -108,7 +108,7 @@ public class ActorDebugWidget(ActorDebugCapability capability) : Widget<ActorDeb
                 }
             }
 
-            using(var vfxTab = ImRaii.TabItem("Goop Demo"))
+            using(var vfxTab = ImRaii.TabItem(global::Brio.Resources.Localize.Text("Goop Demo")))
             {
                 if(vfxTab.Success)
                 {

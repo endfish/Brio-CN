@@ -29,7 +29,7 @@ public class ActorAppearanceWindow : Window, IDisposable
     private ActorAppearanceCapability _capability = null!;
     private AppearanceImportOptions _importOptions = AppearanceImportOptions.All;
 
-    public ActorAppearanceWindow(EntityManager entityManager, GPoseService gPoseService, MCDFService mCDFService) : base($"{Brio.Name} - APPEARANCE###brio_character_editor_window")
+    public ActorAppearanceWindow(EntityManager entityManager, GPoseService gPoseService, MCDFService mCDFService) : base(global::Brio.Resources.Localize.Format("{0} - APPEARANCE###brio_character_editor_window", Brio.Name))
     {
         Namespace = "brio_character_editor_namespace";
 
@@ -73,7 +73,7 @@ public class ActorAppearanceWindow : Window, IDisposable
 
         _capability = capability;
 
-        WindowName = $"{Brio.Name} - Appearance - {capability.Entity.FriendlyName}###brio_character_editor_window";
+        WindowName = global::Brio.Resources.Localize.Format("{0} - Appearance - {1}###brio_character_editor_window", Brio.Name, capability.Entity.FriendlyName);
 
         using(ImRaii.Disabled(capability.Entity.IsLoading))
         {

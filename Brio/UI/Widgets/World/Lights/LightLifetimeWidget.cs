@@ -62,7 +62,7 @@ public class LightLifetimeWidget(LightLifetimeCapability lightLifetimeCapability
             Capability.MoveToCamera();
         }
 
-        var togglenText = Capability.GameLight.IsVisible ? $"Turn OFF {Capability.Entity.FriendlyName}" : $"Turn ON {Capability.Entity.FriendlyName}";
+        var togglenText = global::Brio.Resources.Localize.Format(Capability.GameLight.IsVisible ? "Turn OFF {0}" : "Turn ON {0}", Capability.Entity.FriendlyName);
         if(ImGui.MenuItem($"{togglenText}###lightlifetime_toggle"))
         {
             Capability.GameLight.ToggleLight();

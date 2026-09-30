@@ -49,7 +49,7 @@ public class PosingGraphicalWindow : Window, IDisposable
     int _selectedPane = 0;
     private bool _hideControlPane = false;
 
-    public PosingGraphicalWindow(EntityManager entityManager, CameraService cameraService, PhysicsService physicsService, ConfigurationService configurationService, PosingService posingService, GPoseService gPoseService) : base($"{Brio.Name} - POSING###brio_posing_graphical_window")
+    public PosingGraphicalWindow(EntityManager entityManager, CameraService cameraService, PhysicsService physicsService, ConfigurationService configurationService, PosingService posingService, GPoseService gPoseService) : base(global::Brio.Resources.Localize.Format("{0} - POSING###brio_posing_graphical_window", Brio.Name))
     {
         Namespace = "brio_posing_graphical_namespace";
 
@@ -124,7 +124,7 @@ public class PosingGraphicalWindow : Window, IDisposable
         posing.Hover = new None();
         _closestHover = float.MaxValue;
 
-        WindowName = $"{Brio.Name} - POSING###brio_posing_graphical_window";
+        WindowName = global::Brio.Resources.Localize.Format("{0} - POSING###brio_posing_graphical_window", Brio.Name);
 
         DrawTopBar(posing);
 
@@ -219,7 +219,7 @@ public class PosingGraphicalWindow : Window, IDisposable
             posing.OverlayOpen = !posing.OverlayOpen;
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip(posing.OverlayOpen ? "Close Overlay" : "Show Overlay");
+            ImGui.SetTooltip(posing.OverlayOpen ? global::Brio.Resources.Localize.Text("Close Overlay") : global::Brio.Resources.Localize.Text("Show Overlay"));
 
         ImGui.SameLine();
 
@@ -230,7 +230,7 @@ public class PosingGraphicalWindow : Window, IDisposable
         }
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip(posing.TransformWindowOpen ? "Close Transform Window" : "Show Transform Window");
+            ImGui.SetTooltip(posing.TransformWindowOpen ? global::Brio.Resources.Localize.Text("Close Transform Window") : global::Brio.Resources.Localize.Text("Show Transform Window"));
 
         ImGui.SameLine();
 
@@ -290,7 +290,7 @@ public class PosingGraphicalWindow : Window, IDisposable
         }
 
         if(ImGui.IsItemHovered())
-            ImGui.SetTooltip(_hideControlPane ? "Show Control Pane" : "Hide Control Pane");
+            ImGui.SetTooltip(_hideControlPane ? global::Brio.Resources.Localize.Text("Show Control Pane") : global::Brio.Resources.Localize.Text("Hide Control Pane"));
 
         ImGui.Separator();
     }

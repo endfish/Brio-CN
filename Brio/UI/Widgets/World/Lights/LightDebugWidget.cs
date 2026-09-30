@@ -18,7 +18,7 @@ public class LightDebugWidget(LightDebugCapability capability) : Widget<LightDeb
         if(Capability.LightingService.CurrentGPoseState is not null)
             Capability.DynamisIPC.DrawPointer((nint)Capability.LightingService.CurrentGPoseState);
         else
-            ImGui.TextColored(ImGuiColors.DalamudRed, "CurrentGPoseState is NUll!");
+            ImGui.TextColored(ImGuiColors.DalamudRed, global::Brio.Resources.Localize.Text("CurrentGPoseState is NUll!"));
 
         ImGui.Text("BrioLight");
         ImGui.SameLine();

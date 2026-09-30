@@ -15,6 +15,7 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void TextCentered(string text, float width)
     {
+        text = global::Brio.Resources.Localize.Text(text);
         float textWidth = ImGui.CalcTextSize(text).X;
         float indent = (width - textWidth) * 0.5f;
 
@@ -29,6 +30,7 @@ public static partial class ImBrio
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static void Text(string text, uint color = 0xFFFFFF)
     {
+        text = global::Brio.Resources.Localize.Text(text);
         ImGui.TextColored(ImGui.ColorConvertU32ToFloat4(color), text);
     }
 

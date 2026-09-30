@@ -516,7 +516,7 @@ public static class CameraEditor
 
         if(ImGui.Button("Browse"))
         {
-            UIManager.Instance.FileDialogManager.OpenFileDialog("Browse for XAT Camera File", "XAT Camera File {.xcp}",
+            UIManager.Instance.FileDialogManager.OpenFileDialog(global::Brio.Resources.Localize.Text("Browse for XAT Camera File"), global::Brio.Resources.Localize.Text("XAT Camera File {.xcp}"),
                 (success, path) =>
                 {
                     if(success)

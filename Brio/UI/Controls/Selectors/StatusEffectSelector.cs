@@ -56,7 +56,7 @@ public class StatusEffectSelector(string id) : Selector<StatusEffectSelectorHold
 
         ImGui.Image(tex.Handle, iconSize);
         ImGui.SameLine();
-        ImGui.Text($"{item.Name.ExtractText()}\n{item.RowId}\nVFX: {item.VFX.RowId} / Hit: {item.HitEffect.RowId}");
+        ImGui.Text(global::Brio.Resources.Localize.Format("{0}\n{1}\nVFX: {2} / Hit: {3}", item.Name.ExtractText(), item.RowId, item.VFX.RowId, item.HitEffect.RowId));
     }
 
     protected override int Compare(StatusEffectSelectorHolder sesh1, StatusEffectSelectorHolder sesh2)

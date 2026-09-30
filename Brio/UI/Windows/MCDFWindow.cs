@@ -8,7 +8,7 @@ public class MCDFWindow : Window
 {
     private readonly ConfigurationService _configurationService;
 
-    public MCDFWindow(ConfigurationService configurationService) : base($"{Brio.Name} MCDF ###brio_mcdf_window", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
+    public MCDFWindow(ConfigurationService configurationService) : base(global::Brio.Resources.Localize.Format("{0} MCDF ###brio_mcdf_window", Brio.Name), ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         Namespace = "brio_mcdf_window";
 

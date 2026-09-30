@@ -195,7 +195,7 @@ public static class LibrarySourcesEditor
                         isFolderDialogOpen = true;
 
                         UIManager.Instance.FileDialogManager.OpenFolderDialog(
-                            "Browse for Folder",
+                            global::Brio.Resources.Localize.Text("Browse for Folder"),
                             (success, path) =>
                             {
                                 if(success && !string.IsNullOrEmpty(path))
@@ -288,7 +288,7 @@ public static class LibrarySourcesEditor
 
         ImBrio.FontIcon(sourceConfig.Enabled ? FontAwesomeIcon.Check : FontAwesomeIcon.Times);
         ImGui.SameLine();
-        ImGui.Text(sourceConfig.Name ?? "Unnamed Source");
+        ImGui.Text(sourceConfig.Name ?? global::Brio.Resources.Localize.Text("Unnamed Source"));
 
         if(sourceConfig is FileSourceConfig fileSource)
         {

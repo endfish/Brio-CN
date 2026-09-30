@@ -22,7 +22,7 @@ public class ProjectWindow : Window, IDisposable
     static Project? selectedItem;
     private const float InfoPaneWidth = 175;
 
-    public ProjectWindow(ProjectSystem projectSystem, MCDFService mCDFService, GPoseService gPoseService) : base($"{Brio.Name} LOAD PROJECT###brio_project_window", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
+    public ProjectWindow(ProjectSystem projectSystem, MCDFService mCDFService, GPoseService gPoseService) : base(global::Brio.Resources.Localize.Format("{0} LOAD PROJECT###brio_project_window", Brio.Name), ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         Namespace = "brio_project_namespace";
 
@@ -86,8 +86,8 @@ public class ProjectWindow : Window, IDisposable
 
                 if(_projectSystem.BrioProjects.Projects.Count == 0)
                 {
-                    ImGui.TextDisabled("No saved projects yet.");
-                    ImGui.TextWrapped("A project stores your current Brio scene.");
+                    ImGui.TextDisabled(global::Brio.Resources.Localize.Text("No saved projects yet."));
+                    ImGui.TextWrapped(global::Brio.Resources.Localize.Text("A project stores your current Brio scene."));
 
                     if(ImBrio.Button("Save current scene as a new project", FontAwesomeIcon.FileCirclePlus, new(ImBrio.GetRemainingWidth(), 0), centerTest: true))
                         ModalManager.Instance.OpenSaveProjectModal();
@@ -172,12 +172,12 @@ public class ProjectWindow : Window, IDisposable
 
         ImGui.SetCursorPosY(itemTop + ImGui.GetStyle().FramePadding.Y);
 
-        ImGui.Text(project.Name ?? "No Name Source");
+        ImGui.Text(project.Name ?? global::Brio.Resources.Localize.Text("No Name Source"));
 
         if(project.Created.HasValue)
             ImGui.Text($"Created: {project.Created.Value:g}");
 
-        ImGui.Text(project.Description ?? "No Description");
+        ImGui.Text(project.Description ?? global::Brio.Resources.Localize.Text("No Description"));
 
         ImGui.SetCursorPosY(itemTop + itemHeight + ImGui.GetStyle().ItemSpacing.Y);
 

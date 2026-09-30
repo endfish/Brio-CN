@@ -98,7 +98,7 @@ public class LibraryManager : IDisposable
     }
     private void ShowFilePicker(FilterBase filter, Action<object> callback, bool loadMessagePack)
     {
-        string title = $"Import {filter.Name}###import_browse";
+        string title = global::Brio.Resources.Localize.Format("Import {0}###import_browse", global::Brio.Resources.Localize.Text(filter.Name));
 
         // Build the filter string for Dalamud's file picker
         // "Pose File (*.pose | *.cmp){.pose,.cmp}"
@@ -122,7 +122,8 @@ public class LibraryManager : IDisposable
                 typeIdBuilder.Append(typeInfo.Extension);
             }
 
-            filterBuilder.Append("Any File(");
+            filterBuilder.Append(global::Brio.Resources.Localize.Text("Any File"));
+            filterBuilder.Append("(");
             for(int i = 0; i < allInfos.Count; i++)
             {
                 if(i > 0)
@@ -143,7 +144,7 @@ public class LibraryManager : IDisposable
             foreach(FileTypeInfoBase typeInfo in allInfos)
             {
                 filterBuilder.Append(",");
-                filterBuilder.Append(typeInfo.Name);
+                filterBuilder.Append(global::Brio.Resources.Localize.Text(typeInfo.Name));
                 filterBuilder.Append(" (*");
                 filterBuilder.Append(typeInfo.Extension);
                 filterBuilder.Append("){");

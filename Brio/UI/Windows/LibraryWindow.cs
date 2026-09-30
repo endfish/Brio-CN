@@ -101,7 +101,7 @@ public class LibraryWindow : Window, IDisposable
         PosingService posingService,
         IFramework frameworkService,
         SettingsWindow settingsWindow)
-        : base($"{Brio.Name} LIBRARY###brio_library_window")
+        : base(global::Brio.Resources.Localize.Format("{0} LIBRARY###brio_library_window", Brio.Name))
     {
         this.Namespace = "brio_library_namespace";
 
@@ -309,11 +309,12 @@ public class LibraryWindow : Window, IDisposable
         if(!this.IsOpen || !this._isModal || _modalFilter == null)
             return;
 
-        ImGui.OpenPopup($"Import {_modalFilter.Name}##brio_library_popup");
+        var popupTitle = global::Brio.Resources.Localize.Format("Import {0}##brio_library_popup", global::Brio.Resources.Localize.Text(_modalFilter.Name));
+        ImGui.OpenPopup(popupTitle);
 
         ImGui.SetNextWindowSizeConstraints(MinimumSize * ImGuiHelpers.GlobalScale, ImGui.GetIO().DisplaySize);
 
-        using(var popup = ImRaii.PopupModal($"Import {_modalFilter.Name}##brio_library_popup"))
+        using(var popup = ImRaii.PopupModal(popupTitle))
         {
             if(popup.Success)
             {
@@ -454,7 +455,7 @@ public class LibraryWindow : Window, IDisposable
                             }
 
                             if(ImGui.IsItemHovered())
-                                ImGui.SetTooltip(isFavorite ? "Remove from favorites" : "Add to favorites");
+                                ImGui.SetTooltip(isFavorite ? global::Brio.Resources.Localize.Text("Remove from favorites") : global::Brio.Resources.Localize.Text("Add to favorites"));
 
                             ImGui.SameLine();
                         }
@@ -917,7 +918,7 @@ public class LibraryWindow : Window, IDisposable
 
                         if(trimmedTags > 0)
                         {
-                            ImBrio.Text($"plus {trimmedTags} more tags...", 0x88FFFFFF);
+                            ImBrio.Text(global::Brio.Resources.Localize.Format("plus {0} more tags...", trimmedTags), 0x88FFFFFF);
                         }
 
                         hasContent = true;
@@ -926,7 +927,7 @@ public class LibraryWindow : Window, IDisposable
                     // quick tag
                     if(availableTags.Count >= 1)
                     {
-                        ImBrio.Text($"Press TAB to filter by tag \"{availableTags[0].DisplayName}\"", 0x88FFFFFF);
+                        ImBrio.Text(global::Brio.Resources.Localize.Format("Press TAB to filter by tag \"{0}\"", availableTags[0].DisplayName), 0x88FFFFFF);
                         hasContent = true;
 
                         if(ImGui.IsKeyPressed(ImGuiKey.Tab))
@@ -939,7 +940,7 @@ public class LibraryWindow : Window, IDisposable
 
                     if(!hasContent)
                     {
-                        ImBrio.Text($"Start typing to search...", 0x88FFFFFF);
+                        ImBrio.Text(global::Brio.Resources.Localize.Text("Start typing to search..."), 0x88FFFFFF);
                     }
                 }
 

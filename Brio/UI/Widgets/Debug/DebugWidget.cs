@@ -21,31 +21,31 @@ public class DebugWidget(DebugCapability capability, IClientState _clientState, 
         {
             if(bar.Success)
             {
-                using(var item = ImRaii.TabItem("GPose"))
+                using(var item = ImRaii.TabItem(global::Brio.Resources.Localize.Text("GPose")))
                 {
                     if(item.Success)
                         DrawGPose();
                 }
 
-                using(var item = ImRaii.TabItem("Addresses"))
+                using(var item = ImRaii.TabItem(global::Brio.Resources.Localize.Text("Addresses")))
                 {
                     if(item.Success)
                         DrawAddresses();
                 }
 
-                using(var item = ImRaii.TabItem("Misc"))
+                using(var item = ImRaii.TabItem(global::Brio.Resources.Localize.Text("Misc")))
                 {
                     if(item.Success)
                         DrawMisc();
                 }
 
-                using(var item = ImRaii.TabItem("Objects"))
+                using(var item = ImRaii.TabItem(global::Brio.Resources.Localize.Text("Objects")))
                 {
                     if(item.Success)
                         DrawObjects();
                 }
 
-                using(var item = ImRaii.TabItem("World"))
+                using(var item = ImRaii.TabItem(global::Brio.Resources.Localize.Text("World")))
                 {
                     if(item.Success)
                     {
@@ -81,7 +81,7 @@ public class DebugWidget(DebugCapability capability, IClientState _clientState, 
             Capability.ExitGPose();
         }
 
-        ImGui.Text($"IsPosing: {Capability?.IsPosing}");
+        ImGui.Text(global::Brio.Resources.Localize.Format("IsPosing: {0}", Capability?.IsPosing));
     }
 
     private unsafe void DrawAddresses()
@@ -103,11 +103,11 @@ public class DebugWidget(DebugCapability capability, IClientState _clientState, 
     {
         var io = ImGui.GetIO();
 
-        ImGui.Text($"MapId - {_clientState.MapId}");
-        ImGui.Text($"TerritoryType - {_clientState.TerritoryType}");
-        ImGui.Text($"CurrentWorld - {_objectTable.LocalPlayer?.CurrentWorld.Value.Name}");
-        ImGui.Text($"HomeWorld - {_objectTable.LocalPlayer?.HomeWorld.Value.Name}");
+        ImGui.Text(global::Brio.Resources.Localize.Format("MapId - {0}", _clientState.MapId));
+        ImGui.Text(global::Brio.Resources.Localize.Format("TerritoryType - {0}", _clientState.TerritoryType));
+        ImGui.Text(global::Brio.Resources.Localize.Format("CurrentWorld - {0}", _objectTable.LocalPlayer?.CurrentWorld.Value.Name));
+        ImGui.Text(global::Brio.Resources.Localize.Format("HomeWorld - {0}", _objectTable.LocalPlayer?.HomeWorld.Value.Name));
 
-        ImGui.Text(io.Framerate.ToString("F2") + " FPS");
+        ImGui.Text(io.Framerate.ToString("F2") + global::Brio.Resources.Localize.Text(" FPS"));
     }
 }

@@ -165,12 +165,12 @@ public class GearEditor()
 
         var (dye0Id, dye0Name, dye0Color) = dye0Union.Match(
             dye => ((byte)dye.RowId, dye.Name.ToString(), ImBrio.ARGBToABGR(dye.Color)),
-            none => ((byte)0, "None", (uint)0x0)
+            none => ((byte)0, global::Brio.Resources.Localize.Text("None"), (uint)0x0)
         );
 
         var (dye1Id, dye1Name, dye1Color) = dye1Union.Match(
             dye => ((byte)dye.RowId, dye.Name.ToString(), ImBrio.ARGBToABGR(dye.Color)),
-            none => ((byte)0, "None", (uint)0x0)
+            none => ((byte)0, global::Brio.Resources.Localize.Text("None"), (uint)0x0)
         );
 
         using(ImRaii.PushId(slot.ToString()))
@@ -343,12 +343,12 @@ public class GearEditor()
 
         var (dye0Id, dye0Name, dye0Color) = dye0Union.Match(
             dye => ((byte)dye.RowId, dye.Name.ToString(), ImBrio.ARGBToABGR(dye.Color)),
-            none => ((byte)0, "None", (uint)0x0)
+            none => ((byte)0, global::Brio.Resources.Localize.Text("None"), (uint)0x0)
         );
 
         var (dye1Id, dye1Name, dye1Color) = dye1Union.Match(
             dye => ((byte)dye.RowId, dye.Name.ToString(), ImBrio.ARGBToABGR(dye.Color)),
-            none => ((byte)0, "None", (uint)0x0)
+            none => ((byte)0, global::Brio.Resources.Localize.Text("None"), (uint)0x0)
         );
 
         var model = GameDataProvider.Instance.ModelDatabase.GetModelById(equip, _weaponSlots);
@@ -598,7 +598,7 @@ public class GearEditor()
         FacewearUnion facewearUnion = new FacewearId(appearance.Facewear);
         var (facewearId, facewearName, facewearIcon) = facewearUnion.Match(
            glasses => ((ushort)glasses.RowId, glasses.Name, (uint)glasses.Icon),
-           none => ((ushort)0, "None", (uint)0x0)
+           none => ((ushort)0, global::Brio.Resources.Localize.Text("None"), (uint)0x0)
        );
 
         using(ImRaii.PushId("facewear"))

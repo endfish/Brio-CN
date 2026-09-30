@@ -23,7 +23,7 @@ public class CameraWindow : Window, IDisposable
     private readonly CutsceneManager _cutsceneManager;
     private readonly ConfigurationService _configService;
 
-    public CameraWindow(EntityManager entityManager, GPoseService gPoseService, CutsceneManager cutsceneManager, ConfigurationService configService, VirtualCameraManager virtualCameraService) : base($"{Brio.Name} - CAMERA###brio_camera_window")
+    public CameraWindow(EntityManager entityManager, GPoseService gPoseService, CutsceneManager cutsceneManager, ConfigurationService configService, VirtualCameraManager virtualCameraService) : base(global::Brio.Resources.Localize.Format("{0} - CAMERA###brio_camera_window", Brio.Name))
     {
         Namespace = "brio_camera_namespace";
 
@@ -60,7 +60,7 @@ public class CameraWindow : Window, IDisposable
                 list.Add(_virtualCameraService.GetDefaultCamera()!);
                 foreach(var value in list)
                 {
-                    if(ImGui.Selectable($"Camera: [ {value.FriendlyName} ] [ {value.CameraType.ToString().ToUpper()} ]"))
+                    if(ImGui.Selectable(global::Brio.Resources.Localize.Format("Camera: [ {0} ] [ {1} ]", value.FriendlyName, global::Brio.Resources.Localize.Text(value.CameraType.ToString()))))
                     {
                         _virtualCameraService.SelectedCameraEntity = value;
                     }
@@ -78,7 +78,7 @@ public class CameraWindow : Window, IDisposable
                 : null;
         }
 
-        ImBrio.SeparatorText($"Camera - [{_virtualCameraService.SelectedCameraEntity?.FriendlyName}]");
+        ImBrio.SeparatorText(global::Brio.Resources.Localize.Format("Camera - [{0}]", _virtualCameraService.SelectedCameraEntity?.FriendlyName));
 
         //
         // Hedder
@@ -96,16 +96,16 @@ public class CameraWindow : Window, IDisposable
         switch(camBrioCap.CameraEntity.CameraType)
         {
             case CameraType.Free:
-                WindowName = $"{Brio.Name} - CAMERA (FREE CAM)###brio_camera_window";
+                WindowName = global::Brio.Resources.Localize.Format("{0} - CAMERA (FREE CAM)###brio_camera_window", Brio.Name);
                 CameraEditor.DrawFreeCam("camera_widget_editor", camBrioCap);
                 break;
             case CameraType.Cutscene:
-                WindowName = $"{Brio.Name} - CAMERA (CUTSCENE)###brio_camera_window";
+                WindowName = global::Brio.Resources.Localize.Format("{0} - CAMERA (CUTSCENE)###brio_camera_window", Brio.Name);
                 CameraEditor.DrawBrioCutscene("camera_widget_editor", camBrioCap, _cutsceneManager, _configService);
                 break;
             case CameraType.Game:
             case CameraType.Default:
-                WindowName = $"{Brio.Name} - CAMERA (BRIO CAM)###brio_camera_window";
+                WindowName = global::Brio.Resources.Localize.Format("{0} - CAMERA (BRIO CAM)###brio_camera_window", Brio.Name);
                 CameraEditor.DrawBrioCam("camera_widget_editor", camBrioCap);
                 break;
         }

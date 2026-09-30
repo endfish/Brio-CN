@@ -32,7 +32,7 @@ public class UpdateWindow : Window
     private readonly List<string> _supporters = [];
     private readonly List<string> _contributors = [];
 
-    public UpdateWindow() : base($"   {Brio.Name} CHANGLOG [{ConfigurationService.Instance.Version}]###brio_welcomewindow", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration)
+    public UpdateWindow() : base(global::Brio.Resources.Localize.Format("   {0} CHANGLOG [{1}]###brio_welcomewindow", Brio.Name, ConfigurationService.Instance.Version), ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoDocking | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoDecoration)
     {
         Namespace = "brio_welcomewindow_namespace";
 
@@ -137,9 +137,9 @@ public class UpdateWindow : Window
         // Tagline Text
         ImGui.SetCursorPosY(ImGui.GetCursorPosY() - 20);
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
-        ImGui.TextColored(new Vector4(0.4f, 0.9f, 0.4f, 1.0f), _changelogFile?.Tagline);
+        ImGui.TextColored(new Vector4(0.4f, 0.9f, 0.4f, 1.0f), Localize.Text(_changelogFile?.Tagline ?? string.Empty));
         ImGui.SameLine();
-        ImGui.TextColored(new Vector4(0.75f, 0.75f, 0.85f, 1.0f), $"  -  {_changelogFile?.Subline}");
+        ImGui.TextColored(new Vector4(0.75f, 0.75f, 0.85f, 1.0f), $"  -  {Localize.Text(_changelogFile?.Subline ?? string.Empty)}");
         ImBrio.VerticalPadding(5);
 
         // Buttons
@@ -223,28 +223,28 @@ public class UpdateWindow : Window
         // Dev Message
         if(entry.Message.IsNullOrEmpty() is false)
         {
-            if(CollapsingHeader($"{entry.Name} — {entry.Date} ", $" {entry.Tagline} ", currentColor, isCurrent))
+            if(CollapsingHeader($"{Localize.Text(entry.Name)} — {entry.Date} ", $" {Localize.Text(entry.Tagline ?? string.Empty)} ", currentColor, isCurrent))
             {
                 ImBrio.VerticalPadding(10);
 
-                ImGui.Text(entry.Message);
+                ImGui.Text(Localize.Text(entry.Message));
 
                 ImBrio.VerticalPadding(10);
             }
             return;
         }
 
-        if(CollapsingHeader($"{entry.Name} — {entry.Date}", $"  —  {entry.Tagline} ", currentColor, isCurrent))
+        if(CollapsingHeader($"{Localize.Text(entry.Name)} — {entry.Date}", $"  —  {Localize.Text(entry.Tagline ?? string.Empty)} ", currentColor, isCurrent))
         {
             ImBrio.VerticalPadding(10);
 
             foreach(var item in entry.Versions)
             {
-                DrawFeature(FontAwesomeIcon.None, item.Number, new Vector4(0.5f, 0.9f, 0.5f, 1.0f));
+                DrawFeature(FontAwesomeIcon.None, Localize.Text(item.Number), new Vector4(0.5f, 0.9f, 0.5f, 1.0f));
 
                 foreach(var subItem in item.Items)
                 {
-                    ImGui.BulletText(subItem);
+                    ImGui.BulletText(Localize.Text(subItem));
                 }
             }
 

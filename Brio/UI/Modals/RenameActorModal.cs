@@ -38,7 +38,7 @@ public class RenameActorModal : Modal
     {
         if(_currentActorEntity is not null && _currentActorEntity.IsAttached)
         {
-            ImBrio.SeparatorText($"Renaming:  [ {_currentActorEntity.FriendlyName} ]");
+            ImBrio.SeparatorText(global::Brio.Resources.Localize.Format("Renaming:  [ {0} ]", _currentActorEntity.FriendlyName));
 
             ImBrio.VerticalPadding(5);
 

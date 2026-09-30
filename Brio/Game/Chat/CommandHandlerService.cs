@@ -1,4 +1,5 @@
 ﻿using Brio.Services;
+using Brio.Resources;
 using Brio.UI;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
@@ -36,7 +37,7 @@ public class CommandHandlerService : IDisposable
         });
         _commandManager.AddHandler(MCDFCommandName, new CommandInfo(OnCommand)
         {
-            HelpMessage = "Toggles Brio's MCDF window.",
+            HelpMessage = Localize.Text("Toggles Brio's MCDF window."),
             ShowInHelp = false,
         });
     }
@@ -90,12 +91,12 @@ public class CommandHandlerService : IDisposable
 
     private void PrintHelp()
     {
-        _chatGui.Print("Valid Brio Commands Are:");
-        _chatGui.Print("<none> - Toggle main Brio window");
-        _chatGui.Print("window - Toggle main Brio window");
-        _chatGui.Print("settings - Toggle Brio settings window");
-        _chatGui.Print("about - Toggle Brio info window");
-        _chatGui.Print("help - Print this help prompt");
+        _chatGui.Print(global::Brio.Resources.Localize.Text("Valid Brio Commands Are:"));
+        _chatGui.Print(global::Brio.Resources.Localize.Text("<none> - Toggle main Brio window"));
+        _chatGui.Print(global::Brio.Resources.Localize.Text("window - Toggle main Brio window"));
+        _chatGui.Print(global::Brio.Resources.Localize.Text("settings - Toggle Brio settings window"));
+        _chatGui.Print(global::Brio.Resources.Localize.Text("about - Toggle Brio info window"));
+        _chatGui.Print(global::Brio.Resources.Localize.Text("help - Print this help prompt"));
     }
 
     public void Dispose()

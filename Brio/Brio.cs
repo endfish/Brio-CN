@@ -336,9 +336,10 @@ public class Brio(IDalamudPluginInterface pluginInterface) : IAsyncDalamudPlugin
 
     public static void NotifyInfo(string message)
     {
+        message = Localize.Text(message);
         NotificationManager.AddNotification(new Dalamud.Interface.ImGuiNotification.Notification
         {
-            Title = "Brio Info",
+            Title = Localize.Text("Brio Info"),
             Content = message,
             Type = Dalamud.Interface.ImGuiNotification.NotificationType.Info,
             RespectUiHidden = false
@@ -350,8 +351,8 @@ public class Brio(IDalamudPluginInterface pluginInterface) : IAsyncDalamudPlugin
     {
         NotificationManager.AddNotification(new Dalamud.Interface.ImGuiNotification.Notification
         {
-            Title = title,
-            Content = message,
+            Title = Localize.Text(title),
+            Content = Localize.Text(message),
             Type = type,
             RespectUiHidden = false
         });
