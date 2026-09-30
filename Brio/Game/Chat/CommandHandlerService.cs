@@ -1,6 +1,6 @@
 ﻿using Brio.Services;
-using Brio.UI;
 using Brio.Resources;
+using Brio.UI;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
 using System;
