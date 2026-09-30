@@ -163,7 +163,7 @@ public class EnvironmentEditorWidget(EnvironmentEditorCapability capability) : W
             case 2:
                 ImBrio.VerticalPadding(3);
 
-                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Wind"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Rain Properties"),
+                if(ImBrio.SeparatorTextButton(global::Brio.Resources.Localize.Text("Wind"), FontAwesomeIcon.Redo, global::Brio.Resources.Localize.Text("Reset All Wind Properties."),
                     Capability.Environment.EnvironmentOverrideState.HasFlag(EnvironmentOverrideState.Wind)))
                 {
                     Capability.Environment.EnvironmentOverrideState &= ~EnvironmentOverrideState.Wind;

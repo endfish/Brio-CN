@@ -183,8 +183,8 @@ public class PosingOverlayToolbarWindow : Window
         ImBrio.AttachToolTip(global::Brio.Resources.Localize.Text(posing is null
             ? "(This Entity has no Bones)"
             : posing?.Actor.IsOverlayVisible ?? false
-                ? "Hide Actor's bones in overlay when not selected"
-                : "Always show Actor's bones when not selected"));
+                ? "Hide this actor's bones when not selected"
+                : "Always show this actor's bones when not selected"));
 
         ImGui.SameLine();
 
