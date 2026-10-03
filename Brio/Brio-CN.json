@@ -2,7 +2,7 @@
   "Author": "Minmoose, Asgard 与贡献者；汉化：Endfish",
   "Name": "Brio-CN",
   "InternalName": "Brio-CN",
-  "AssemblyVersion": "1.0.9.0",
+  "AssemblyVersion": "1.0.10.0",
   "Description": "Brio 的简体中文本地化版本，为 GPose 提供角色生成、骨骼姿势编辑、动作播放、灯光、镜头、时间、天气与场景控制等高级功能。\n\n本分支还包含常用姿势快捷入口、Penumbra 动作 Mod 识别，以及可导航的世界模型实时预览。",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/endfish/Brio-CN",
@@ -20,6 +20,6 @@
   "LoadPriority": 0,
   "IconUrl": "https://raw.githubusercontent.com/endfish/Brio-CN/zh-CN/Resources/Images/BrioIcon.png",
   "Punchline": "面向 GPose 的高级角色、姿势、动作与场景工具（简体中文版）。",
-  "Changelog": "强化跨种族动作切换面部动画时的恢复与延迟播放保护；新增实时动作编号显示与无名角色标签；新增可随场景保存和克隆的道具骨骼编辑，支持撤销、重做与重置；修正道具及饰品骨骼槽位、编辑窗口尺寸抖动和带句点文案的中文匹配问题。",
+  "Changelog": "同步上游 Brio 0.8.0.12；新增 NPC 多名称搜索与别名展示，相机及灯光预设支持相对当前玩家坐标；修复快捷键释放、GPose 叠加层、工具栏位置和自动保存提示；补齐中文界面并修复换行文案匹配，保留道具骨骼编辑与本地 GPose 增强。",
   "AcceptsFeedback": true
 }
