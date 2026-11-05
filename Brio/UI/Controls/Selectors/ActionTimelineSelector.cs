@@ -1,4 +1,5 @@
 using Brio.Capabilities.Actor;
+using Brio.Game.Actor;
 using Brio.Config;
 using Brio.Game.Actor.Extensions;
 using Brio.Game.Actor.Interop;
@@ -228,6 +229,10 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
         if(ResolveModActionActor() is not ICharacter character)
             return null;
+
+        if(Brio.TryGetService<CrossRaceAnimationService>(out var animations)
+            && animations.GetNativeContext(character.Address) is { } nativeContext)
+            return nativeContext;
 
         var characterBase = character.GetCharacterBase();
         if(characterBase is null)

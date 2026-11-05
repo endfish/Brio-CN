@@ -1,8 +1,10 @@
 ﻿using Brio.Config;
 using Brio.Entities;
 using Brio.Entities.Actor;
+using Brio.Game.Actor;
 using Brio.Game.Actor.Extensions;
 using Brio.Game.Actor.Interop;
+using Brio.Game.Core;
 using Brio.Game.GPose;
 using Brio.Game.Posing;
 using Brio.Game.Types;
@@ -13,19 +15,27 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 using Microsoft.Extensions.DependencyInjection;
+using ModelChara = Lumina.Excel.Sheets.ModelChara;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Brio.Game.Actor.ActionTimelineService;
+using static Brio.Game.Actor.ActorRedrawService;
 
 namespace Brio.Capabilities.Actor;
 
 public class ActionTimelineCapability : ActorCharacterCapability
 {
     private readonly IFramework _framework;
+    private readonly IObjectTable _objectTable;
+    private readonly ActorRedrawService _redraw;
+    private readonly ObjectMonitorService _monitor;
+    private readonly CrossRaceAnimationService _crossRaceAnimations;
 
     public ushort ActorObjectIndex { get; }
 
-    public unsafe float SpeedMultiplier => SpeedMultiplierOverride ?? Character.Native()->Timeline.OverallSpeed;
+    public unsafe float SpeedMultiplier => SpeedMultiplierOverride
+        ?? (TryGetLiveCharacter(out var character) ? character.Native()->Timeline.OverallSpeed : 1);
     public bool HasSpeedMultiplierOverride => SpeedMultiplierOverride.HasValue;
     public float? SpeedMultiplierOverride { get; private set; }
     public bool IsPaused { get; private set; } = false;
@@ -43,43 +53,67 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public unsafe ushort LipsOverride
     {
-        get => Character.Native()->Timeline.LipsOverride;
-        set => Character.Native()->Timeline.SetLipsOverrideTimeline(value);
+        get => TryGetLiveCharacter(out var character) ? character.Native()->Timeline.LipsOverride : (ushort)0;
+        set
+        {
+            _timelinePlaybackGeneration++;
+            if(value != 0 && !PrepareAnimationContext(value))
+                return;
+            if(TryGetLiveCharacter(out var character))
+                character.Native()->Timeline.SetLipsOverrideTimeline(value);
+        }
     }
 
     private readonly Dictionary<ActionTimelineSlots, float> _actionTimelineSlotSpeedOverrides = [];
     private OriginalBaseAnimation? _originalBaseAnimation = null;
-    private OriginalAnimationContext? _originalAnimationContext = null;
+    private int _timelinePlaybackGeneration;
+    private volatile bool _isDisposed;
+    private volatile bool _actorDestroyed;
+    private volatile bool _drawObjectInvalidated;
+    private bool _slotsDirty = false;
+    private (ushort Timeline, string Reason)? _lastRejectedPlayback;
+    private long _lastRejectedPlaybackAt;
+    private bool _crossRaceAnimationEmulationEnabled;
     private bool _baseOverrideUsesAnimationContext;
     private ushort _configuredAnimationTimeline;
     private ActionTimelineContext? _configuredAnimationContext;
-    private bool _crossRaceAnimationEmulationEnabled;
-    private int _timelinePlaybackGeneration;
-    private bool _isDisposed;
-    private bool _slotsDirty = false;
+    private ActionTimelineContext? _activeAnimationContext;
+    private ActionTimelineContext? _redrawAnimationContext;
+    private bool _needsAnimationContextRebind;
 
-    public bool HasAnimationContextOverride => _originalAnimationContext.HasValue;
-    public bool CanUseCrossRaceAnimationEmulation => _gPoseService.IsGPosing;
+    public bool HasAnimationContextOverride => _crossRaceAnimations.GetPlaybackContext(Actor.ObjectAddress) is not null;
+    public bool CanUseCrossRaceAnimationEmulation => !_isDisposed && _gPoseService.IsGPosing
+        && (_crossRaceAnimationEmulationEnabled || GetAnimationContext() is { ModelKind: ActionTimelineModelKind.Human });
     public bool CrossRaceAnimationEmulationEnabled
     {
         get => _crossRaceAnimationEmulationEnabled;
         set
         {
-            if(_crossRaceAnimationEmulationEnabled == value)
+            if(value == _crossRaceAnimationEmulationEnabled)
                 return;
-
-            _crossRaceAnimationEmulationEnabled = value;
-            if(!value)
+            if(value)
             {
-                // Restoring RaceSexId while a foreign-race base override keeps
-                // running creates the same mixed animation state that facial
-                // playback must avoid. Stop that override as part of disabling
-                // emulation, regardless of whether the user or a safety guard
-                // disabled it.
-                if(_baseOverrideUsesAnimationContext && HasBaseOverride)
+                if(!CanUseCrossRaceAnimationEmulation || !TryGetLiveCharacter(out var character)
+                    || GetAnimationContext() is not { } native)
+                    return;
+                if(!_crossRaceAnimations.SetContext(character, native, null))
+                {
+                    RejectPlayback(0, "The cross-race animation loader could not be initialized. See the log for details.");
+                    return;
+                }
+                _crossRaceAnimationEmulationEnabled = true;
+            }
+            else
+            {
+                var hadForeignPlayback = HasAnimationContextOverride;
+                var hadForeignBase = _baseOverrideUsesAnimationContext && HasBaseOverride;
+                _crossRaceAnimationEmulationEnabled = false;
+                if(hadForeignBase)
                     ResetBaseOverride();
-
                 ClearConfiguredAnimationContext();
+                if(hadForeignPlayback && !hadForeignBase)
+                    PlayTimelineNow(3);
+                _crossRaceAnimations.Remove(Actor.ObjectAddress);
             }
         }
     }
@@ -90,42 +124,74 @@ public class ActionTimelineCapability : ActorCharacterCapability
         EntityManager entityManager,
         PhysicsService physicsService,
         ConfigurationService configService,
-        GPoseService gPoseService) : base(parent)
+        GPoseService gPoseService,
+        IObjectTable objectTable,
+        ActorRedrawService redraw,
+        ObjectMonitorService monitor,
+        CrossRaceAnimationService crossRaceAnimations) : base(parent)
     {
         _framework = framework;
+        _objectTable = objectTable;
+        _redraw = redraw;
+        _monitor = monitor;
+        _crossRaceAnimations = crossRaceAnimations;
         ActorObjectIndex = parent.GameObject.ObjectIndex;
         gPoseService.OnGPoseStateChange += OnGPoseStateChange;
         _gPoseService = gPoseService;
+        _redraw.ActorRedrawEvent += OnActorRedraw;
+        unsafe
+        {
+            _monitor.CharacterDestroyed += OnCharacterDestroyed;
+            _monitor.CharacterBaseDestroyed += OnDrawObjectDestroyed;
+            _monitor.CharacterBaseMaterialsUpdated += OnDrawObjectReady;
+        }
 
         Widget = new ActionTimelineWidget(this, entityManager, physicsService, configService);
     }
 
     private readonly GPoseService _gPoseService;
 
+    private bool TryGetLiveCharacter(out ICharacter character)
+    {
+        character = null!;
+        if(_isDisposed || _actorDestroyed || ActorObjectIndex >= _objectTable.Length
+            || _objectTable[ActorObjectIndex] is not ICharacter current
+            || current.Address == nint.Zero || current.Address != Actor.ObjectAddress)
+            return false;
+        character = current;
+        return true;
+    }
+
     public unsafe void SetOverallSpeedOverride(float speed)
     {
+        _timelinePlaybackGeneration++;
+        SetOverallSpeedOverrideCore(speed);
+    }
+
+    private unsafe void SetOverallSpeedOverrideCore(float speed)
+    {
+        if(!float.IsFinite(speed) || !TryGetLiveCharacter(out var character))
+            return;
         SpeedMultiplierOverride = speed;
-        Character.Native()->Timeline.OverallSpeed = speed;
+        character.Native()->Timeline.OverallSpeed = speed;
     }
 
     public void ResetOverallSpeedOverride()
     {
+        _timelinePlaybackGeneration++;
         SpeedMultiplierOverride = null;
     }
 
     public unsafe ActionTimelineUnion GetSlotAction(ActionTimelineSlots slot)
     {
-        var timeline = Character.Native()->Timeline.TimelineSequencer.TimelineIds[(int)slot];
+        var timeline = (uint)slot < 14 && TryGetLiveCharacter(out var character)
+            ? character.Native()->Timeline.TimelineSequencer.TimelineIds[(int)slot] : (ushort)0;
         return new ActionTimelineId(timeline);
     }
 
     public unsafe bool TryReadActiveTimelineIds(Span<ushort> destination)
     {
-        var character = Character;
-        if(!character.IsValid()
-            || character.Address == nint.Zero
-            || character.Address != Actor.ObjectAddress
-            || character.ObjectIndex != ActorObjectIndex)
+        if(!TryGetLiveCharacter(out var character))
             return false;
 
         // Read raw IDs, including timelines absent from our action database.
@@ -138,13 +204,16 @@ public class ActionTimelineCapability : ActorCharacterCapability
         if(_actionTimelineSlotSpeedOverrides.TryGetValue(slot, out float speed))
             return speed;
 
-        return Character.Native()->Timeline.TimelineSequencer.TimelineSpeeds[(int)slot];
+        return (uint)slot < 14 && TryGetLiveCharacter(out var character)
+            ? character.Native()->Timeline.TimelineSequencer.TimelineSpeeds[(int)slot] : 1;
     }
 
     public unsafe void SetSlotSpeedOverride(ActionTimelineSlots slot, float speed)
     {
+        if((uint)slot >= 14 || !float.IsFinite(speed) || !TryGetLiveCharacter(out var character))
+            return;
         _actionTimelineSlotSpeedOverrides[slot] = speed;
-        Character.Native()->Timeline.TimelineSequencer.SetSlotSpeed((uint)slot, speed);
+        character.Native()->Timeline.TimelineSequencer.SetSlotSpeed((uint)slot, speed);
         _slotsDirty = true;
     }
 
@@ -163,109 +232,118 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public unsafe void ApplyBaseOverride(ushort actionTimeline, bool interrupt)
     {
+        _timelinePlaybackGeneration++;
+        if(!PrepareAnimationContext(actionTimeline) || !TryGetLiveCharacter(out var character))
+            return;
         if(_originalBaseAnimation == null)
-            _originalBaseAnimation = new(Character.Native()->Mode, Character.Native()->ModeParam, Character.Native()->Timeline.BaseOverride);
+            _originalBaseAnimation = new(character.Native()->Mode, character.Native()->ModeParam, character.Native()->Timeline.BaseOverride);
 
-        var chara = Character.Native();
+        var chara = character.Native();
 
         chara->SetMode(CharacterModes.AnimLock, 0);
         chara->Timeline.BaseOverride = actionTimeline;
-        _baseOverrideUsesAnimationContext = HasAnimationContextOverride;
+        _baseOverrideUsesAnimationContext = !IsFacialTimeline(actionTimeline) && HasAnimationContextOverride;
 
         if(interrupt)
-            BlendTimeline(actionTimeline);
+            PlayTimelineNow(actionTimeline);
     }
 
     public async void StopSpeedAndResetTimeline(Action? postStopAction = null, bool resetSpeedAfterAction = false)
     {
-        Brio.Log.Verbose($"StopSpeedAndResetTimeline {postStopAction is not null} {resetSpeedAfterAction}");
-
+        if(!_gPoseService.IsGPosing || !TryGetLiveCharacter(out var character))
+            return;
+        var generation = ++_timelinePlaybackGeneration;
+        nint drawAddress;
+        unsafe { drawAddress = (nint)character.Native()->GameObject.DrawObject; }
+        if(drawAddress == 0)
+            return;
         var oldSpeed = SpeedMultiplier;
-
-        SetOverallSpeedOverride(0);
-
-        Brio.Log.Verbose($"SetOverallSpeedOverride {oldSpeed} {SpeedMultiplier}");
-
-        await _framework.RunOnTick(() =>
-        {
-            unsafe
-            {
-                var drawObj = Character.Native()->GameObject.DrawObject;
-                if(drawObj == null)
-                    return;
-
-                if(drawObj->Object.GetObjectType() != ObjectType.CharacterBase)
-                    return;
-
-                var charaBase = (CharacterBase*)drawObj;
-                if(charaBase->Skeleton == null)
-                    return;
-
-                var skeleton = charaBase->Skeleton;
-                for(int p = 0; p < skeleton->PartialSkeletonCount; ++p)
-                {
-                    var partial = &skeleton->PartialSkeletons[p];
-
-                    var animatedSkele = partial->GetHavokAnimatedSkeleton(0);
-                    if(animatedSkele == null)
-                        continue;
-
-                    for(int c = 0; c < animatedSkele->AnimationControls.Length; ++c)
-                    {
-                        var control = animatedSkele->AnimationControls[c].Value;
-                        if(control == null)
-                            continue;
-
-                        var binding = control->hkaAnimationControl.Binding;
-                        if(binding.ptr == null)
-                            continue;
-
-                        var anim = binding.ptr->Animation.ptr;
-                        if(anim == null)
-                            continue;
-
-                        if(control->PlaybackSpeed == 0)
-                        {
-                            control->hkaAnimationControl.LocalTime = 0;
-                        }
-                    }
-                }
-            }
-        }, delayTicks: 4);
-
-        postStopAction?.Invoke();
-
-        if(resetSpeedAfterAction)
+        SetOverallSpeedOverrideCore(0);
+        try
         {
             await _framework.RunOnTick(() =>
             {
-                SetOverallSpeedOverride(oldSpeed);
-            }, delayTicks: 2);
+                if(!IsCurrentPlayback(generation, drawAddress))
+                    return;
+                ResetAnimationControlTime();
+                postStopAction?.Invoke();
+                // The requested action may itself advance the playback generation.
+                generation = _timelinePlaybackGeneration;
+            }, delayTicks: 4);
+
+            if(resetSpeedAfterAction)
+                await _framework.RunOnTick(() =>
+                {
+                    if(IsCurrentPlayback(generation, drawAddress))
+                        SetOverallSpeedOverrideCore(oldSpeed);
+                }, delayTicks: 2);
+        }
+        catch(Exception ex)
+        {
+            Brio.Log.Error(ex, "Could not reset animation control time.");
         }
     }
 
-    public unsafe void ResetBaseOverride()
+    private unsafe bool IsCurrentPlayback(int generation, nint drawAddress)
+        => _gPoseService.IsGPosing && generation == _timelinePlaybackGeneration
+            && drawAddress != 0 && TryGetLiveCharacter(out var character)
+            && (nint)character.Native()->GameObject.DrawObject == drawAddress;
+
+    private unsafe void ResetAnimationControlTime()
+    {
+        if(!TryGetLiveCharacter(out var character))
+            return;
+        var drawObj = character.Native()->GameObject.DrawObject;
+        if(drawObj == null || drawObj->Object.GetObjectType() != ObjectType.CharacterBase)
+            return;
+        var charaBase = (CharacterBase*)drawObj;
+        var skeleton = charaBase->Skeleton;
+        if(skeleton == null || skeleton->PartialSkeletons == null)
+            return;
+        for(int p = 0; p < skeleton->PartialSkeletonCount; ++p)
+        {
+            var partial = &skeleton->PartialSkeletons[p];
+            var animatedSkele = partial->GetHavokAnimatedSkeleton(0);
+            if(animatedSkele == null)
+                continue;
+            for(int c = 0; c < animatedSkele->AnimationControls.Length; ++c)
+            {
+                var control = animatedSkele->AnimationControls[c].Value;
+                if(control == null || control->hkaAnimationControl.Binding.ptr == null
+                    || control->hkaAnimationControl.Binding.ptr->Animation.ptr == null)
+                    continue;
+                if(control->PlaybackSpeed == 0)
+                    control->hkaAnimationControl.LocalTime = 0;
+            }
+        }
+    }
+
+    public void ResetBaseOverride() => ResetBaseOverride(playIdle: true);
+
+    private unsafe void ResetBaseOverride(bool playIdle, bool restoreTimeline = true)
     {
         _timelinePlaybackGeneration++;
 
         var resetTimeline = false;
         if(_originalBaseAnimation is OriginalBaseAnimation original)
         {
-            var chara = Character.Native();
-
-            chara->Timeline.BaseOverride = original.OriginalTimeline;
-            chara->Mode = original.OriginalMode;
-            chara->ModeParam = original.OriginalInput;
+            if(TryGetLiveCharacter(out var character))
+            {
+                var chara = character.Native();
+                chara->Timeline.BaseOverride = restoreTimeline ? original.OriginalTimeline : (ushort)0;
+                chara->Mode = original.OriginalMode;
+                chara->ModeParam = original.OriginalInput;
+            }
 
             _originalBaseAnimation = null;
             resetTimeline = true;
         }
-        _baseOverrideUsesAnimationContext = false;
 
         RestoreAnimationContext();
+        _baseOverrideUsesAnimationContext = false;
 
-        if(resetTimeline)
-            BlendTimeline(3);
+        if(playIdle && resetTimeline && !_isDisposed && _gPoseService.IsGPosing && TryGetLiveCharacter(out _))
+            PlayTimelineNow(3);
     }
 
     public bool HasBaseOverride => _originalBaseAnimation != null;
@@ -273,78 +351,14 @@ public class ActionTimelineCapability : ActorCharacterCapability
     public unsafe void BlendTimeline(ushort actionTimeline)
     {
         _timelinePlaybackGeneration++;
-
-        if(TryStageFacialTimeline(actionTimeline))
-            return;
-
-        // Some callers (most notably Dynamic Face Control) play timelines
-        // directly instead of going through ActionTimelineEditor. Always
-        // reconcile the emulated animation context here so those paths can not
-        // leave a spoofed RaceSexId active while loading a facial timeline.
-        PrepareAnimationContext(actionTimeline);
-        PlayTimelineNow(actionTimeline);
-    }
-
-    private bool TryStageFacialTimeline(ushort timelineId)
-    {
-        if(!IsFacialTimeline(timelineId))
-            return false;
-
-        var hadActiveCrossRacePlayback = HasAnimationContextOverride
-            || (_baseOverrideUsesAnimationContext && HasBaseOverride);
-        var wasEmulating = CrossRaceAnimationEmulationEnabled || hadActiveCrossRacePlayback;
-
-        // Disabling emulation also restores the original base override before
-        // restoring the actor's native animation context. This order prevents
-        // a foreign base timeline from surviving under the native RaceSexId.
-        CrossRaceAnimationEmulationEnabled = false;
-        ClearConfiguredAnimationContext();
-
-        if(!hadActiveCrossRacePlayback)
-        {
-            if(wasEmulating)
-                Brio.Log.Warning($"Disabled cross-race animation emulation before playing facial timeline {timelineId}.");
-
-            return false;
-        }
-
-        // Replace any pending foreign animation resources with a native idle,
-        // then give the renderer two framework ticks to settle before loading
-        // the race-specific facial PAP. The delayed callback is invalidated by
-        // any newer playback/reset request.
-        PlayTimelineNow(3);
-        var playbackGeneration = _timelinePlaybackGeneration;
-        _ = _framework.RunOnTick(() =>
-        {
-            if(_isDisposed
-                || playbackGeneration != _timelinePlaybackGeneration
-                || Character.Address == nint.Zero)
-                return;
-
-            PlayTimelineNow(timelineId);
-
-            if(_actionTimelineSlotSpeedOverrides.TryGetValue(ActionTimelineSlots.Facial, out var speed))
-                SetFacialSlotSpeed(speed);
-        }, delayTicks: 2);
-
-        Brio.Log.Warning($"Stopped cross-race animation playback and deferred facial timeline {timelineId} until native animation resources settle.");
-        return true;
+        if(PrepareAnimationContext(actionTimeline))
+            PlayTimelineNow(actionTimeline);
     }
 
     private unsafe void PlayTimelineNow(ushort timelineId)
     {
-        Character.Native()->Timeline.TimelineSequencer.PlayTimeline(timelineId);
-    }
-
-    private unsafe void SetFacialSlotSpeed(float speed)
-    {
-        Character.Native()->Timeline.TimelineSequencer.SetSlotSpeed((uint)ActionTimelineSlots.Facial, speed);
-    }
-
-    private static bool IsFacialTimeline(ushort timelineId)
-    {
-        return Brio.TryGetService<TimelineIdentification>(out var identification)
-            && identification.IsFacialExpression(timelineId);
+        if(_gPoseService.IsGPosing && TryGetLiveCharacter(out var character))
+            character.Native()->Timeline.TimelineSequencer.PlayTimeline(timelineId);
     }
 
     public void Stop()
@@ -356,7 +370,11 @@ public class ActionTimelineCapability : ActorCharacterCapability
             ResetBaseOverride();
             ResetOverallSpeedOverride();
         }
-
+        else if(HasAnimationContextOverride)
+        {
+            RestoreAnimationContext();
+            PlayTimelineNow(3);
+        }
         RestoreAnimationContext();
     }
 
@@ -378,62 +396,38 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public override void Dispose()
     {
+        if(_isDisposed)
+            return;
         _timelinePlaybackGeneration++;
         _gPoseService.OnGPoseStateChange -= OnGPoseStateChange;
+        _redraw.ActorRedrawEvent -= OnActorRedraw;
+        unsafe
+        {
+            _monitor.CharacterDestroyed -= OnCharacterDestroyed;
+            _monitor.CharacterBaseDestroyed -= OnDrawObjectDestroyed;
+            _monitor.CharacterBaseMaterialsUpdated -= OnDrawObjectReady;
+        }
         SpeedMultiplierOverride = null;
         _actionTimelineSlotSpeedOverrides.Clear();
-        ResetBaseOverride();
+        ResetBaseOverride(playIdle: false);
         ClearConfiguredAnimationContext();
+        _crossRaceAnimations.Remove(Actor.ObjectAddress);
+        _crossRaceAnimationEmulationEnabled = false;
         _isDisposed = true;
 
         base.Dispose();
     }
 
-    public unsafe bool ApplyAnimationContext(ActionTimelineContext? context)
+    public bool ApplyAnimationContext(ActionTimelineContext? context)
     {
-        if(!CrossRaceAnimationEmulationEnabled || !_gPoseService.IsGPosing)
-        {
-            RestoreAnimationContext();
+        if(!CrossRaceAnimationEmulationEnabled || !TryGetLiveCharacter(out var character)
+            || GetAnimationContext() is not { ModelKind: ActionTimelineModelKind.Human } native)
             return context is null;
-        }
-
-        if(context is null)
-        {
-            RestoreAnimationContext();
-            return true;
-        }
-
-        if(context.Value.ModelKind != ActionTimelineModelKind.Human)
+        if(!_crossRaceAnimations.SetContext(character, native, context))
             return false;
-        if(context.Value.AnimationVariant > byte.MaxValue)
-            return false;
-
-        var characterBase = Character.GetCharacterBase();
-        if(characterBase is null
-            || characterBase->CharacterBase.GetModelType() != CharacterBase.ModelType.Human)
-            return false;
-
-        var human = (BrioHuman*)characterBase;
-        var current = new ActionTimelineContext(
-            ActionTimelineModelKind.Human,
-            human->Human.RaceSexId,
-            characterBase->CharacterBase.AnimationVariant);
-
-        if(_originalAnimationContext is null)
-            _originalAnimationContext = new(
-                current.ModelId,
-                characterBase->CharacterBase.AnimationVariant);
-
-        var original = _originalAnimationContext.Value;
-        if(context.Value.ModelId == original.RaceSexId
-            && context.Value.AnimationVariant == original.AnimationVariant)
-        {
-            RestoreAnimationContext();
-            return true;
-        }
-
-        human->Human.RaceSexId = context.Value.ModelId;
-        characterBase->CharacterBase.AnimationVariant = (byte)context.Value.AnimationVariant;
+        _activeAnimationContext = context == native ? null : context;
+        _redrawAnimationContext = null;
+        _needsAnimationContextRebind = false;
         return true;
     }
 
@@ -441,48 +435,54 @@ public class ActionTimelineCapability : ActorCharacterCapability
         ushort timelineId,
         ActionTimelineContext? context)
     {
-        if(!CrossRaceAnimationEmulationEnabled || !_gPoseService.IsGPosing)
-        {
-            ClearConfiguredAnimationContext();
-            return;
-        }
-
         _configuredAnimationTimeline = timelineId;
         _configuredAnimationContext = context;
     }
 
-    public void PrepareAnimationContext(ushort timelineId)
+    public bool PrepareAnimationContext(ushort timelineId)
     {
-        // Facial PAPs and face skeletons are race-specific. Playing one while
-        // Human.RaceSexId is temporarily spoofed for a cross-race body action
-        // can leave the game's pending resource list with an invalid handle and
-        // crash Human.UpdateRender. Facial playback must always use the actor's
-        // native animation context.
+        if(!_gPoseService.IsGPosing || _drawObjectInvalidated || !TryGetLiveCharacter(out _))
+            return false;
         if(IsFacialTimeline(timelineId))
         {
-            var wasEmulating = CrossRaceAnimationEmulationEnabled || HasAnimationContextOverride;
-            CrossRaceAnimationEmulationEnabled = false;
-            ClearConfiguredAnimationContext();
-
-            if(wasEmulating)
-                Brio.Log.Warning($"Disabled cross-race animation emulation before playing facial timeline {timelineId}.");
-
-            return;
+            if(Brio.TryGetService<GameDataProvider>(out var faceData))
+                _crossRaceAnimations.MarkNativeTimeline(Actor.ObjectAddress, faceData.ActionTimelineMetadata.Get(timelineId).Key);
+            return true;
         }
-
-        if(!CrossRaceAnimationEmulationEnabled || !_gPoseService.IsGPosing)
-        {
-            ClearConfiguredAnimationContext();
-            return;
-        }
-
-        if(_configuredAnimationTimeline != timelineId)
+        if(!CrossRaceAnimationEmulationEnabled)
         {
             RestoreAnimationContext();
-            return;
+            return true;
         }
+        var context = _configuredAnimationTimeline == timelineId ? _configuredAnimationContext : null;
+        if(context is null && GetAnimationContext() is { ModelKind: ActionTimelineModelKind.Human } native
+            && Brio.TryGetService<GameDataProvider>(out var data)
+            && data.ActionTimelineMetadata.TryGet(timelineId, out var metadata) && !metadata.Supports(native))
+        {
+            context = metadata.Contexts.Where(c => c.ModelKind == ActionTimelineModelKind.Human)
+                .OrderBy(c => c.ModelId / 100 % 2 == native.ModelId / 100 % 2 ? 0 : 1)
+                .ThenBy(c => c.ModelId % 10 == 1 ? 0 : 1).ThenBy(c => c.ModelId).ThenBy(c => c.AnimationVariant)
+                .Select(c => (ActionTimelineContext?)c).FirstOrDefault();
+        }
+        return ApplyAnimationContext(context)
+            || RejectPlayback(timelineId, "The selected cross-race playback context could not be applied. See the log for details.");
+    }
 
-        ApplyAnimationContext(_configuredAnimationContext);
+    private static bool IsFacialTimeline(ushort timelineId)
+        => timelineId is >= 626 and <= 634
+            || (Brio.TryGetService<TimelineIdentification>(out var identification) && identification.IsFacialExpression(timelineId));
+
+    private bool RejectPlayback(ushort timelineId, string reason)
+    {
+        var now = Environment.TickCount64;
+        if(_lastRejectedPlayback != (timelineId, reason) || now - _lastRejectedPlaybackAt >= 5000)
+        {
+            _lastRejectedPlayback = (timelineId, reason);
+            _lastRejectedPlaybackAt = now;
+            Brio.Log.Warning($"Blocked animation {timelineId} on actor {ActorObjectIndex}: {reason}");
+            Brio.NotifyError(Localize.Format("Animation {0} was blocked: {1}", timelineId, Localize.Text(reason)));
+        }
+        return false;
     }
 
     public void ClearConfiguredAnimationContext()
@@ -494,16 +494,17 @@ public class ActionTimelineCapability : ActorCharacterCapability
 
     public unsafe ActionTimelineContext? GetAnimationContext(bool preferOriginal = true)
     {
-        if(preferOriginal
-            && GetOriginalAnimationContext() is ActionTimelineContext originalContext)
-            return originalContext;
-
-        var characterBase = Character.GetCharacterBase();
+        if(_drawObjectInvalidated || !TryGetLiveCharacter(out var character))
+            return null;
+        if(preferOriginal && _crossRaceAnimations.GetNativeContext(Actor.ObjectAddress) is { } original)
+            return original;
+        var characterBase = character.GetCharacterBase();
         if(characterBase is null)
             return null;
 
         var animationVariant = characterBase->CharacterBase.AnimationVariant;
-        if(characterBase->CharacterBase.GetModelType() == CharacterBase.ModelType.Human)
+        var modelType = characterBase->CharacterBase.GetModelType();
+        if(modelType == CharacterBase.ModelType.Human)
         {
             var human = (BrioHuman*)characterBase;
             return new(
@@ -512,41 +513,106 @@ public class ActionTimelineCapability : ActorCharacterCapability
                 animationVariant);
         }
 
-        return null;
-    }
-
-    public ActionTimelineContext? GetOriginalAnimationContext()
-    {
-        if(_originalAnimationContext is not OriginalAnimationContext original)
+        var modelCharaId = character.Native()->ModelContainer.ModelCharaId;
+        if(modelCharaId <= 0 || !Brio.TryGetService<GameDataProvider>(out var data)
+            || !data.GetExcelSheet<ModelChara>().TryGetRow((uint)modelCharaId, out var model)
+            || model.Model == 0)
             return null;
-
-        return new(
-            ActionTimelineModelKind.Human,
-            original.RaceSexId,
-            original.AnimationVariant);
+        return modelType switch
+        {
+            CharacterBase.ModelType.Monster => new(ActionTimelineModelKind.Monster, model.Model, animationVariant),
+            CharacterBase.ModelType.DemiHuman => new(ActionTimelineModelKind.Demihuman, model.Model, animationVariant),
+            _ => null,
+        };
     }
 
-    public unsafe void RestoreAnimationContext()
+    public ActionTimelineContext? GetOriginalAnimationContext() => _crossRaceAnimations.GetNativeContext(Actor.ObjectAddress);
+
+    public void RestoreAnimationContext()
     {
-        if(_originalAnimationContext is not OriginalAnimationContext original)
-            return;
+        _crossRaceAnimations.ClearContext(Actor.ObjectAddress);
+        _activeAnimationContext = null;
+        _redrawAnimationContext = null;
+        _needsAnimationContextRebind = false;
+    }
 
-        var characterBase = Character.GetCharacterBase();
-        if(characterBase is not null
-            && characterBase->CharacterBase.GetModelType() == CharacterBase.ModelType.Human)
+    private void InvalidatePlayback(bool endSession = false)
+    {
+        // Called before native model/character destruction. Do not touch the
+        // dying DrawObject or enqueue an idle animation from this callback.
+        // An old base timeline may not fit a replacement model. Clear our
+        // override instead of transferring its snapshot across a redraw.
+        var rebind = _activeAnimationContext ?? _redrawAnimationContext;
+        ResetBaseOverride(playIdle: false, restoreTimeline: false);
+        _needsAnimationContextRebind = !endSession && _crossRaceAnimationEmulationEnabled;
+        _redrawAnimationContext = _needsAnimationContextRebind ? rebind : null;
+        if(endSession)
         {
-            var human = (BrioHuman*)characterBase;
-            human->Human.RaceSexId = original.RaceSexId;
-            characterBase->CharacterBase.AnimationVariant = original.AnimationVariant;
+            _crossRaceAnimationEmulationEnabled = false;
+            _configuredAnimationTimeline = 0;
+            _configuredAnimationContext = null;
         }
+        _crossRaceAnimations.Remove(Actor.ObjectAddress);
+        SpeedMultiplierOverride = null;
+        _actionTimelineSlotSpeedOverrides.Clear();
+    }
 
-        _originalAnimationContext = null;
+    private void OnActorRedraw(IGameObject actor, RedrawStage stage)
+    {
+        if(stage == RedrawStage.Before && actor.Address == Actor.ObjectAddress)
+            InvalidatePlayback();
+        else if(stage == RedrawStage.After && actor.Address == Actor.ObjectAddress)
+        {
+            _drawObjectInvalidated = false;
+            RebindAnimationContext();
+        }
+    }
+
+    private unsafe void OnDrawObjectDestroyed(BrioCharacterBase* drawObject)
+    {
+        if(TryGetLiveCharacter(out var character)
+            && character.Native()->GameObject.DrawObject == (DrawObject*)drawObject)
+        {
+            _drawObjectInvalidated = true;
+            InvalidatePlayback();
+        }
+    }
+
+    private unsafe void OnDrawObjectReady(BrioCharacterBase* drawObject)
+    {
+        if(TryGetLiveCharacter(out var character)
+            && character.Native()->GameObject.DrawObject == (DrawObject*)drawObject)
+        {
+            _drawObjectInvalidated = false;
+            RebindAnimationContext();
+        }
+    }
+
+    private void RebindAnimationContext()
+    {
+        if(!_needsAnimationContextRebind || !_crossRaceAnimationEmulationEnabled || !_gPoseService.IsGPosing
+            || !TryGetLiveCharacter(out var character) || GetAnimationContext() is not { } native)
+            return;
+        if(_crossRaceAnimations.SetContext(character, native, _redrawAnimationContext))
+        {
+            _activeAnimationContext = _redrawAnimationContext;
+            _redrawAnimationContext = null;
+            _needsAnimationContextRebind = false;
+        }
+    }
+
+    private unsafe void OnCharacterDestroyed(Character* character)
+    {
+        if((nint)character != Actor.ObjectAddress)
+            return;
+        _actorDestroyed = true;
+        InvalidatePlayback(endSession: true);
     }
 
     private void OnGPoseStateChange(bool isGPosing)
     {
         if(!isGPosing)
-            CrossRaceAnimationEmulationEnabled = false;
+            InvalidatePlayback(endSession: true);
     }
 
     public static ActionTimelineCapability? CreateIfEligible(IServiceProvider provider, ActorEntity entity)

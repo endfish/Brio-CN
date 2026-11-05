@@ -247,6 +247,7 @@ public class Brio(IDalamudPluginInterface pluginInterface) : IAsyncDalamudPlugin
         serviceCollection.AddSingleton<VFXService>();
         serviceCollection.AddSingleton<SGLService>();
         serviceCollection.AddSingleton<ActionTimelineService>();
+        serviceCollection.AddSingleton<CrossRaceAnimationService>();
         serviceCollection.AddSingleton<GPoseService>();
         serviceCollection.AddSingleton<CommandHandlerService>();
         serviceCollection.AddSingleton<ModelTransformService>();

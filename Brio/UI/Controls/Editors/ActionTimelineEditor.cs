@@ -354,7 +354,7 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
                         ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + ImGui.GetFontSize() * 28f);
                         ImGui.TextUnformatted(global::Brio.Resources.Localize.Get(
                             "ui.pose.crossRaceWarning",
-                            "Only affects the current actor and resets when GPose ends.\nSome modded animations or custom skeletons may be incompatible.\nDisable it immediately if animation or rendering behaves abnormally."));
+                            "Only affects the current actor while GPose is active.\nBody animations use the selected playback context; facial animations keep the actor's native race and face.\nIf an animation resource fails to load, only that failed request is skipped. Custom skeleton compatibility still depends on the animation."));
                         ImGui.PopTextWrapPos();
                     }
                 }
@@ -772,18 +772,17 @@ public class ActionTimelineEditor(CutsceneManager cutsceneManager, GPoseService 
 
     public static void ApplyBaseOverride(ActionTimelineCapability cap, bool resetSpeed = false)
     {
-        if(cap.SlotedBaseAnimation == 0 || cap.IsPaused)
+        if(cap.SlotedBaseAnimation is <= 0 or > ushort.MaxValue || cap.IsPaused)
             return;
 
         if(resetSpeed || cap.SpeedMultiplier == 0)
             cap.ResetOverallSpeedOverride();
 
-        cap.PrepareAnimationContext((ushort)cap.SlotedBaseAnimation);
         cap.ApplyBaseOverride((ushort)cap.SlotedBaseAnimation, cap.DoBaseInterrupt);
     }
     public static void ApplyBlend(ActionTimelineCapability cap)
     {
-        if(cap.SlotedBlendAnimation == 0 || cap.IsPaused)
+        if(cap.SlotedBlendAnimation is <= 0 or > ushort.MaxValue || cap.IsPaused)
             return;
 
         cap.BlendTimeline((ushort)cap.SlotedBlendAnimation);
