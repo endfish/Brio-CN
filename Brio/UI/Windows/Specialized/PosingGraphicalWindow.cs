@@ -45,6 +45,8 @@ public class PosingGraphicalWindow : Window, IDisposable
     private float _closestHover = float.MaxValue;
 
     private Matrix4x4? _trackingMatrix;
+    private readonly ImBrioGizmo.RotationState _rotationState = new();
+    private TransformableEntity[]? _gizmoSnapshotTargets;
 
     int _selectedPane = 0;
     private bool _hideControlPane = false;
@@ -72,6 +74,7 @@ public class PosingGraphicalWindow : Window, IDisposable
     {
         if(!_entityManager.SelectedHasCapability<PosingCapability>() || !_entityManager.SelectedHasCapability<ActorAppearanceCapability>())
         {
+            FinishGizmoEdit();
             return false;
         }
 
@@ -101,6 +104,8 @@ public class PosingGraphicalWindow : Window, IDisposable
 
     public override void PostDraw()
     {
+        if(!_rotationState.DrawnThisFrame)
+            FinishGizmoEdit();
         if(_hasPushedScale)
             ImGui.GetIO().FontGlobalScale = _lastGlobalScale;
 
@@ -414,14 +419,23 @@ public class PosingGraphicalWindow : Window, IDisposable
         var selectedEntity = _entityManager.SelectedEntity;
 
         if(selectedEntity == null)
+        {
+            FinishGizmoEdit();
             return;
+        }
 
         if(!selectedEntity.TryGetCapability<PosingCapability>(out var posing))
+        {
+            FinishGizmoEdit();
             return;
+        }
 
         var camera = _cameraService.GetCurrentCamera();
         if(camera == null)
+        {
+            FinishGizmoEdit();
             return;
+        }
 
         var selected = posing.Selected;
 
@@ -457,10 +471,10 @@ public class PosingGraphicalWindow : Window, IDisposable
         );
 
         if(targetMatrix == null)
+        {
+            FinishGizmoEdit();
             return;
-
-        var matrix = _trackingMatrix ?? targetMatrix.Value;
-        var originalMatrix = matrix;
+        }
 
         if(ImBrio.FontIconButton((_posingService.CoordinateMode == PosingCoordinateMode.Local ? FontAwesomeIcon.Globe : FontAwesomeIcon.Atom)))
             _posingService.CoordinateMode = _posingService.CoordinateMode == PosingCoordinateMode.Local ? PosingCoordinateMode.World : PosingCoordinateMode.Local;
@@ -471,16 +485,31 @@ public class PosingGraphicalWindow : Window, IDisposable
 
         Vector2 gizmoSize = new(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().X);
 
+        var allTransformables = _entityManager.GetAllSelectedTransformables();
+        if(_rotationState.Prepare([
+            selectedEntity, selected.Value, selectedBone, posing.SkeletonPosing.CharacterSkeleton, _posingService.CoordinateMode,
+            ..allTransformables.Select(x => (object)x.target),
+            ..posing.SelectedBones.Select(x => (object)x)]))
+            FinishGizmoEdit();
+
+        var matrix = _trackingMatrix ?? targetMatrix.Value;
+        var originalMatrix = matrix;
+
         bool modelFrozen = posing.ModelPosing.IsTransformFrozen;
         bool boneFrozen = selectedBone != null && selectedBone.Freeze;
 
-        if(ImBrioGizmo.DrawRotation(ref matrix, gizmoSize, _posingService.CoordinateMode == PosingCoordinateMode.World))
+        var applyChange = false;
+        if(ImBrioGizmo.DrawRotation(ref matrix, gizmoSize, _rotationState, _posingService.CoordinateMode == PosingCoordinateMode.World))
         {
             if(!modelFrozen && !boneFrozen)
+            {
                 _trackingMatrix = matrix;
+                _gizmoSnapshotTargets ??= allTransformables.Select(x => x.target).OfType<TransformableEntity>().ToArray();
+                applyChange = true;
+            }
         }
 
-        if(_trackingMatrix.HasValue)
+        if(applyChange && _trackingMatrix.HasValue)
         {
             var delta = _trackingMatrix.Value.ToTransform().CalculateDiff(originalMatrix.ToTransform());
 
@@ -517,12 +546,27 @@ public class PosingGraphicalWindow : Window, IDisposable
             }
         }
 
-        if(!ImBrioGizmo.IsUsing() && _trackingMatrix.HasValue)
-        {
-            TransformHelper.SnapshotAll(_entityManager.GetAllSelectedTransformables().Select(x => x.target));
+        if(!_rotationState.IsUsing && _trackingMatrix.HasValue)
+            FinishGizmoEdit();
+    }
 
-            _trackingMatrix = null;
-        }
+    private void FinishGizmoEdit()
+    {
+        _rotationState.Cancel();
+        _trackingMatrix = null;
+        var targets = _gizmoSnapshotTargets;
+        _gizmoSnapshotTargets = null;
+        if(targets is null || !_gPoseService.IsGPosing)
+            return;
+        foreach(var target in targets)
+            if(_entityManager.TryGetEntity(target.Id, out var live) && ReferenceEquals(target, live))
+                target.Snapshot();
+    }
+
+    public override void OnClose()
+    {
+        FinishGizmoEdit();
+        base.OnClose();
     }
 
     private void DrawGraphics(PosingCapability posing, ActorAppearanceCapability appearance)
@@ -906,11 +950,17 @@ public class PosingGraphicalWindow : Window, IDisposable
     private void OnGPoseStateChanged(bool newState)
     {
         if(newState is false)
+        {
+            FinishGizmoEdit();
             IsOpen = false;
+        }
     }
 
     public void Dispose()
     {
+        _rotationState.Cancel();
+        _trackingMatrix = null;
+        _gizmoSnapshotTargets = null;
         _gPoseService.OnGPoseStateChange -= OnGPoseStateChanged;
     }
 

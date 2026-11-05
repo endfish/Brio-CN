@@ -2,6 +2,7 @@
 using Brio.Core;
 using Brio.Entities;
 using Brio.Game.Camera;
+using Brio.Game.GPose;
 using Brio.Game.Posing;
 using Brio.UI.Controls.Editors;
 using Brio.UI.Controls.Stateless;
@@ -20,18 +21,22 @@ public class PosingTransformWindow : Window
     private readonly EntityManager _entityManager;
     private readonly PosingService _posingService;
     private readonly CameraService _cameraService;
+    private readonly GPoseService _gPoseService;
     private readonly PosingTransformEditor _posingTransformEditor = new();
     private readonly ITransformableEditor _transformableEditor = new();
 
     private Matrix4x4? _trackingMatrix;
+    private readonly ImBrioGizmo.RotationState _rotationState = new();
+    private TransformableEntity[]? _gizmoSnapshotTargets;
 
-    public PosingTransformWindow(EntityManager entityManager, CameraService cameraService, PosingService posingService) : base(global::Brio.Resources.Localize.Format("{0} - TRANSFORM###brio_transform_window", Brio.Name), ImGuiWindowFlags.AlwaysVerticalScrollbar)
+    public PosingTransformWindow(EntityManager entityManager, CameraService cameraService, PosingService posingService, GPoseService gPoseService) : base(global::Brio.Resources.Localize.Format("{0} - TRANSFORM###brio_transform_window", Brio.Name), ImGuiWindowFlags.AlwaysVerticalScrollbar)
     {
         Namespace = "brio_transform_namespace";
 
         _entityManager = entityManager;
         _cameraService = cameraService;
         _posingService = posingService;
+        _gPoseService = gPoseService;
 
         SizeConstraints = new WindowSizeConstraints
         {
@@ -45,7 +50,10 @@ public class PosingTransformWindow : Window
     public override bool DrawConditions()
     {
         if(!(_entityManager.SelectedEntity is TransformableEntity transformableEntity))
+        {
+            FinishGizmoEdit();
             return false;
+        }
 
         return base.DrawConditions();
     }
@@ -127,11 +135,17 @@ public class PosingTransformWindow : Window
     {
         var camera = _cameraService.GetCurrentCamera();
         if(camera == null)
+        {
+            FinishGizmoEdit();
             return;
+        }
 
         var allTransformables = _entityManager.GetAllSelectedTransformables();
         if(allTransformables.Count == 0)
+        {
+            FinishGizmoEdit();
             return;
+        }
 
         bool isMultiEntitySelection = allTransformables.Count > 1;
         Vector3? multiEntityCentroid = isMultiEntitySelection
@@ -183,11 +197,10 @@ public class PosingTransformWindow : Window
                 allTransformables[0].target.Transform.ToMatrix();
 
         if(targetMatrix == null)
+        {
+            FinishGizmoEdit();
             return;
-
-        var matrix = _trackingMatrix ?? targetMatrix.Value;
-        var originalMatrix = matrix;
-
+        }
 
         if(ImBrio.FontIconButton((_posingService.CoordinateMode == PosingCoordinateMode.Local ? FontAwesomeIcon.Globe : FontAwesomeIcon.Atom)))
             _posingService.CoordinateMode = _posingService.CoordinateMode == PosingCoordinateMode.Local ? PosingCoordinateMode.World : PosingCoordinateMode.Local;
@@ -204,7 +217,17 @@ public class PosingTransformWindow : Window
 
         Vector2 gizmoSize = new(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().X);
 
-        if(ImBrioGizmo.DrawRotation(ref matrix, gizmoSize, _posingService.CoordinateMode == PosingCoordinateMode.World))
+        if(_rotationState.Prepare([
+            _entityManager.SelectedEntity, selected?.Value, selectedBone, posing?.SkeletonPosing.CharacterSkeleton, _posingService.CoordinateMode,
+            ..allTransformables.Select(x => (object)x.target),
+            ..(posing?.SelectedBones.Select(x => (object)x) ?? [])]))
+            FinishGizmoEdit();
+
+        var matrix = _trackingMatrix ?? targetMatrix.Value;
+        var originalMatrix = matrix;
+
+        var applyChange = false;
+        if(ImBrioGizmo.DrawRotation(ref matrix, gizmoSize, _rotationState, _posingService.CoordinateMode == PosingCoordinateMode.World))
         {
             bool canEdit;
 
@@ -218,10 +241,12 @@ public class PosingTransformWindow : Window
             if(canEdit)
             {
                 _trackingMatrix = matrix;
+                _gizmoSnapshotTargets ??= allTransformables.Select(x => x.target).OfType<TransformableEntity>().ToArray();
+                applyChange = true;
             }
         }
 
-        if(_trackingMatrix.HasValue)
+        if(applyChange && _trackingMatrix.HasValue)
         {
             var delta = _trackingMatrix.Value.ToTransform().CalculateDiff(originalMatrix.ToTransform());
 
@@ -263,12 +288,34 @@ public class PosingTransformWindow : Window
         }
 
 
-        if(!ImBrioGizmo.IsUsing() && _trackingMatrix.HasValue)
-        {
-            TransformHelper.SnapshotAll(_entityManager.GetAllSelectedTransformables().Select(x => x.target));
+        if(!_rotationState.IsUsing && _trackingMatrix.HasValue)
+            FinishGizmoEdit();
+    }
 
-            _trackingMatrix = null;
-        }
+    private void FinishGizmoEdit()
+    {
+        _rotationState.Cancel();
+        _trackingMatrix = null;
+        var targets = _gizmoSnapshotTargets;
+        _gizmoSnapshotTargets = null;
+        if(targets is null || !_gPoseService.IsGPosing)
+            return;
+        foreach(var target in targets)
+            if(_entityManager.TryGetEntity(target.Id, out var live) && ReferenceEquals(target, live))
+                target.Snapshot();
+    }
+
+    public override void OnClose()
+    {
+        FinishGizmoEdit();
+        base.OnClose();
+    }
+
+    public override void PostDraw()
+    {
+        if(!_rotationState.DrawnThisFrame)
+            FinishGizmoEdit();
+        base.PostDraw();
     }
 }
 
