@@ -392,7 +392,7 @@
       "unlock": "解锁"
     },
     "pose": {
-      "crossRaceWarning": "仅对当前人物生效，退出拍照模式后自动关闭。\n部分 Mod 动作或自定义骨骼可能不兼容。\n出现动作或渲染异常时，请立即关闭。",
+      "crossRaceWarning": "仅对拍照模式中的当前人物生效。\n身体动作使用所选种族的播放资源；脸型与表情仍使用人物自身的数据。\n若某段动画资源加载失败，只跳过该次失败请求，其他动作通道继续播放。自定义骨骼是否兼容仍取决于具体动作。",
       "fromFile": "从文件……",
       "smartImport": "智能导入",
       "smartImportHelp": "智能导入会根据要导入的姿势自动调整载入流程。\n\n例如：\n- 如果姿势包含模型 ID，会自动变换模型以匹配。\n- 如果姿势标记为仅表情或仅身体，会自动禁用另一个选项。\n- 尝试以表情方式载入姿势时，会自动判断该姿势是否使用 7.0 后的面部骨骼制作，并相应调整导入流程。",
@@ -1939,6 +1939,10 @@
     "Change the text in a few places to make more sense": "调整部分界面文字，使说明更清晰。",
     "isParticleSystemEnabled": "粒子系统已启用",
     "IsEnvironmentOverride": "覆盖环境设置",
-    "customParticlesEnabled": "自定义粒子已启用"
+    "customParticlesEnabled": "自定义粒子已启用",
+    "Animation {0} was blocked: {1}": "已拦截动作 {0}：{1}",
+    "The cross-race animation loader could not be initialized. See the log for details.": "无法初始化跨种族动作加载器，请查看日志中的具体错误。",
+    "The selected cross-race playback context could not be applied. See the log for details.": "无法应用所选的跨种族播放资源，请查看日志中的具体错误。",
+    "Animation resource {0} could not be loaded. Only this request was skipped; other animation channels continue.": "动画资源 {0} 加载失败，已仅跳过该次请求，其他动作通道继续播放。"
   }
 }
