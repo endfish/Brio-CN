@@ -79,6 +79,14 @@ public class CommandHandlerService : IDisposable
                 _uiManager.ToggleTimelineWindow();
                 break;
 
+            case "poses":
+                _uiManager.TogglePoseManagerWindow();
+                break;
+
+            case "face":
+                _uiManager.ToggleExpressionEditorWindow();
+                break;
+
             case "settings":
                 _uiManager.ToggleSettingsWindow();
                 break;
@@ -114,6 +122,8 @@ public class CommandHandlerService : IDisposable
         _chatGui.Print(Localize.Text("<none> - Toggle main Brio window"));
         _chatGui.Print(Localize.Text("window - Toggle main Brio window"));
         _chatGui.Print(Localize.Text("settings - Toggle Brio settings window"));
+        _chatGui.Print(Localize.Text("poses - Toggle the pose manager"));
+        _chatGui.Print(Localize.Text("face - Toggle the expression editor"));
         _chatGui.Print($"models - {Localize.Get("ui.mapModelInspector.commandSubHelp", "Toggle the on-demand map model inspector")}");
         _chatGui.Print(Localize.Text("about - Toggle Brio info window"));
         _chatGui.Print(Localize.Text("help - Print this help prompt"));

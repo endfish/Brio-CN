@@ -21,6 +21,7 @@ using Brio.MCDF.Game.FileCache;
 using Brio.MCDF.Game.Services;
 using Brio.Resources;
 using Brio.Services;
+using Brio.Services.Poses;
 using Brio.Services.Models;
 using Brio.Services.Timeline;
 using Brio.UI;
@@ -213,6 +214,9 @@ public class Brio(IDalamudPluginInterface pluginInterface) : IAsyncDalamudPlugin
         serviceCollection.AddSingleton<PathMetadataService>();
         serviceCollection.AddSingleton<ActionTimelineAnnotationService>();
         serviceCollection.AddSingleton<QuickAccessService>();
+        serviceCollection.AddSingleton<PoseLibraryService>();
+        serviceCollection.AddSingleton<PoseAssetActions>();
+        serviceCollection.AddSingleton<FaceEditingService>();
 
         // API & Web
         serviceCollection.AddSingleton<BrioAPIService>();
@@ -298,6 +302,8 @@ public class Brio(IDalamudPluginInterface pluginInterface) : IAsyncDalamudPlugin
         serviceCollection.AddSingleton<ProjectWindow>();
         serviceCollection.AddSingleton<UpdateWindow>();
         serviceCollection.AddSingleton<LibraryWindow>();
+        serviceCollection.AddSingleton<PoseManagerWindow>();
+        serviceCollection.AddSingleton<ExpressionEditorWindow>();
         serviceCollection.AddSingleton<ActorAppearanceWindow>();
         serviceCollection.AddSingleton<ActionTimelineWindow>();
         serviceCollection.AddSingleton<PosingOverlayWindow>();

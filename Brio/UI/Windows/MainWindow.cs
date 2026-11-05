@@ -246,6 +246,14 @@ public class MainWindow : Window, IDisposable
 
         //}
 
+        var toolsWidth = (ImGui.GetContentRegionAvail().X - ImGui.GetStyle().ItemSpacing.X) / 2;
+        if(ImGui.Button(global::Brio.Resources.Localize.Text("Pose Manager###main_pose_manager"), new Vector2(toolsWidth, 0)))
+            UIManager.Instance.TogglePoseManagerWindow();
+        ImGui.SameLine();
+        using(ImRaii.Disabled(!_gPoseService.IsGPosing))
+            if(ImGui.Button(global::Brio.Resources.Localize.Text("Expression Editor###main_expression_editor"), new Vector2(toolsWidth, 0)))
+                UIManager.Instance.ToggleExpressionEditorWindow();
+
         //
 
         using(ImRaii.Disabled(_mCDFService.IsApplyingMCDF))

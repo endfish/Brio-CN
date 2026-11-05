@@ -30,6 +30,8 @@ public class UIManager : IDisposable
     private readonly AutoSaveWindow _autoSaveWindow;
     private readonly MCDFWindow _mCDFWindow;
     private readonly LibraryWindow _libraryWindow;
+    private readonly PoseManagerWindow _poseManagerWindow;
+    private readonly ExpressionEditorWindow _expressionEditorWindow;
     private readonly ActorAppearanceWindow _actorAppearanceWindow;
     private readonly ActionTimelineWindow _actionTimelineWindow;
     private readonly PosingOverlayWindow _overlayWindow;
@@ -91,6 +93,8 @@ public class UIManager : IDisposable
             SettingsWindow settingsWindow,
             UpdateWindow updateWindow,
             LibraryWindow libraryWindow,
+            PoseManagerWindow poseManagerWindow,
+            ExpressionEditorWindow expressionEditorWindow,
             ProjectWindow projectWindow,
             ActorAppearanceWindow appearanceWindow,
             ActionTimelineWindow actionTimelineWindow,
@@ -126,6 +130,8 @@ public class UIManager : IDisposable
         _mainWindow = mainWindow;
         _settingsWindow = settingsWindow;
         _libraryWindow = libraryWindow;
+        _poseManagerWindow = poseManagerWindow;
+        _expressionEditorWindow = expressionEditorWindow;
         _updateWindow = updateWindow;
         _projectWindow = projectWindow;
         _actorAppearanceWindow = appearanceWindow;
@@ -157,6 +163,8 @@ public class UIManager : IDisposable
         _windowSystem.AddWindow(_mainWindow);
         _windowSystem.AddWindow(_settingsWindow);
         _windowSystem.AddWindow(_libraryWindow);
+        _windowSystem.AddWindow(_poseManagerWindow);
+        _windowSystem.AddWindow(_expressionEditorWindow);
         _windowSystem.AddWindow(_projectWindow);
         _windowSystem.AddWindow(_updateWindow);
         _windowSystem.AddWindow(_actorAppearanceWindow);
@@ -200,6 +208,9 @@ public class UIManager : IDisposable
     {
         _graphicalWindow.IsOpen = !_graphicalWindow.IsOpen;
     }
+
+    public void TogglePoseManagerWindow() => _poseManagerWindow.IsOpen = !_poseManagerWindow.IsOpen;
+    public void ToggleExpressionEditorWindow() => _expressionEditorWindow.IsOpen = !_expressionEditorWindow.IsOpen;
 
     public void ToggleEntitySectionWindow()
     {
