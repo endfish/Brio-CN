@@ -1945,8 +1945,6 @@
     "The selected cross-race playback context could not be applied. See the log for details.": "无法应用所选的跨种族播放资源，请查看日志中的具体错误。",
     "Animation resource {0} could not be loaded. Only this request was skipped; other animation channels continue.": "动画资源 {0} 加载失败，已仅跳过该次请求，其他动作通道继续播放。",
     "Library folder (hover for path)": "姿势库目录（悬停查看路径）",
-    "poses - Toggle the pose manager": "poses - 打开／关闭姿势管理器",
-    "face - Toggle the expression editor": "face - 打开／关闭表情编辑器",
     "All body types": "全部体型",
     "All groups": "全部分组",
     "All pose types": "全部姿势类型",
