@@ -1,6 +1,7 @@
 using Brio.Resources;
 using Brio.Services.Poses;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.Textures.TextureWraps;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Brio.UI.Controls.Stateless;
 public sealed class PosePreviewView
 {
     public float Yaw = -0.3f, Pitch = 0.05f, Zoom = 1;
-    public void Reset() { Yaw = -0.3f; Pitch = 0.05f; Zoom = 1; }
+    public void Reset(float yaw = -.3f, float pitch = .05f) { Yaw = yaw; Pitch = pitch; Zoom = 1; }
 }
 
 public static class PoseMannequin
@@ -24,14 +25,21 @@ public static class PoseMannequin
         _ => new(.78f, .8f, .84f, 1),
     };
 
-    public static void Draw(string id, LibraryPoseDocument? pose, PoseAssetMetadata metadata, Vector2 size, PosePreviewView? view = null)
+    public static void Draw(string id, LibraryPoseDocument? pose, PoseAssetMetadata metadata, Vector2 size,
+        PosePreviewView? view = null, IDalamudTextureWrap? mannequin = null)
     {
         var top = ImGui.GetCursorScreenPos();
         size = Vector2.Max(size, new(20));
         var draw = ImGui.GetWindowDrawList();
         draw.AddRectFilled(top, top + size, 0xFF23201E, 5);
         draw.PushClipRect(top, top + size, true);
-        if(pose is null)
+        if(mannequin is not null)
+        {
+            var imageSize = mannequin.Size * Math.Min(size.X / mannequin.Width, size.Y / mannequin.Height);
+            var imagePos = top + (size - imageSize) * .5f;
+            draw.AddImage(mannequin.Handle, imagePos, imagePos + imageSize);
+        }
+        else if(pose is null)
         {
             draw.AddText(top + new Vector2(8), 0xFFAAAAAA, Localize.Text("Loading or unavailable pose"));
         }

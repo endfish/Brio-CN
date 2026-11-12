@@ -4,6 +4,7 @@ using Brio.UI.Controls.Stateless;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
+using Dalamud.Plugin.Services;
 using System;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,8 @@ using System.Threading.Tasks;
 
 namespace Brio.UI.Windows;
 
-public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActions actions) : Window(Localize.Text("Pose Manager###brio_pose_manager"))
+public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActions actions, ITextureProvider textures)
+    : Window(Localize.Text("Pose Manager###brio_pose_manager")), IDisposable
 {
     private string _search = "", _group = "", _name = "", _tags = "", _editGroup = "", _status = "";
     private int _genderFilter, _kindFilter;
@@ -22,12 +24,15 @@ public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActio
     private PoseAssetMetadata _edit = new();
     private PoseAssetKind _saveKind;
     private readonly PosePreviewView _view = new();
+    private readonly PoseBodyPreviewCache _mannequins = new(textures);
     private Task? _import;
     private int _importFailures;
     public static readonly string[] KindNames = ["Body", "Expression", "Hands", "Complete pose"];
     public static readonly string[] GenderNames = ["Unspecified", "Male", "Female", "Unisex"];
 
     public override void OnOpen() => _ = library.ScanAsync();
+    public override void OnClose() => _mannequins.SetEnabled(false);
+    public void Dispose() => _mannequins.Dispose();
     public override void PreDraw()
     {
         WindowName = Localize.Text("Pose Manager###brio_pose_manager");
@@ -43,6 +48,7 @@ public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActio
 
     public override void Draw()
     {
+        _mannequins.BeginFrame();
         if(_import is { IsCompleted: true })
         {
             _status = _import.IsFaulted || _importFailures > 0 ? "Some pose files could not be imported. See the log for details." : "Pose operation completed.";
@@ -69,7 +75,13 @@ public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActio
             });
         ImGui.SameLine();
         if(ImGui.Button(Localize.Text("Refresh###pm_refresh"))) _ = library.ScanAsync();
-        ImGui.TextDisabled(Localize.Text(library.IsScanning ? "Scanning..." : "Bone previews only; original screenshots are ignored."));
+        ImGui.SameLine();
+        if(ImGui.Button(Localize.Text(_mannequins.IsEnabled ? "Unload 3D previews###pm_3d" : "Load 3D previews###pm_3d")))
+            _mannequins.SetEnabled(!_mannequins.IsEnabled);
+        ImGui.TextDisabled(Localize.Text(library.IsScanning ? "Scanning..."
+            : _mannequins.HasFailed ? "3D previews are unavailable. Showing wireframes."
+            : _mannequins.IsEnabled ? "Body poses use mannequin previews. Original screenshots are ignored."
+            : "Wireframe previews. 3D previews are loaded only on request."));
         ImGui.SetNextItemWidth(210);
         ImGui.InputTextWithHint("###pm_search", Localize.Text("Search name, group or tags"), ref _search, 200);
         ImGui.SameLine();
@@ -80,6 +92,9 @@ public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActio
         ImGui.SameLine(); ImGui.Checkbox(Localize.Text("Favorites only###pm_favorites"), ref _favorites);
 
         var entries = library.Entries;
+        if(_selected is { } selected && entries.FirstOrDefault(e => e.Path == selected.Path) is { } refreshed
+            && refreshed.Stamp != selected.Stamp)
+            _selected = refreshed;
         using(var groups = ImRaii.Child("###pm_groups", new(145, -32), true))
         {
             if(groups.Success)
@@ -111,7 +126,9 @@ public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActio
                     if(visible)
                     {
                         ImGui.SetCursorPos(start + new Vector2(5));
-                        PoseMannequin.Draw("", library.Preview(entry), entry.Metadata, new(card.X - 10, 125));
+                        var pose = library.Preview(entry);
+                        PoseMannequin.Draw("", pose, entry.Metadata, new(card.X - 10, 125),
+                            mannequin: _mannequins.Thumbnail(entry, pose));
                         ImGui.TextColored(PoseMannequin.Color(entry.Metadata.Gender), entry.Name.Length > 19 ? entry.Name[..18] + "…" : entry.Name);
                         ImGui.TextDisabled(Localize.Text(GenderNames[(int)entry.Metadata.Gender]));
                         ImGui.SetCursorPos(end);
@@ -140,15 +157,30 @@ public sealed class PoseManagerWindow(PoseLibraryService library, PoseAssetActio
     {
         _selected = entry; _selectedPath = entry.Path; _name = entry.Name;
         _edit = global::Brio.Core.JsonSerializer.Deserialize<PoseAssetMetadata>(global::Brio.Core.JsonSerializer.Serialize(entry.Metadata));
-        _tags = _edit.Tags; _editGroup = _edit.Group; _view.Reset();
+        _tags = _edit.Tags; _editGroup = _edit.Group; ResetPreviewView();
+    }
+
+    private void ResetPreviewView()
+    {
+        if(PoseBodyPreviewCache.HasBody(_edit.Kind))
+            _view.Reset(PoseBodyPreview.DefaultYaw, PoseBodyPreview.DefaultPitch);
+        else
+            _view.Reset();
     }
 
     private void DrawDetails()
     {
-        if(_selected is not { } entry) { ImGui.TextWrapped(Localize.Text("Select a pose to inspect its mannequin. Browsing never changes the actor.")); return; }
-        PoseMannequin.Draw("###pm_view", library.Preview(entry), _edit, new(ImGui.GetContentRegionAvail().X, 240), _view);
+        if(_selected is not { } entry)
+        {
+            _mannequins.ClearDetail();
+            ImGui.TextWrapped(Localize.Text("Select a pose to inspect its mannequin. Browsing never changes the actor."));
+            return;
+        }
+        var size = new Vector2(ImGui.GetContentRegionAvail().X, 240);
+        var pose = library.Preview(entry);
+        PoseMannequin.Draw("###pm_view", pose, _edit, size, _view, _mannequins.Detail(entry, pose, _edit.Kind, size, _view));
         ImGui.TextDisabled(Localize.Text("Drag to orbit; wheel to zoom."));
-        if(ImGui.Button(Localize.Text("Reset view###pm_reset_view"))) _view.Reset();
+        if(ImGui.Button(Localize.Text("Reset view###pm_reset_view"))) ResetPreviewView();
         ImGui.SetNextItemWidth(-1); ImGui.InputTextWithHint("###pm_name", Localize.Text("Name"), ref _name, 100);
         ImGui.SetNextItemWidth(-1); ImGui.InputTextWithHint("###pm_group", Localize.Text("Group"), ref _editGroup, 100);
         ImGui.SetNextItemWidth(-1); ImGui.InputTextWithHint("###pm_tags", Localize.Text("Tags"), ref _tags, 300);
