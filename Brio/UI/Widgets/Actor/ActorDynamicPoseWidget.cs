@@ -8,6 +8,7 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
+using System;
 using System.Numerics;
 using static Brio.Game.Actor.ActionTimelineService;
 
@@ -46,11 +47,18 @@ public class ActorDynamicPoseWidget(ActorDynamicPoseCapability capability) : Wid
             return;
         }
 
-        if(ImBrio.Button(global::Brio.Resources.Localize.Text("   Set Expression"), FontAwesomeIcon.Grin, new Vector2(ImBrio.GetRemainingWidth() - (28 * ImGuiHelpers.GlobalScale), 24 * ImGuiHelpers.GlobalScale), centerTest: true))
+        var iconStep = 25 * ImGuiHelpers.GlobalScale + ImGui.GetStyle().ItemSpacing.X;
+        var expressionWidth = MathF.Max(1, ImGui.GetContentRegionAvail().X - 2 * iconStep);
+        if(ImBrio.Button(global::Brio.Resources.Localize.Text("   Set Expression"), FontAwesomeIcon.Grin,
+            new Vector2(expressionWidth, 24 * ImGuiHelpers.GlobalScale), centerTest: true))
         {
             _expressionSelector.Select(null, false);
             ImGui.OpenPopup("dfc_expression_popup");
         }
+
+        ImGui.SameLine();
+        if(ImBrio.FontIconButton("expression_editor", FontAwesomeIcon.Edit, "Expression Editor", Capability.CanOpenExpressionEditor))
+            UIManager.Instance.ToggleExpressionEditorWindow();
 
         ImGui.SameLine();
 

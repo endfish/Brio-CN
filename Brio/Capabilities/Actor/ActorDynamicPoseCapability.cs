@@ -21,6 +21,7 @@ public class ActorDynamicPoseCapability : ActorCharacterCapability
     private readonly EntityManager _entityManager;
 
     public VirtualCamera? Camera => _virtualCameraManager.CurrentCamera;
+    internal bool CanOpenExpressionEditor => _gposeService.IsGPosing;
     public bool IsEnabled { get; set; }
 
     public string SelectedActorName = "Select an actor to track";

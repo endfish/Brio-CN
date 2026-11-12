@@ -9,6 +9,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
+using System;
 using System.Numerics;
 
 namespace Brio.UI.Widgets.Posing;
@@ -40,19 +41,28 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
     {
         if(Capability.Actor.TryGetCapability<ActionTimelineCapability>(out var timelineCapability) == false)
         {
+            DrawPoseManagerButton(new Vector2(25));
             return;
         }
 
+        // Nine icons and three separators. Keep the file group together;
+        // move the following tools to a new row if scaling leaves no room.
+        var scale = ImGuiHelpers.GlobalScale;
+        var spacing = ImGui.GetStyle().ItemSpacing.X;
+        var fittingWidth = (ImGui.GetContentRegionAvail().X - 11 * spacing - 9 * scale) / (9 * scale);
+        var wrapTools = fittingWidth < 22;
+        var buttonSize = new Vector2(wrapTools ? 25 : MathF.Min(25, MathF.Floor(fittingWidth)), 25);
+
         var overlayOpen = Capability.OverlayOpen;
         if(ImBrio.FontIconButton("overlay", overlayOpen ? FontAwesomeIcon.EyeSlash : FontAwesomeIcon.Eye,
-            global::Brio.Resources.Localize.Text(overlayOpen ? "Close Overlay" : "Open Overlay")))
+            global::Brio.Resources.Localize.Text(overlayOpen ? "Close Overlay" : "Open Overlay"), size: buttonSize))
         {
             Capability.OverlayOpen = !overlayOpen;
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("import", FontAwesomeIcon.FileDownload, global::Brio.Resources.Localize.Text("Import Pose")))
+        if(ImBrio.FontIconButton("import", FontAwesomeIcon.FileDownload, global::Brio.Resources.Localize.Text("Import Pose"), size: buttonSize))
         {
             ImGui.OpenPopup("DrawImportPoseMenuPopup");
         }
@@ -61,35 +71,41 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("export", FontAwesomeIcon.Save, global::Brio.Resources.Localize.Text("Save Pose")))
+        if(ImBrio.FontIconButton("export", FontAwesomeIcon.Save, global::Brio.Resources.Localize.Text("Save Pose"), size: buttonSize))
             ImGui.OpenPopup("DrawExportPoseMenuPopup");
 
         FileUIHelpers.DrawExportPoseMenuPopup(Capability);
 
-        ImBrio.VerticalSeparator(24, 1);
+        ImGui.SameLine();
+        DrawPoseManagerButton(buttonSize);
 
-        if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, global::Brio.Resources.Localize.Text("Undo"), Capability.CanUndo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
+        if(wrapTools)
+            ImGui.Spacing();
+        else
+            ImBrio.VerticalSeparator(24, 1);
+
+        if(ImBrio.FontIconButton("undo", FontAwesomeIcon.Reply, global::Brio.Resources.Localize.Text("Undo"), Capability.CanUndo, size: buttonSize) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Undo) && Capability.CanUndo))
         {
             Capability.Undo();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, global::Brio.Resources.Localize.Text("Redo"), Capability.CanRedo) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
+        if(ImBrio.FontIconButton("redo", FontAwesomeIcon.Share, global::Brio.Resources.Localize.Text("Redo"), Capability.CanRedo, size: buttonSize) || (InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Redo) && Capability.CanRedo))
         {
             Capability.Redo();
         }
 
         ImBrio.VerticalSeparator(24, 1);
 
-        if(ImBrio.FontIconButton("flipButton", FontAwesomeIcon.Repeat, global::Brio.Resources.Localize.Text("Mirror Pose")))
+        if(ImBrio.FontIconButton("flipButton", FontAwesomeIcon.Repeat, global::Brio.Resources.Localize.Text("Mirror Pose"), size: buttonSize))
         {
             Capability.MirrorPose();
         }
 
         ImGui.SameLine();
 
-        if(ImBrio.ToggelFontIconButton("freezeActor", FontAwesomeIcon.Snowflake, new Vector2(0), timelineCapability.SpeedMultiplier == 0,
+        if(ImBrio.ToggelFontIconButton("freezeActor", FontAwesomeIcon.Snowflake, new Vector2(buttonSize.X - 25, 0), timelineCapability.SpeedMultiplier == 0,
             tooltip: global::Brio.Resources.Localize.Text(timelineCapability.SpeedMultiplierOverride == 0 ? "Un-Freeze Character" : "Freeze Character")) || InputManagerService.ActionKeysPressedLastFrame(InputAction.Posing_Freeze))
         {
             if(timelineCapability.SpeedMultiplierOverride == 0)
@@ -99,7 +115,7 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
         }
         ImGui.SameLine();
 
-        if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Pose"), Capability.HasOverride()))
+        if(ImBrio.FontIconButtonRight("reset", FontAwesomeIcon.Undo, 1, global::Brio.Resources.Localize.Text("Reset Pose"), Capability.HasOverride(), size: buttonSize))
         {
             ImGui.OpenPopup("widget_reset_pose_popup");
         }
@@ -111,6 +127,12 @@ public class PosingWidget(PosingCapability capability) : Widget<PosingCapability
                 DrawResetMenu();
             }
         }
+    }
+
+    private static void DrawPoseManagerButton(Vector2 size)
+    {
+        if(ImBrio.FontIconButton("pose_manager", FontAwesomeIcon.BookBookmark, "Pose Manager", size: size))
+            UIManager.Instance.TogglePoseManagerWindow();
     }
 
     private void DrawTransform()

@@ -138,8 +138,13 @@ public class ActorEntity(IGameObject gameObject, IServiceProvider provider) : Tr
         AddCapability(ActivatorUtilities.CreateInstance<ActorLifetimeCapability>(_serviceProvider, this));
         AddCapability(_actorAppearanceCapability = ActivatorUtilities.CreateInstance<ActorAppearanceCapability>(_serviceProvider, this));
 
-        if(ActorType is ActorType.BrioActor && GameObject.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Pc)
-            AddCapability(ActorDynamicPoseCapability.CreateIfEligible(_serviceProvider, this));
+        var faceControl = ActorType is ActorType.BrioActor && GameObject.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Pc
+            ? ActorDynamicPoseCapability.CreateIfEligible(_serviceProvider, this)
+            : null;
+        if(faceControl is not null)
+            AddCapability(faceControl);
+        else
+            AddCapability(ActivatorUtilities.CreateInstance<ActorExpressionEditorCapability>(_serviceProvider, this));
 
         AddCapability(ActivatorUtilities.CreateInstance<SkeletonPosingCapability>(_serviceProvider, this));
 
