@@ -281,12 +281,13 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
     private void RefreshModActions()
     {
-        if(_modActionActorIndex is not ushort objectIndex
+        if((!ExpressionsOnly && _libraryCategory is not (ActionLibraryCategory.Mods or ActionLibraryCategory.All))
+            || _modActionActorIndex is not ushort objectIndex
             || ResolveModActionActor() is null
             || !Brio.TryGetService<PenumbraModActionService>(out var service))
             return;
 
-        var actions = service.GetActiveActions(objectIndex);
+        var actions = service.GetActiveActions(objectIndex, _actorContext);
         if(_modActionVersion == service.Version)
             return;
 
@@ -535,8 +536,13 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
             || !GameDataProvider.Instance.ActionTimelines.TryGetRow(timelineId, out BrioActionTimeline timeline))
             return false;
 
+        // Keep the confirmed pose number visible even for long mod names.
+        var name = modAction.Pose is not null
+            ? $"{modAction.DisplayActionName} - {modAction.DisplayModName}"
+            : $"{modAction.DisplayModName} - {modAction.DisplayActionName}";
+
         AddItem(new ActionTimelineSelectorEntry(
-            $"{modAction.ModName} - {modAction.EmoteName}",
+            name,
             (ushort)timelineId,
             emote?.RowId ?? timelineId,
             timeline.Key.ToString(),
@@ -1097,6 +1103,15 @@ public class ActionTimelineSelector(string id) : Selector<ActionTimelineSelector
 
         ImGui.EndPopup();
     }
+
+    protected override Comparison<ActionTimelineSelectorEntry> CreateComparison()
+        => _libraryCategory == ActionLibraryCategory.Poses ? ComparePoseTab : Compare;
+
+    private int ComparePoseTab(ActionTimelineSelectorEntry a, ActionTimelineSelectorEntry b)
+        => a.TimelineType == ActionTimelineSelectorEntry.OriginalType.Pose
+            && b.TimelineType == ActionTimelineSelectorEntry.OriginalType.Pose
+            ? CommonPoseCatalog.GetOrder(a.TimelineId).CompareTo(CommonPoseCatalog.GetOrder(b.TimelineId))
+            : Compare(a, b);
 
     protected override int Compare(ActionTimelineSelectorEntry itemA, ActionTimelineSelectorEntry itemB)
     {

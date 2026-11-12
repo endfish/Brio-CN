@@ -246,6 +246,7 @@ public abstract class Selector<T> where T : class
     {
         var generation = Interlocked.Increment(ref _updateGeneration);
         var search = _search;
+        var comparison = CreateComparison();
 
         if(shouldClear)
         {
@@ -271,7 +272,7 @@ public abstract class Selector<T> where T : class
             if(generation != Volatile.Read(ref _updateGeneration))
                 return;
 
-            newList.Sort(Compare);
+            newList.Sort(comparison);
 
             if(generation == Volatile.Read(ref _updateGeneration))
                 Interlocked.Exchange(ref _filteredAndSortedItems, newList);
@@ -294,6 +295,8 @@ public abstract class Selector<T> where T : class
     {
         return true;
     }
+
+    protected virtual Comparison<T> CreateComparison() => Compare;
 
     protected virtual int Compare(T itemA, T itemB)
     {
